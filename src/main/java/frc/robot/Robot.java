@@ -120,7 +120,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
-    //hi my name is chad
+    //hi my name is chad. please delete this later
   }
 
   /**
@@ -128,6 +128,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
-    //moar testing!
+    //moar testing! please delete this later
   }
 }
