@@ -13,7 +13,12 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.commands.Drive;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,6 +30,10 @@ import frc.robot.subsystems.ExampleSubsystem;
 public class Robot extends TimedRobot {
   public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
   public static OI m_oi;
+  public static Drivetrain drivetrain = new Drivetrain();
+  private boolean m_LimelightHasValidTarget = false;
+  private double m_LimelightDriveCommand = 0.0;
+  private double m_LimelightSteerCommand = 0.0;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -81,7 +90,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_chooser.getSelected();
-
+    drivetrain.turnToAngle(90);
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -95,11 +104,33 @@ public class Robot extends TimedRobot {
     }
   }
 
+  public void doStuff(){
+
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry tx = table.getEntry("tx");
+    NetworkTableEntry ty = table.getEntry("ty");
+    NetworkTableEntry area = table.getEntry("ta");
+    NetworkTableEntry ts = table.getEntry("ts");
+
+    double x = tx.getDouble(0);
+    double y = ty.getDouble(0);
+    double a = area.getDouble(0);
+    double s = ts.getDouble(0);
+
+    SmartDashboard.putNumber("LimelightX", x);
+    SmartDashboard.putNumber("LimelightY", y);
+    SmartDashboard.putNumber("LimelightArea", a);
+    SmartDashboard.putNumber("LimelightSkew", s);
+  }
+
   /**
    * This function is called periodically during autonomous.
    */
   @Override
   public void autonomousPeriodic() {
+    doStuff();
+    Update_Limelight_Tracking();
+
     Scheduler.getInstance().run();
   }
 
@@ -109,6 +140,8 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    Drive dwj = new Drive();
+    dwj.start();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -129,5 +162,47 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
     //moar testing! please delete this later
+  }
+
+    /**
+   * This function implements a simple method of generating driving and steering commands
+   * based on the tracking data from a limelight camera.
+   */
+  public void Update_Limelight_Tracking()
+  {
+        // These numbers must be tuned for your Robot!  Be careful!
+        final double STEER_K = 0.01;                    // how hard to turn toward the target
+        final double DRIVE_K = 0.01;                    // how hard to drive fwd toward the target
+        final double DESIRED_TARGET_AREA = 36.0;        // Area of the target when the robot reaches the wall
+        final double MAX_DRIVE = 0.25;                  // Simple speed limit so we don't drive too fast
+
+        double tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
+        double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+        double ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
+        double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
+
+        if (tv < 1.0)
+        {
+          m_LimelightHasValidTarget = false;
+          m_LimelightDriveCommand = 0.0;
+          m_LimelightSteerCommand = 0.0;
+          return;
+        }
+
+        m_LimelightHasValidTarget = true;
+
+        // Start with proportional steering
+        double steer_cmd = tx * STEER_K;
+        m_LimelightSteerCommand = steer_cmd;
+
+        // try to drive forward until the target area reaches our desired area
+        double drive_cmd = (DESIRED_TARGET_AREA - ta) * DRIVE_K;
+
+        // don't let the robot drive too fast into the goal
+        if (drive_cmd > MAX_DRIVE)
+        {
+          drive_cmd = MAX_DRIVE;
+        }
+        m_LimelightDriveCommand = drive_cmd;
   }
 }
