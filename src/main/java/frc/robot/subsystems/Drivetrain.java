@@ -13,38 +13,32 @@ import frc.robot.constants.Constants;
 import frc.robot.constants.JoystickConstants;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.SPI;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANPIDController;
 
 /**
  * Add your docs here.
  */
-public class Drivetrain extends Subsystem implements PIDOutput{
+public class Drivetrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   private int[] leftCanIDs = new int[]{11, 12, 13};
   private int[] rightCanIDs = new int[]{14, 15, 16};
   private CANSparkMax[] leftMotors = new CANSparkMax[leftCanIDs.length];
   private CANSparkMax[] rightMotors = new CANSparkMax[rightCanIDs.length];
-  PIDController turnController;
-  AHRS ahrs;
+  public AHRS ahrs;
   double rotateToAngleRate;
   DifferentialDrive drive;
   double angle;
-  CANPIDController leftController;
-  CANPIDController rightController;
+  double rotation = 0;
 
   //PID
-  static final double kP = 0.03;
-  static final double kI = 0.00;
-  static final double kD = 0.00;
-  static final double kF = 0.00;
+  static final double kP = 0.004;
 
   static final double kToleranceDegrees = 2.0f;
 
@@ -65,23 +59,57 @@ public class Drivetrain extends Subsystem implements PIDOutput{
     }
 
     ahrs = new AHRS(SPI.Port.kMXP);
-    turnController = new PIDController(kP, kI, kD, ahrs, this);
-    
-    turnController.setInputRange(-180f, 180f);
-    turnController.setOutputRange(-1f, 1f);
-    turnController.setAbsoluteTolerance(kToleranceDegrees);
-    turnController.setContinuous(true);
 
     drive = new DifferentialDrive(leftMotors[0], rightMotors[0]);
-
-    leftController = new CANPIDController(leftMotors[0]);
-    rightController = new CANPIDController(rightMotors[0]);
   } 
 
-  public void turnToAngle(double angle){
-    turnController.setSetpoint(90);
-    turnController.enable();
-    //drive.arcadeDrive(0, angle);
+  public void turnToAngle(double angle) {
+    double error = angle - ahrs.getAngle();
+    SmartDashboard.putNumber("Error", error);
+    SmartDashboard.putNumber("GyroAngle", ahrs.getAngle());
+    SmartDashboard.putBoolean("GryoIsCalibrating", ahrs.isCalibrating());
+
+    if (Math.abs(error) > kToleranceDegrees && !ahrs.isCalibrating()){
+      this.rotation = error;
+      move();
+     //this.rotation = 0;
+     //ahrs.resetDisplacement();
+      return;
+    } else {
+      this.rotation = 0;
+      move();
+      //ahrs.reset();
+      return;
+    }
+  }
+
+  public void move() {
+    //Math.pow((.17*i), 2);
+    //drive.tankDrive(0 + Math.pow((kP * this.rotation), 2), 0 - Math.pow((kP * this.rotation), 2));
+    SmartDashboard.putBoolean("HitMove", true);
+    SmartDashboard.putNumber("Rotation", this.rotation);
+    double rotation =  kP * this.rotation;
+
+    double newRotation2 = rotation + getVoltageCompensation(rotation);
+    //SmartDashboard.putNumber("newRotation2", newRotation2);
+
+    double volatageLimit =  newRotation2 > 1 ? 1 : newRotation2; 
+    SmartDashboard.putNumber("newRotation", volatageLimit);
+
+    SmartDashboard.putNumber("Left", 0 - volatageLimit);
+    SmartDashboard.putNumber("Right", 0 + volatageLimit);
+
+    drive.tankDrive(0 - volatageLimit, 0 + volatageLimit);
+  }
+
+  public double getVoltageCompensation(double voltage){
+    if (voltage > 0 && voltage <= 20)
+      return .23;
+
+    if (voltage < 0 && voltage > -20)
+      return -.23;
+
+    return 0;
   }
 
   public void drive(double rightSpeed, double leftSpeed){
@@ -100,16 +128,12 @@ public class Drivetrain extends Subsystem implements PIDOutput{
     sparkMax.enableVoltageCompensation(12.0);
     sparkMax.setClosedLoopRampRate(Constants.closedDriveVoltageRampRate);
     sparkMax.setOpenLoopRampRate(Constants.openDriveVoltageRampRate);
+    sparkMax.setIdleMode(IdleMode.kBrake);
   }
 
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-  }
-
-  @Override
-  public void pidWrite(double output){
-    rotateToAngleRate = output;
   }
 }

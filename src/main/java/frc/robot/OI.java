@@ -8,6 +8,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.ResetGyro;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -42,4 +44,8 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
   public static Joystick joystick = new Joystick(0);
+  JoystickButton buttonA = new JoystickButton(joystick, 7);
+  public OI () {
+    buttonA.whenPressed(new ResetGyro());
+  }
 }

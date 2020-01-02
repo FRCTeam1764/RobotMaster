@@ -19,6 +19,8 @@ import frc.robot.commands.Drive;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -34,6 +36,7 @@ public class Robot extends TimedRobot {
   private boolean m_LimelightHasValidTarget = false;
   private double m_LimelightDriveCommand = 0.0;
   private double m_LimelightSteerCommand = 0.0;
+  AHRS ahrs;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -90,7 +93,14 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autonomousCommand = m_chooser.getSelected();
-    drivetrain.turnToAngle(90);
+    ahrs = new AHRS(SPI.Port.kMXP);
+    SmartDashboard.putBoolean("AutoInitHit", true);
+    ahrs.reset();
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException ie) {
+      //do nothing lul
+    }
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -130,6 +140,8 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     doStuff();
     Update_Limelight_Tracking();
+
+    drivetrain.turnToAngle(180);
 
     Scheduler.getInstance().run();
   }
