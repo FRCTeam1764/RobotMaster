@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.helpers.LimeLightValues;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.ExampleSubsystem;
 import frc.robot.commands.Drive;
@@ -114,34 +115,16 @@ public class Robot extends TimedRobot {
     }
   }
 
-  public void doStuff(){
-
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry area = table.getEntry("ta");
-    NetworkTableEntry ts = table.getEntry("ts");
-
-    double x = tx.getDouble(0);
-    double y = ty.getDouble(0);
-    double a = area.getDouble(0);
-    double s = ts.getDouble(0);
-
-    SmartDashboard.putNumber("LimelightX", x);
-    SmartDashboard.putNumber("LimelightY", y);
-    SmartDashboard.putNumber("LimelightArea", a);
-    SmartDashboard.putNumber("LimelightSkew", s);
-  }
-
   /**
    * This function is called periodically during autonomous.
    */
   @Override
   public void autonomousPeriodic() {
-    doStuff();
-    Update_Limelight_Tracking();
-
-    drivetrain.turnToAngle(180);
+    LimeLightValues llv = new LimeLightValues();
+    if(llv.hasTarget){
+      if(llv.xDeg > 0.5 || llv.xDeg < -0.5)
+        Robot.drivetrain.turnToAngle(llv.xDeg);
+    }
 
     Scheduler.getInstance().run();
   }
