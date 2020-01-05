@@ -44,8 +44,10 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
   public static Joystick joystick = new Joystick(0);
+  /*
   JoystickButton buttonA = new JoystickButton(joystick, 7);
   public OI () {
     buttonA.whenPressed(new ResetGyro());
   }
+  */
 }

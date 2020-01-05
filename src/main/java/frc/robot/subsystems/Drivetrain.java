@@ -11,11 +11,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.constants.Constants;
 import frc.robot.constants.JoystickConstants;
-
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.SPI;
 
@@ -29,11 +28,11 @@ public class Drivetrain extends Subsystem {
   // here. Call these from Commands.
   private int[] leftCanIDs = new int[]{11, 12, 13};
   private int[] rightCanIDs = new int[]{14, 15, 16};
-  private CANSparkMax[] leftMotors = new CANSparkMax[leftCanIDs.length];
-  private CANSparkMax[] rightMotors = new CANSparkMax[rightCanIDs.length];
+  private WPI_TalonSRX[] leftMotors = new WPI_TalonSRX[leftCanIDs.length];
+  private WPI_TalonSRX[] rightMotors = new WPI_TalonSRX[rightCanIDs.length];
   public AHRS ahrs;
   double rotateToAngleRate;
-  DifferentialDrive drive;
+  public DifferentialDrive drive;
   double angle;
   double rotation = 0;
 
@@ -44,14 +43,14 @@ public class Drivetrain extends Subsystem {
 
   public Drivetrain(){
     for (int i= 0; i < leftCanIDs.length; i++){
-      leftMotors[i] = new CANSparkMax(leftCanIDs[i], MotorType.kBrushless);
+      leftMotors[i] = new WPI_TalonSRX(leftCanIDs[i]);
       if (i != 0){
         leftMotors[i].follow(leftMotors[0]);
       }
       ConfigureMotor(leftMotors[i], true);
     }
     for (int i= 0; i < rightCanIDs.length; i++){
-      rightMotors[i] = new CANSparkMax(rightCanIDs[i], MotorType.kBrushless);
+      leftMotors[i] = new WPI_TalonSRX(rightCanIDs[i]);
       if (i != 0){
         rightMotors[i].follow(rightMotors[0]);
       }
@@ -112,23 +111,13 @@ public class Drivetrain extends Subsystem {
     return 0;
   }
 
-  public void drive(double rightSpeed, double leftSpeed){
-    double newRightSpeed = isWithinDeadzone(rightSpeed) ? rightSpeed : 0;
-    double newLeftSpeed = isWithinDeadzone(leftSpeed) ? leftSpeed : 0;
-
-    drive.tankDrive(newLeftSpeed, newRightSpeed);
-  }
-
-  private boolean isWithinDeadzone(double speed){
-    return Math.abs(speed) > JoystickConstants.deadzone;
-  }
-
-  private void ConfigureMotor(CANSparkMax sparkMax, boolean inverted){
-    sparkMax.setInverted(inverted);
-    sparkMax.enableVoltageCompensation(12.0);
-    sparkMax.setClosedLoopRampRate(Constants.closedDriveVoltageRampRate);
-    sparkMax.setOpenLoopRampRate(Constants.openDriveVoltageRampRate);
-    sparkMax.setIdleMode(IdleMode.kBrake);
+  private void ConfigureMotor(WPI_TalonSRX falcon, boolean inverted){
+    falcon.setInverted(inverted);
+    falcon.enableVoltageCompensation(true);
+    falcon.configClosedloopRamp(Constants.closedDriveVoltageRampRate);
+    falcon.configOpenloopRamp(Constants.openDriveVoltageRampRate);
+    falcon.setNeutralMode(NeutralMode.Brake);
+    falcon.configNeutralDeadband(JoystickConstants.deadzone);
   }
 
   @Override
