@@ -26,7 +26,7 @@ public class Drive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.drivetrain.drive.tankDrive(OI.joystick.getY() + OI.joystick.getZ(), OI.joystick.getY() - OI.joystick.getZ());
+    Robot.drivetrain.drive(OI.joystick.getY() + OI.joystick.getZ(), OI.joystick.getY() - OI.joystick.getZ());
   }
 
   // Make this return true when this Command no longer needs to run execute()
