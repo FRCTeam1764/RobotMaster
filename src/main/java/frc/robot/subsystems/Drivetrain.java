@@ -8,15 +8,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.constants.Constants;
 import frc.robot.constants.JoystickConstants;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
-import edu.wpi.first.wpilibj.SPI;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;;
 
 /**
  * Add your docs here.
@@ -26,22 +24,23 @@ public class Drivetrain extends Subsystem {
   // here. Call these from Commands.
   private int[] rightCanIDs = new int[]{11, 12, 13};
   private int[] leftCanIDs = new int[]{ 14, 15, 16 };
-  private TalonSRX[] leftMotors = new TalonSRX[leftCanIDs.length];
-  private TalonSRX[] rightMotors = new TalonSRX[rightCanIDs.length];
+  private WPI_TalonFX[] leftMotors = new WPI_TalonFX[leftCanIDs.length];
+  private WPI_TalonFX[] rightMotors = new WPI_TalonFX[rightCanIDs.length];
   double rotateToAngleRate;
   double angle;
   double rotation = 0;
+  public DifferentialDrive drive;
 
   public Drivetrain(){
     for (int i= 0; i < leftCanIDs.length; i++){
-      leftMotors[i] = new TalonSRX(leftCanIDs[i]);
+      leftMotors[i] = new WPI_TalonFX(leftCanIDs[i]);
       if (i != 0){
         leftMotors[i].follow(leftMotors[0]);
       }
         ConfigureMotor(leftMotors[i], true);
     }
     for (int i= 0; i < rightCanIDs.length; i++){
-      rightMotors[i] = new TalonSRX(rightCanIDs[i]);
+      rightMotors[i] = new WPI_TalonFX(rightCanIDs[i]);
       if (i != 0){
         rightMotors[i].follow(rightMotors[0]);
       }
@@ -49,7 +48,7 @@ public class Drivetrain extends Subsystem {
     }
   } 
 
-  private void ConfigureMotor(TalonSRX falcon, boolean inverted){
+  private void ConfigureMotor(WPI_TalonFX falcon, boolean inverted){
     falcon.setInverted(inverted);
     falcon.configClosedloopRamp(Constants.closedDriveVoltageRampRate);
     falcon.configOpenloopRamp(Constants.openDriveVoltageRampRate);

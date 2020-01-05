@@ -45,8 +45,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    Drive dwj = new Drive();
-    dwj.start();
   }
 
   @Override
