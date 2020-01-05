@@ -8,14 +8,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.constants.Constants;
 import frc.robot.constants.JoystickConstants;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.SPI;
 
@@ -26,23 +25,23 @@ public class Drivetrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   private int[] rightCanIDs = new int[]{11, 12, 13};
-  private int[] leftCanIDs = new int[] { 14, 15, 16 };
-  private TalonFX[] leftMotors = new TalonFX[leftCanIDs.length];
-  private TalonFX[] rightMotors = new TalonFX[rightCanIDs.length];
+  private int[] leftCanIDs = new int[]{ 14, 15, 16 };
+  private TalonSRX[] leftMotors = new TalonSRX[leftCanIDs.length];
+  private TalonSRX[] rightMotors = new TalonSRX[rightCanIDs.length];
   double rotateToAngleRate;
   double angle;
   double rotation = 0;
 
   public Drivetrain(){
     for (int i= 0; i < leftCanIDs.length; i++){
-      leftMotors[i] = new TalonFX(leftCanIDs[i]);
+      leftMotors[i] = new TalonSRX(leftCanIDs[i]);
       if (i != 0){
         leftMotors[i].follow(leftMotors[0]);
       }
-      ConfigureMotor(leftMotors[i], true);
+        ConfigureMotor(leftMotors[i], true);
     }
     for (int i= 0; i < rightCanIDs.length; i++){
-      leftMotors[i] = new TalonFX(rightCanIDs[i]);
+      rightMotors[i] = new TalonSRX(rightCanIDs[i]);
       if (i != 0){
         rightMotors[i].follow(rightMotors[0]);
       }
@@ -50,7 +49,7 @@ public class Drivetrain extends Subsystem {
     }
   } 
 
-  private void ConfigureMotor(TalonFX falcon, boolean inverted){
+  private void ConfigureMotor(TalonSRX falcon, boolean inverted){
     falcon.setInverted(inverted);
     falcon.configClosedloopRamp(Constants.closedDriveVoltageRampRate);
     falcon.configOpenloopRamp(Constants.openDriveVoltageRampRate);
@@ -60,7 +59,7 @@ public class Drivetrain extends Subsystem {
 
   public void drive(double leftSpeed, double rightSpeed){
     leftMotors[0].set(ControlMode.PercentOutput, leftSpeed);
-    leftMotors[0].set(ControlMode.PercentOutput, rightSpeed);
+    rightMotors[0].set(ControlMode.PercentOutput, rightSpeed);
   }
 
   @Override
