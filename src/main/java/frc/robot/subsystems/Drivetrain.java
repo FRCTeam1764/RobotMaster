@@ -5,21 +5,21 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.subsystems;
+package frc.robot.Subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Constants;
 import frc.robot.constants.JoystickConstants;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import com.ctre.phoenix.motorcontrol.Faults;
+import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import edu.wpi.first.wpilibj.SPI;
-
-import com.kauailabs.navx.frc.AHRS;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 /**
  * Add your docs here.
@@ -27,109 +27,77 @@ import com.kauailabs.navx.frc.AHRS;
 public class Drivetrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private int[] leftCanIDs = new int[]{11, 12, 13};
-  private int[] rightCanIDs = new int[]{14, 15, 16};
-  private CANSparkMax[] leftMotors = new CANSparkMax[leftCanIDs.length];
-  private CANSparkMax[] rightMotors = new CANSparkMax[rightCanIDs.length];
-  public AHRS ahrs;
-  double rotateToAngleRate;
-  DifferentialDrive drive;
-  double angle;
-  double rotation = 0;
-
-  //PID
-  static final double kP = 0.004;
-
-  static final double kToleranceDegrees = 2.0f;
+ 
+  public WPI_TalonFX _rghtFront = new WPI_TalonFX(11);
+  public WPI_TalonFX _rghtFollower = new WPI_TalonFX(12);
+  public WPI_TalonFX _rghtFollower2 = new WPI_TalonFX(13);
+  public WPI_TalonFX _leftFront = new WPI_TalonFX(14);
+  public WPI_TalonFX _leftFollower = new WPI_TalonFX(15);
+  public WPI_TalonFX _leftFollower2 = new WPI_TalonFX(16);
+  
+  public DifferentialDrive _diffD = new DifferentialDrive(_leftFront, _rghtFront);
 
   public Drivetrain(){
-    for (int i= 0; i < leftCanIDs.length; i++){
-      leftMotors[i] = new CANSparkMax(leftCanIDs[i], MotorType.kBrushless);
-      if (i != 0){
-        leftMotors[i].follow(leftMotors[0]);
-      }
-      ConfigureMotor(leftMotors[i], true);
-    }
-    for (int i= 0; i < rightCanIDs.length; i++){
-      rightMotors[i] = new CANSparkMax(rightCanIDs[i], MotorType.kBrushless);
-      if (i != 0){
-        rightMotors[i].follow(rightMotors[0]);
-      }
-      ConfigureMotor(rightMotors[i], true);
-    }
+     /* factory default values */
+     _rghtFront.configFactoryDefault();
+     _rghtFollower.configFactoryDefault();
+     _leftFront.configFactoryDefault();
+     _leftFollower.configFactoryDefault();
+     _rghtFollower2.configFactoryDefault();
+     _leftFollower2.configFactoryDefault();
 
-    ahrs = new AHRS(SPI.Port.kMXP);
+     _leftFront.configOpenloopRamp(0.5);
+     _rghtFront.configOpenloopRamp(0.5);
 
-    drive = new DifferentialDrive(leftMotors[0], rightMotors[0]);
-  } 
+     _leftFront.setNeutralMode(NeutralMode.Brake);
+     _rghtFront.setNeutralMode(NeutralMode.Brake);
 
-  public void turnToAngle(double angle) {
-    double error = angle - ahrs.getAngle();
-    SmartDashboard.putNumber("Error", error);
-    SmartDashboard.putNumber("GyroAngle", ahrs.getAngle());
-    SmartDashboard.putBoolean("GryoIsCalibrating", ahrs.isCalibrating());
+     /* set up followers */
+     _rghtFollower.follow(_rghtFront);
+     _leftFollower.follow(_leftFront);
 
-    if (Math.abs(error) > kToleranceDegrees && !ahrs.isCalibrating()){
-      this.rotation = error;
-      move();
-     //this.rotation = 0;
-     //ahrs.resetDisplacement();
-      return;
-    } else {
-      this.rotation = 0;
-      move();
-      //ahrs.reset();
-      return;
-    }
+     _rghtFollower2.follow(_rghtFront);
+     _leftFollower2.follow(_leftFront);
+
+     /* [3] flip values so robot moves forward when stick-forward/LEDs-green */
+     _rghtFront.setInverted(true); // !< Update this
+     _leftFront.setInverted(false); // !< Update this
+
+     /*
+      * set the invert of the followers to match their respective master controllers
+      */
+     _rghtFollower.setInverted(true);
+     _leftFollower.setInverted(false);
+    _rghtFollower2.setInverted(true);
+     _leftFollower2.setInverted(false);        
+
+
+     /*
+      * [4] adjust sensor phase so sensor moves positive when Talon LEDs are green
+      */
+     _rghtFront.setSensorPhase(true);
+     _leftFront.setSensorPhase(true);
+
+     /*
+      * WPI drivetrain classes defaultly assume left and right are opposite. call
+      * this so we can apply + to both sides when moving forward. DO NOT CHANGE
+      */
+     _diffD.setRightSideInverted(false);
+ }
+
+  private void ConfigureMotor(final WPI_TalonFX falcon, final boolean inverted){
+    falcon.setInverted(inverted);
+    falcon.configClosedloopRamp(Constants.closedDriveVoltageRampRate);
+    falcon.configOpenloopRamp(Constants.openDriveVoltageRampRate);
+    falcon.setNeutralMode(NeutralMode.Brake);
+    falcon.configNeutralDeadband(JoystickConstants.deadzone);
   }
 
-  public void move() {
-    //Math.pow((.17*i), 2);
-    //drive.tankDrive(0 + Math.pow((kP * this.rotation), 2), 0 - Math.pow((kP * this.rotation), 2));
-    SmartDashboard.putBoolean("HitMove", true);
-    SmartDashboard.putNumber("Rotation", this.rotation);
-    double rotation =  kP * this.rotation;
-
-    double newRotation2 = rotation + getVoltageCompensation(rotation);
-    //SmartDashboard.putNumber("newRotation2", newRotation2);
-
-    double volatageLimit =  newRotation2 > 1 ? 1 : newRotation2; 
-    SmartDashboard.putNumber("newRotation", volatageLimit);
-
-    SmartDashboard.putNumber("Left", 0 - volatageLimit);
-    SmartDashboard.putNumber("Right", 0 + volatageLimit);
-
-    drive.tankDrive(0 - volatageLimit, 0 + volatageLimit);
-  }
-
-  public double getVoltageCompensation(double voltage){
-    if (voltage > 0 && voltage <= 20)
-      return .23;
-
-    if (voltage < 0 && voltage > -20)
-      return -.23;
-
-    return 0;
-  }
-
-  public void drive(double rightSpeed, double leftSpeed){
-    double newRightSpeed = isWithinDeadzone(rightSpeed) ? rightSpeed : 0;
-    double newLeftSpeed = isWithinDeadzone(leftSpeed) ? leftSpeed : 0;
-
-    drive.tankDrive(newLeftSpeed, newRightSpeed);
-  }
-
-  private boolean isWithinDeadzone(double speed){
-    return Math.abs(speed) > JoystickConstants.deadzone;
-  }
-
-  private void ConfigureMotor(CANSparkMax sparkMax, boolean inverted){
-    sparkMax.setInverted(inverted);
-    sparkMax.enableVoltageCompensation(12.0);
-    sparkMax.setClosedLoopRampRate(Constants.closedDriveVoltageRampRate);
-    sparkMax.setOpenLoopRampRate(Constants.openDriveVoltageRampRate);
-    sparkMax.setIdleMode(IdleMode.kBrake);
-  }
+  /*public void drive(final double leftSpeed, final double rightSpeed){
+    leftMotors[0].set(ControlMode.PercentOutput, leftSpeed);
+    rightMotors[0].set(ControlMode.PercentOutput, rightSpeed);
+    SmartDashboard.putString("Percent Output", ControlMode.PercentOutput.toString());
+  }*/
 
   @Override
   public void initDefaultCommand() {
