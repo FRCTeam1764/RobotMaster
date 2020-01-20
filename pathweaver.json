@@ -1,0 +1,8 @@
+{
+  "lengthUnit": "Foot",
+  "maxVelocity": 2.0,
+  "maxAcceleration": 2.0,
+  "wheelBase": 2.166666667,
+  "gameName": "Destination: Deep Space",
+  "outputDir": "pathweaver"
+}

@@ -10,22 +10,33 @@ public class LimeLightValues {
     public static double area;
     public static double skew;
     public static boolean hasTarget;
+    public static boolean ledOn;
 
+    public static NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
     public LimeLightValues(){
-        NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
         xDeg = limelightTable.getEntry("tx").getDouble(0);
         yDeg = limelightTable.getEntry("ty").getDouble(0);
         area = limelightTable.getEntry("ta").getDouble(0);
         skew = limelightTable.getEntry("ts").getDouble(0);
         hasTarget = Boolean.parseBoolean(limelightTable.getEntry("tv").getString("0"));
+        ledOn = limelightTable.getEntry("ledMode").getBoolean(false);
 
-        SmartDashboard.putNumber("LimelightXDeg", xDeg);
+      /*  SmartDashboard.putNumber("LimelightXDeg", xDeg);
         SmartDashboard.putNumber("LimelightYDeg", yDeg);
         SmartDashboard.putNumber("LimelightArea", area);
         SmartDashboard.putNumber("LimelightSkew", skew);
-        SmartDashboard.putBoolean("LimelightHasTarget", hasTarget);
+        SmartDashboard.putBoolean("LimelightHasTarget", hasTarget);*/
     
+    }
+
+    public static double getXDeg(){
+      // SmartDashboard.putNumber("LimelightXDeg", limelightTable.getEntry("tx").getDouble(0));
+        return limelightTable.getEntry("tx").getDouble(0);
+    }
+
+    public static double getYDeg(){
+        return limelightTable.getEntry("ty").getDouble(0);
     }
     
 }

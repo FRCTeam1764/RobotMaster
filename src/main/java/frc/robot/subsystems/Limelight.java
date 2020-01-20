@@ -26,16 +26,36 @@ public class Limelight extends Subsystem {
   }
 
   public void turnLEDOn(){
-    
+    LimeLightValues.limelightTable.getEntry("ledMode").setNumber(3);
+  }
+
+  public void turnLEDOff(){
+    LimeLightValues.limelightTable.getEntry("ledMode").setNumber(1);
   }
  
-  private final double targetHeight = 0.9166666666667; // ll in //Height to center of target in feet
-  private final double cameraHeight = 1.0416666666667; // 12 1/2 in //Height to center of camera lense in feet
-  private double distance;
-
-  public double findDistanceFixed(){ //Finds the distance from the front of the robot to target in feet, assuming fixed position
-      distance = (targetHeight - cameraHeight) / Math.tan( LimeLightValues.yDeg * Math.PI/180);
+  private final double targetHeight = 109; //Height to center of target in inches //Note: remeasure
+  private final double cameraHeight = 14; //Height to center of camera lense in inches
+  private final double cameraAngle = 20.8; //Angle camera is mounted at in degrees
+  private final double frontToCamera = 8; //Distance from front of robot to camera, in inches
+  private double distance = 0;
+  
+  public double getDistanceFixed() throws InterruptedException { // Finds the distance from the front of the robot to
+                                                                 // target in inches, assuming fixed position
+      turnLEDOn();
+      Thread.sleep(250);
+      distance = (targetHeight - cameraHeight) / 
+                 Math.tan((cameraAngle + LimeLightValues.getYDeg()) * (Math.PI/180)) - frontToCamera;
+      turnLEDOff();
       return distance;
+  }
 
+  double angle = 0;
+
+  public double getAngle() throws InterruptedException {
+      turnLEDOn();
+      Thread.sleep(250);
+      angle = LimeLightValues.getXDeg();
+      turnLEDOff();
+      return angle;
   }
 }
