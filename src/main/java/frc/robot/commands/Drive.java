@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Robot;
+import frc.robot.Subsystems.Limelight;
 import frc.robot.OI;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -34,6 +35,7 @@ public class Drive extends Command {
   public Drive() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.drivetrain);
+    requires(Robot.limelight);
   }
 
   TalonFX _rightMaster = Robot.drivetrain._rightMaster;
@@ -64,22 +66,29 @@ public class Drive extends Command {
 	
 		/* Button processing for state toggle and sensor zeroing */
 		getButtons(btns, _gamepad);
-		if(btns[2] && !_btns[2]){
+		/*if(btns[2] && !_btns[2]){
 			_state = !_state; 		// Toggle state
 			_firstCall = true;		// State change, do first call operation
 			_targetAngle = _rightMaster.getSelectedSensorPosition(1);
 			_lockedDistance = _rightMaster.getSelectedSensorPosition(0);
-		}else if (btns[1] && !_btns[1]) {
+    }*/
+    if (btns[1] && !_btns[1]) {
 			zeroSensors();			// Zero Sensors
 		}
 		if(btns[5] && !_btns[5]) {
-			_smoothing--; // Decrement smoothing
+      _smoothing--; // Decrement smoothing
+      
+      Robot.limelight.turnLEDOn();
+
 			if(_smoothing < 0) _smoothing = 0; // Cap smoothing
 			_rightMaster.configMotionSCurveStrength(_smoothing);
 
 			System.out.println("Smoothing value is: " + _smoothing);
 		}
 		if(btns[6] && !_btns[6]) {
+
+      Robot.limelight.turnLEDOff();
+
 			_smoothing++; // Increment smoothing
 			if(_smoothing > 8) _smoothing = 8; // Cap smoothing
 			_rightMaster.configMotionSCurveStrength(_smoothing);
@@ -90,17 +99,19 @@ public class Drive extends Command {
 				
 		if(!_state){
 			if (_firstCall)
-				System.out.println("This is Acade Drive.\n");
+			//	System.out.println("This is Acade Drive.\n");
 			
 			_leftMaster.set(ControlMode.PercentOutput, forward, DemandType.ArbitraryFeedForward, +turn);
 			_rightMaster.set(ControlMode.PercentOutput, forward, DemandType.ArbitraryFeedForward, -turn);
-		}else{
+    }
+    /*else{
 			if (_firstCall) {
-				System.out.println("This is Motion Magic with the Auxiliary PID using the difference between two encoders.");
+      
+        System.out.println("This is Motion Magic with the Auxiliary PID using the difference between two encoders.");
 				System.out.println("Servo [-6,6] rotations while also maintaining a straight heading.\n");
 
 				/* Determine which slot affects which PID */
-				_rightMaster.selectProfileSlot(Constants.kSlot_Distanc, Constants.PID_PRIMARY);
+				/*_rightMaster.selectProfileSlot(Constants.kSlot_Distanc, Constants.PID_PRIMARY);
 				_rightMaster.selectProfileSlot(Constants.kSlot_Turning, Constants.PID_TURN);
 			}
 			
@@ -108,17 +119,17 @@ public class Drive extends Command {
 			//final double target_sensorUnits = forward * Constants.kSensorUnitsPerRotation * Constants.kRotationsToTravel
        //   + _lockedDistance;
 
-       final double target_sensorUnits = 162116;
+      /* final double target_sensorUnits = 162116;
        final double target_turn = _targetAngle;
 
        /*
        * Configured for MotionMagic on Quad Encoders' Sum and Auxiliary PID on Quad
        * Encoders' Difference
        */
-      _rightMaster.set(ControlMode.MotionMagic, target_sensorUnits, DemandType.AuxPID, target_turn);
+      /*_rightMaster.set(ControlMode.MotionMagic, target_sensorUnits, DemandType.AuxPID, target_turn);
       _leftMaster.follow(_rightMaster, FollowerType.AuxOutput1);
     }
-    _firstCall = false;
+    _firstCall = false;*/
   }
 
   /** Zero quadrature encoders on Talon */

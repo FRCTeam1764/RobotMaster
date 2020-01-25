@@ -5,14 +5,19 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
+package frc.robot.Interfaces;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.buttons.Button;
 
 /**
  * Add your docs here.
  */
-public class OI {
+public interface WheelOfFortuneInterface {
+    public void brake(); //Motor comes to a complete stop
+    public void moveWheel(); //Moves motor at a slow yet steady speed
+    public void setSelectedColor(Button btn); //Sets the wanted color for the wheel 
+    public String getSelectedColor(); //Gets selected color in the form of a string
 
-public static Joystick joystick = new Joystick(0);
+
+
 }

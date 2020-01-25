@@ -5,14 +5,13 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot;
-
-import edu.wpi.first.wpilibj.Joystick;
+package frc.robot.Interfaces;
 
 /**
  * Add your docs here.
  */
-public class OI {
 
-public static Joystick joystick = new Joystick(0);
+ // Control the shooter both in movement and in shooting
+public interface ShootingInterface {
+    public void shootBall();
 }

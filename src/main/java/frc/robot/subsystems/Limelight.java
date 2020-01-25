@@ -17,8 +17,6 @@ public class Limelight extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  private LimeLightValues values = new LimeLightValues();
-
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
@@ -32,9 +30,17 @@ public class Limelight extends Subsystem {
   public void turnLEDOff(){
     LimeLightValues.limelightTable.getEntry("ledMode").setNumber(1);
   }
+
+  public boolean isLEDOn(){
+    return LimeLightValues.limelightTable.getEntry("ledMode").getValue().toString().equals("3")? true : false;
+  }
+
+  public boolean isLEDOff(){
+    return LimeLightValues.limelightTable.getEntry("ledMode").getValue().toString().equals("1")? true : false;
+  }
  
-  private final double targetHeight = 109; //Height to center of target in inches //Note: remeasure
-  private final double cameraHeight = 14; //Height to center of camera lense in inches
+  private final double targetHeight = 112; //Height to center of target in inches //Note: remeasure
+  private final double cameraHeight = 13; //Height to center of camera lense in inches
   private final double cameraAngle = 20.8; //Angle camera is mounted at in degrees
   private final double frontToCamera = 8; //Distance from front of robot to camera, in inches
   private double distance = 0;
@@ -57,5 +63,17 @@ public class Limelight extends Subsystem {
       angle = LimeLightValues.getXDeg();
       turnLEDOff();
       return angle;
+  }
+
+
+  // only used within testing
+  public void victoryFlash() throws InterruptedException {
+    turnLEDOn();
+    Thread.sleep(200);
+    turnLEDOff();
+    Thread.sleep(100);
+    turnLEDOn();
+    Thread.sleep(200);
+    turnLEDOff();
   }
 }

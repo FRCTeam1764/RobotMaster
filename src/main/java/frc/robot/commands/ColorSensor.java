@@ -7,6 +7,8 @@
 
 package frc.robot.Commands;
 
+import com.revrobotics.ColorMatch;
+import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.I2C;
@@ -25,9 +27,25 @@ public class ColorSensor extends Command {
 
   Color detectedColor;
 
+  ColorMatch match = new ColorMatch();
+
+  ColorMatchResult result;
+
+  String colorString;
+  
+  final Color blueTarget = ColorMatch.makeColor(0.239, 0.477, 0.278);
+  final Color greenTarget = ColorMatch.makeColor(0.25, 0.497 , 0.25);
+  final Color redTarget = ColorMatch.makeColor(0.304, 0.46, 0.227);
+  final Color yellowTarget = ColorMatch.makeColor(0.29, 0.5, 0.2);
+
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+
+    match.addColorMatch(blueTarget);
+    match.addColorMatch(greenTarget);
+    match.addColorMatch(redTarget);
+    match.addColorMatch(yellowTarget);
     
   }
 
@@ -37,11 +55,30 @@ public class ColorSensor extends Command {
 
     detectedColor = sensor.getColor();
 
+        result = match.matchClosestColor(detectedColor);
+
+        if ( result.color == blueTarget) {
+          colorString = "Blue";
+        } else if (result.color == redTarget) {
+          colorString = "Red";
+        } else if (result.color == greenTarget) {
+          colorString = "Green";
+        } else if (result.color == yellowTarget) {
+          colorString = "Yellow";
+        } else {
+          colorString = "Unknown";
+        }
+
+        
+
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
     SmartDashboard.putNumber("IR", sensor.getIR());
     SmartDashboard.putNumber("Proximity", sensor.getProximity());
+
+    SmartDashboard.putNumber("Confidence", result.confidence);
+    SmartDashboard.putString("Detected Color", colorString);
   }
 
   // Make this return true when this Command no longer needs to run execute()

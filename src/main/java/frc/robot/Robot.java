@@ -1,5 +1,6 @@
 package frc.robot;
 
+import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
@@ -15,12 +16,12 @@ public class Robot extends TimedRobot {
 
 	public static Drivetrain drivetrain =  new Drivetrain();
     public static Limelight limelight = new Limelight();
+    public static FieldPositioning fieldpos = new FieldPositioning(0,0,0);
+
     Drive drive = new Drive();
     LimelightDrive lldrive = new LimelightDrive();
     PIDControls pidcontrols = new PIDControls();
     ColorSensor colorsensor = new ColorSensor();
-
-    public static double[] robotPos = new double[3]; // robotPos[0] = x-pos, robotPos[1] = y-pos, robotPos[2] = Angle orientation
     
     @Override
     public void autonomousInit() {
@@ -36,7 +37,9 @@ public class Robot extends TimedRobot {
 
     @Override
 	public void teleopInit() {
-		drive.start();
+    drive.start();
+    
+    
     }
 
 	/**
@@ -46,30 +49,65 @@ public class Robot extends TimedRobot {
 		Scheduler.getInstance().run();
     }
 
-    @Override
-    public void testInit() {
-        // TODO Auto-generated method stub
-        colorsensor.start();
-    }
-
     ColorSensorV3 sensor = new ColorSensorV3(I2C.Port.kOnboard);
 
   Color detectedColor;
 
-  ColorMatchResult match;
+  ColorMatch match = new ColorMatch();
+
+  ColorMatchResult result;
+
+  String colorString;
+  
+  final Color blueTarget = ColorMatch.makeColor(0.239, 0.477, 0.278);
+  final Color greenTarget = ColorMatch.makeColor(0.25, 0.497 , 0.25);
+  final Color redTarget = ColorMatch.makeColor(0.304, 0.46, 0.227);
+  final Color yellowTarget = ColorMatch.makeColor(0.29, 0.5, 0.2);
+
+    @Override
+    public void testInit() {
+        // TODO Auto-generated method stub
+        //colorsensor.start();
+
+        match.addColorMatch(blueTarget);
+        match.addColorMatch(greenTarget);
+        match.addColorMatch(redTarget);
+        match.addColorMatch(yellowTarget);
+        
+    }
   
     @Override
     public void testPeriodic() {
         // TODO Auto-generated method stub
+
         Scheduler.getInstance().run();
 
         detectedColor = sensor.getColor();
+
+        result = match.matchClosestColor(detectedColor);
+
+        if ( result.color == blueTarget) {
+          colorString = "Blue";
+        } else if (result.color == redTarget) {
+          colorString = "Red";
+        } else if (result.color == greenTarget) {
+          colorString = "Green";
+        } else if (result.color == yellowTarget) {
+          colorString = "Yellow";
+        } else {
+          colorString = "Unknown";
+        }
+
+        
 
     SmartDashboard.putNumber("Red", detectedColor.red);
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
     SmartDashboard.putNumber("IR", sensor.getIR());
     SmartDashboard.putNumber("Proximity", sensor.getProximity());
+
+    SmartDashboard.putNumber("Confidence", result.confidence);
+    SmartDashboard.putString("Detected Color", colorString);
        
     }
 }

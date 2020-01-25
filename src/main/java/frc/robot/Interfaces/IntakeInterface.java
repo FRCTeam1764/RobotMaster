@@ -10,8 +10,6 @@ package frc.robot.Interfaces;
 /**
  * Add your docs here.
  */
-
- // Control the shooter both in movement and in shooting
-public interface Shooting {
-    public void shootBall();
+public interface IntakeInterface {
+    public void suckInThemBalls(); //Title says it all
 }
