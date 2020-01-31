@@ -10,16 +10,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Commands.*;
 import frc.robot.Subsystems.*;
+import edu.wpi.first.hal.sim.DriverStationSim;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 
 public class Robot extends TimedRobot {
 
 	public static Drivetrain drivetrain =  new Drivetrain();
     public static Limelight limelight = new Limelight();
-    public static FieldPositioning fieldpos = new FieldPositioning(0,0,0);
+    public static FieldPositioning fieldpos = new FieldPositioning(1); // 0=left, 1=middle, 2=right, driverstation's perspective
 
     Drive drive = new Drive();
-    LimelightDrive lldrive = new LimelightDrive();
+    public static LimelightDrive lldrive = new LimelightDrive();
     PIDControls pidcontrols = new PIDControls();
     ColorSensor colorsensor = new ColorSensor();
     
@@ -45,8 +49,12 @@ public class Robot extends TimedRobot {
 	/**
 	 * This function is called periodically during operator control
 	 */
+
+  public static NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 	public void teleopPeriodic() {
-		Scheduler.getInstance().run();
+    Scheduler.getInstance().run();
+    
+    SmartDashboard.putNumber("LimelightSkew", limelightTable.getEntry("ts").getDouble(0));
     }
 
     ColorSensorV3 sensor = new ColorSensorV3(I2C.Port.kOnboard);

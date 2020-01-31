@@ -37,5 +37,9 @@ public class LimeLightValues {
     public static double getYDeg(){
         return limelightTable.getEntry("ty").getDouble(0);
     }
+
+    public static double getSkew(){
+      return limelightTable.getEntry("ts").getDouble(0);
+    }
     
 }

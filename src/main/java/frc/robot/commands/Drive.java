@@ -9,6 +9,8 @@ package frc.robot.Commands;
 
 import com.ctre.phoenix.motorcontrol.Faults;
 
+import edu.wpi.first.hal.sim.DriverStationSim;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -36,6 +38,7 @@ public class Drive extends Command {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.drivetrain);
     requires(Robot.limelight);
+
   }
 
   TalonFX _rightMaster = Robot.drivetrain._rightMaster;
@@ -100,9 +103,12 @@ public class Drive extends Command {
 		if(!_state){
 			if (_firstCall)
 			//	System.out.println("This is Acade Drive.\n");
-			
-			_leftMaster.set(ControlMode.PercentOutput, forward, DemandType.ArbitraryFeedForward, +turn);
-			_rightMaster.set(ControlMode.PercentOutput, forward, DemandType.ArbitraryFeedForward, -turn);
+
+      //Apply throttle to everything just to make sure nothing is overpowered
+			_leftMaster.set(ControlMode.PercentOutput, forward*getThrottle(), DemandType.ArbitraryFeedForward, +turn*getThrottle());
+      _rightMaster.set(ControlMode.PercentOutput, forward*getThrottle(), DemandType.ArbitraryFeedForward, -turn*getThrottle());
+      
+      DriverStation.reportError("" +turn*getThrottle()  , true);
     }
     /*else{
 			if (_firstCall) {
@@ -142,11 +148,11 @@ public class Drive extends Command {
   /** Deadband 5 percent, used on the gamepad */
   double ForwardDeadband(final double value) {
     /* Upper deadband */
-    if (value >= +0.1)
+    if (value >= +0.12)
       return value;
 
     /* Lower deadband */
-    if (value <= -0.1)
+    if (value <= -0.12)
       return value;
 
     /* Outside deadband */
@@ -155,15 +161,22 @@ public class Drive extends Command {
 
   double TurningDeadband(final double value) {
     /* Upper deadband */
-    if (value >= +0.23)
+    if (value >= +0.19)
       return value;
 
     /* Lower deadband */
-    if (value <= -0.23)
+    if (value <= -0.19)
       return value;
 
     /* Outside deadband */
     return 0;
+  }
+
+  double getThrottle(){
+    return -0.5 *_gamepad.getRawAxis(3) + 0.5;
+
+    /*Uses the equation .5(axisvalue) +.5 to give an equation
+      with the domain [-1,1] and the range [0,1]*/
   }
 
   /** Gets all buttons from gamepad */

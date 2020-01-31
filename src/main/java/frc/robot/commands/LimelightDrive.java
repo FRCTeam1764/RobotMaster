@@ -17,7 +17,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.Timer;
+import java.util.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -46,8 +46,9 @@ public class LimelightDrive extends Command {
 
   }
 
-  final double kP = 0.6 / 29.8; // (kP/MaxDegreesOutputted)
-  final double constantSpeed = .12; // Constant added during turning
+  final double kP = 0.11 / 29.8; // (kP/MaxDegreesOutputted)
+  final double constantSpeed = 0.025; // Constant added during turning
+  final double deadband = 0.45;
   double turningSpeed = 0;
   double xDegrees = 0;
   double navxDegrees = 0;
@@ -61,6 +62,8 @@ public class LimelightDrive extends Command {
   boolean firstCallStartTimer = true;
 
   double intAngle;
+
+  Timer timer = new Timer();
 
   TalonFX _rightMaster = Robot.drivetrain._rightMaster;
   TalonFX _leftMaster = Robot.drivetrain._leftMaster;
@@ -87,6 +90,7 @@ public class LimelightDrive extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    DriverStation.reportError("reached timer", true);
     _leftMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, 0);
     _rightMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, 0);
 
@@ -106,17 +110,19 @@ public class LimelightDrive extends Command {
     _rightMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, 0);
   }
 
-  //Converts the Talon FX's arbitary units to inches
-  public double convertUnitToInches(final double units){
-    return units * (6*Math.PI)/2048; //2048 units per rotation, Circumference of wheels = 6PI In
+  private double unitToInchFactor = (6 * Math.PI) / (2048*9.5); // 2048 units per rotation of motor, ~9.5 gear box ratio, Circumference of wheels = 6PI in
+
+  // Converts the Talon FX's arbitary units to inches
+  public double convertUnitToInches(final double units) {
+    return units * unitToInchFactor;
   }
 
   // Opposite of convertUnitToInches()
-  public double convertInchesToUnits(final double feet){
-    return feet/((6*Math.PI)/2048);
+  public double convertInchesToUnits(final double inches) {
+    return inches / unitToInchFactor;
   }
 
-  public void getXDeg(){
+  public void getXDeg() {
     // Aligns robot to target; turning the robot
 
     // Gets angle from limelight and relates the angle to the navx
@@ -139,7 +145,7 @@ public class LimelightDrive extends Command {
 
       DriverStation.reportWarning("started", true);
 
-      final double intSpeed = kP * navxDegrees + constantSpeed;
+      final double intSpeed = kP * navxDegrees + (navxDegrees > 0 ? constantSpeed : -constantSpeed);
       intAngle = navxDegrees;
 
       SmartDashboard.putNumber("intSpeed", intSpeed);
@@ -149,38 +155,44 @@ public class LimelightDrive extends Command {
     }
   }
 
-
   double errorDegrees;
-  public void turnRobotToTarget(){
+
+  public void turnRobotToTarget() {
 
     errorDegrees = navxDegrees;
 
-  /* while (navxDegrees > 0.8 || navxDegrees < -0.8) {
-      turningSpeed = kP * navxDegrees + constantSpeed; //(turningSpeed < .1? (kI) : 0);
+    /*
+     * while (navxDegrees > 0.8 || navxDegrees < -0.8) { turningSpeed = kP *
+     * navxDegrees + constantSpeed; //(turningSpeed < .1? (kI) : 0);
+     * 
+     * DriverStation.reportError(navxDegrees + "," + turningSpeed, true); //
+     * xDegrees = limelightTable.getEntry("tx").getDouble(0);
+     * 
+     * navxDegrees = navx.getAngle(); _leftMaster.set(ControlMode.PercentOutput, 0,
+     * DemandType.ArbitraryFeedForward, +turningSpeed);
+     * _rightMaster.set(ControlMode.PercentOutput, 0,
+     * DemandType.ArbitraryFeedForward, -turningSpeed); }
+     */
 
-      DriverStation.reportError(navxDegrees + "," + turningSpeed, true);
-      // xDegrees = limelightTable.getEntry("tx").getDouble(0);
-
-      navxDegrees = navx.getAngle();
-      	_leftMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, +turningSpeed);
-			_rightMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, -turningSpeed);
-    }*/
-
-    while (errorDegrees > 0.3 || errorDegrees < -0.3) {
-      turningSpeed = kP * errorDegrees + constantSpeed; //(turningSpeed < .1? (kI) : 0);
+    while (errorDegrees > deadband || errorDegrees < -deadband) {
+      turningSpeed = kP * errorDegrees + (errorDegrees > 0 ? constantSpeed : -constantSpeed); // (turningSpeed < .1?
+                                                                                              // (kI) : 0);
 
       DriverStation.reportError(errorDegrees + "," + turningSpeed, true);
       // xDegrees = limelightTable.getEntry("tx").getDouble(0);
 
       errorDegrees = intAngle - navx.getYaw();
       _leftMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, +turningSpeed);
-			_rightMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, -turningSpeed);
+      _rightMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, -turningSpeed);
     }
   }
 
-  public void getDistanceToTravel(){
-    // Move forward
+  public void getDistanceToTravel() {
     if (firstCallGetDistance) {
+      // Stops motors
+      _leftMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, 0);
+      _rightMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, 0);
+
       try {
         distanceTalonFX = convertInchesToUnits(Robot.limelight.getDistanceFixed() - distanceFromTarget);
       } catch (final InterruptedException e) {
@@ -190,7 +202,7 @@ public class LimelightDrive extends Command {
 
       DriverStation.reportError("Distance = " + distanceTalonFX, true);
 
-      if(distanceTalonFX<0){
+      if (distanceTalonFX < 0) {
         distanceTalonFX = 0;
       }
 
@@ -201,19 +213,20 @@ public class LimelightDrive extends Command {
 
     firstCallGetDistance = false;
 
-    zeroSensors();
-
     _rightMaster.selectProfileSlot(Constants.kSlot_Distanc, Constants.PID_PRIMARY);
     _rightMaster.selectProfileSlot(Constants.kSlot_Turning, Constants.PID_TURN);
+
+    zeroSensors();
   }
 
  private double error;
- Timer timer = new Timer();
 
   public void moveRobotForward(){
+
     /* !--------------------------------------!
        Same as motion magic mode in Drive class
        !--------------------------------------! */
+       while(true){
       final double target_turn = _rightMaster.getSelectedSensorPosition(1);
 
        /*
@@ -225,22 +238,22 @@ public class LimelightDrive extends Command {
 
      error = _rightMaster.getSensorCollection().getIntegratedSensorPosition();
 
-     if(firstCallStartTimer && (error>distanceTalonFX-1 || error<distanceTalonFX+1)){
-      timer.start();
+     DriverStation.reportError(""+_rightMaster.getSensorCollection().getIntegratedSensorVelocity()+","+error, true);
+
+     if(firstCallStartTimer && error>distanceTalonFX-325 && error<distanceTalonFX+325){ // allow +/-3 inches of error
+      timer.schedule(new StopRobot(), 2000);
+      
 
       firstCallStartTimer = false;
      }
-
-     if(timer.hasPeriodPassed(5)){ //5 seconds of PID positioning
-      isFinished();
-     }
-
+    }
+    
   
   }
 
   void zeroSensors() {
     _leftMaster.getSensorCollection().setIntegratedSensorPosition(0.0, Constants.kTimeoutMs);
     _rightMaster.getSensorCollection().setIntegratedSensorPosition(0.0, Constants.kTimeoutMs);
-    System.out.println("All sensors are zeroed.\n");
+    System.out.println("All sensors are zeroed.\n" );
   }
 }

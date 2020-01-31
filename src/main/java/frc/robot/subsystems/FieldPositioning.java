@@ -35,7 +35,6 @@ public class FieldPositioning extends Subsystem {
         robotPos[1] = 2;
         robotPos[2] = 2;
         break;
-
     }
 
   }

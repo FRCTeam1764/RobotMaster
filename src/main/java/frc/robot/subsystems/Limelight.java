@@ -39,18 +39,21 @@ public class Limelight extends Subsystem {
     return LimeLightValues.limelightTable.getEntry("ledMode").getValue().toString().equals("1")? true : false;
   }
  
-  private final double targetHeight = 112; //Height to center of target in inches //Note: remeasure
-  private final double cameraHeight = 13; //Height to center of camera lense in inches
-  private final double cameraAngle = 20.8; //Angle camera is mounted at in degrees
+  private final double targetHeight = 78+2.5+4.75; //May be inaccurate //Height to center of target in inches (no skew) //Note: remeasure
+  private final double cameraHeight = 13;//+21; //Height to center of camera lense in inches
+  private final double cameraAngle = 19.05; //Angle camera is mounted at in degrees
   private final double frontToCamera = 8; //Distance from front of robot to camera, in inches
   private double distance = 0;
   
+  final int delay = 500; //in milliseconds
+
   public double getDistanceFixed() throws InterruptedException { // Finds the distance from the front of the robot to
                                                                  // target in inches, assuming fixed position
       turnLEDOn();
-      Thread.sleep(250);
-      distance = (targetHeight - cameraHeight) / 
-                 Math.tan((cameraAngle + LimeLightValues.getYDeg()) * (Math.PI/180)) - frontToCamera;
+      Thread.sleep(delay+300);
+      distance = targetHeight - cameraHeight; 
+      distance /= Math.tan((cameraAngle + LimeLightValues.getYDeg()) * (Math.PI/180));
+      distance -= frontToCamera;
       turnLEDOff();
       return distance;
   }
@@ -59,7 +62,7 @@ public class Limelight extends Subsystem {
 
   public double getAngle() throws InterruptedException {
       turnLEDOn();
-      Thread.sleep(250);
+      Thread.sleep(delay+300);
       angle = LimeLightValues.getXDeg();
       turnLEDOff();
       return angle;
@@ -69,11 +72,23 @@ public class Limelight extends Subsystem {
   // only used within testing
   public void victoryFlash() throws InterruptedException {
     turnLEDOn();
-    Thread.sleep(200);
+    Thread.sleep(150);
     turnLEDOff();
-    Thread.sleep(100);
+    Thread.sleep(50);
     turnLEDOn();
-    Thread.sleep(200);
+    Thread.sleep(150);
+    turnLEDOff();
+    Thread.sleep(50);
+    turnLEDOn();
+    Thread.sleep(50);
+    turnLEDOff();
+    Thread.sleep(50);
+    turnLEDOn();
+    Thread.sleep(50);
+    turnLEDOff();
+    Thread.sleep(50);
+    turnLEDOn();
+    Thread.sleep(50);
     turnLEDOff();
   }
 }
