@@ -4,17 +4,22 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.Commands.*;
-import frc.robot.Subsystems.*;
-import edu.wpi.first.hal.sim.DriverStationSim;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.I2C;
+import frc.robot.Commands.ColorSensor;
+import frc.robot.Commands.Drive;
+import frc.robot.Commands.PIDControls;
+import frc.robot.Commands.XBoxDrive;
+import frc.robot.Commands.LimelightMovement.LimelightDrive;
+import frc.robot.Commands.LimelightMovement.LimelightTurn;
+import frc.robot.Subsystems.Drivetrain;
+import frc.robot.Subsystems.FieldPositioning;
+import frc.robot.Subsystems.Limelight;
 
 public class Robot extends TimedRobot {
 
@@ -23,13 +28,17 @@ public class Robot extends TimedRobot {
     public static FieldPositioning fieldpos = new FieldPositioning(1); // 0=left, 1=middle, 2=right, driverstation's perspective
 
     Drive drive = new Drive();
+    XBoxDrive xboxdrive = new XBoxDrive();
+    LimelightTurn llturn = new LimelightTurn();
     public static LimelightDrive lldrive = new LimelightDrive();
     PIDControls pidcontrols = new PIDControls();
     ColorSensor colorsensor = new ColorSensor();
     
     @Override
     public void autonomousInit() {
-        lldrive.start();
+        Scheduler.getInstance().add(llturn);
+        lldrive.isCanceled();
+
         //pidcontrols.start();
     }
     
@@ -39,11 +48,14 @@ public class Robot extends TimedRobot {
         
     }
 
+    
+
     @Override
 	public void teleopInit() {
-    drive.start();
-    
-    
+    Scheduler.getInstance().close();
+
+    //Scheduler.getInstance().add(drive);
+    Scheduler.getInstance().add(xboxdrive);
     }
 
 	/**

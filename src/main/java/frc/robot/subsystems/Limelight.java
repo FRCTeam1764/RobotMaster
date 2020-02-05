@@ -39,10 +39,10 @@ public class Limelight extends Subsystem {
     return LimeLightValues.limelightTable.getEntry("ledMode").getValue().toString().equals("1")? true : false;
   }
  
-  private final double targetHeight = 78+2.5+4.75; //May be inaccurate //Height to center of target in inches (no skew) //Note: remeasure
-  private final double cameraHeight = 13;//+21; //Height to center of camera lense in inches
-  private final double cameraAngle = 19.05; //Angle camera is mounted at in degrees
-  private final double frontToCamera = 8; //Distance from front of robot to camera, in inches
+  private final double targetHeight = 78.25+2.5+8.75; //May be inaccurate //Height to center of target in inches (no skew) //Note: remeasure
+  private final double cameraHeight = 13;//+21; //Height to center of camera lens in inches
+  private final double cameraAngle = 20.55; //Angle camera is mounted at in degrees
+  private final double frontToCamera = 12.25; //Distance from front of robot to camera, in inches
   private double distance = 0;
   
   final int delay = 500; //in milliseconds

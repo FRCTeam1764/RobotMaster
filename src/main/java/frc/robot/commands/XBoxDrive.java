@@ -19,6 +19,8 @@ import frc.robot.Subsystems.Limelight;
 import frc.robot.OI;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.constants.PIDConstants;
 
@@ -33,8 +35,8 @@ import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-public class Drive extends Command {
-  public Drive() {
+public class XBoxDrive extends Command {
+  public XBoxDrive() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.drivetrain);
     requires(Robot.limelight);
@@ -50,10 +52,7 @@ public class Drive extends Command {
   double _targetAngle = 0;
   int _smoothing;
 
-  Joystick _gamepad = OI.joystick;
-  
-  boolean[] _btns = new boolean[PIDConstants.kNumButtonsPlusOne];
-	boolean[] btns = new boolean[PIDConstants.kNumButtonsPlusOne];
+  XboxController _gamepad = OI.xbox;
 
   @Override
   protected void initialize() {
@@ -62,80 +61,41 @@ public class Drive extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    double forward = -1 * _gamepad.getY();
-		double turn = _gamepad.getZ();
+    double forward = -_gamepad.getY(Hand.kLeft);
+		double turn = _gamepad.getX(Hand.kRight);
 		forward = ForwardDeadband(forward);
 		turn = TurningDeadband(turn);
 	
 		/* Button processing for state toggle and sensor zeroing */
-		getButtons(btns, _gamepad);
+		//getButtons(btns, _gamepad);
 		/*if(btns[2] && !_btns[2]){
 			_state = !_state; 		// Toggle state
 			_firstCall = true;		// State change, do first call operation
 			_targetAngle = _rightMaster.getSelectedSensorPosition(1);
 			_lockedDistance = _rightMaster.getSelectedSensorPosition(0);
     }*/
-    if (btns[1] && !_btns[1]) {
-			zeroSensors();			// Zero Sensors
-		}
-		if(btns[5] && !_btns[5]) {
-      _smoothing--; // Decrement smoothing
+		if(_gamepad.getAButton()) {
       
       Robot.limelight.turnLEDOn();
-
-			if(_smoothing < 0) _smoothing = 0; // Cap smoothing
-			_rightMaster.configMotionSCurveStrength(_smoothing);
-
-			System.out.println("Smoothing value is: " + _smoothing);
-		}
-		if(btns[6] && !_btns[6]) {
-
+    }
+    if(!_gamepad.getAButton()) {
+      
       Robot.limelight.turnLEDOff();
-
-			_smoothing++; // Increment smoothing
-			if(_smoothing > 8) _smoothing = 8; // Cap smoothing
-			_rightMaster.configMotionSCurveStrength(_smoothing);
-			
-			System.out.println("Smoothing value is: " + _smoothing);
 		}
-		System.arraycopy(btns, 0, _btns, 0, PIDConstants.kNumButtonsPlusOne);
-				
-		if(!_state){
-			if (_firstCall)
+    
+    if( _gamepad.getTriggerAxis(Hand.kRight)>.4){
+      forward = 0;
+      turn = 0;
+    }
+
 			//	System.out.println("This is Acade Drive.\n");
 
       //Apply throttle to everything just to make sure nothing is overpowered
 			_leftMaster.set(ControlMode.PercentOutput, forward*getThrottle(), DemandType.ArbitraryFeedForward, +turn*getThrottle());
       _rightMaster.set(ControlMode.PercentOutput, forward*getThrottle(), DemandType.ArbitraryFeedForward, -turn*getThrottle());
       
-      DriverStation.reportError("" +turn*getThrottle()  , true);
-    }
-    /*else{
-			if (_firstCall) {
-      
-        System.out.println("This is Motion Magic with the Auxiliary PID using the difference between two encoders.");
-				System.out.println("Servo [-6,6] rotations while also maintaining a straight heading.\n");
-
-				/* Determine which slot affects which PID */
-				/*_rightMaster.selectProfileSlot(Constants.kSlot_Distanc, Constants.PID_PRIMARY);
-				_rightMaster.selectProfileSlot(Constants.kSlot_Turning, Constants.PID_TURN);
-			}
-			
-			/* Calculate targets from gamepad inputs */
-			//final double target_sensorUnits = forward * Constants.kSensorUnitsPerRotation * Constants.kRotationsToTravel
-       //   + _lockedDistance;
-
-      /* final double target_sensorUnits = 162116;
-       final double target_turn = _targetAngle;
-
-       /*
-       * Configured for MotionMagic on Quad Encoders' Sum and Auxiliary PID on Quad
-       * Encoders' Difference
-       */
-      /*_rightMaster.set(ControlMode.MotionMagic, target_sensorUnits, DemandType.AuxPID, target_turn);
-      _leftMaster.follow(_rightMaster, FollowerType.AuxOutput1);
-    }
-    _firstCall = false;*/
+      //DriverStation.reportError("" +turn  , true);
+    
   }
 
   /** Zero quadrature encoders on Talon */
@@ -148,11 +108,11 @@ public class Drive extends Command {
   /** Deadband 5 percent, used on the gamepad */
   double ForwardDeadband(final double value) {
     /* Upper deadband */
-    if (value >= +0.1)
+    if (value >= +0.15)
       return value;
 
     /* Lower deadband */
-    if (value <= -0.1)
+    if (value <= -0.15)
       return value;
 
     /* Outside deadband */
@@ -161,11 +121,11 @@ public class Drive extends Command {
 
   double TurningDeadband(final double value) {
     /* Upper deadband */
-    if (value >= +0.14)
+    if (value >= +0.25)
       return value;
 
     /* Lower deadband */
-    if (value <= -0.14)
+    if (value <= -0.25)
       return value;
 
     /* Outside deadband */
@@ -173,7 +133,8 @@ public class Drive extends Command {
   }
 
   double getThrottle(){
-    return -0.5 *_gamepad.getRawAxis(3) + 0.5;
+    //return _gamepad.getTriggerAxis(Hand.kRight);
+    return .75;
 
     /*Uses the equation .5(axisvalue) +.5 to give an equation
       with the domain [-1,1] and the range [0,1]*/

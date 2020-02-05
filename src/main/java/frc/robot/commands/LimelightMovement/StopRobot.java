@@ -5,10 +5,11 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Commands;
+package frc.robot.Commands.LimelightMovement;
 
 import java.util.TimerTask;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Robot;
 
 /**
@@ -21,6 +22,14 @@ public class StopRobot extends TimerTask{
 
     public void run() {
         Robot.lldrive.isFinished();
+        DriverStation.reportError("reached timer", true);
+        try {
+            Robot.limelight.victoryFlash();
+          } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+          }
+          Robot.lldrive.travelledToTarget = true;
 
     }
 }

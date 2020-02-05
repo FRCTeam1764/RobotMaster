@@ -1,9 +1,11 @@
 /**
  * Simple class containing constants used throughout project
  */
-package frc.robot;
+package frc.robot.constants;
 
-public class Constants {
+import frc.robot.Gains;
+
+public class PIDConstants {
 	/**
 	 * Number of joystick buttons to poll.
 	 * 10 means buttons[1,9] are polled, which is actually 9 buttons.
@@ -51,9 +53,9 @@ public class Constants {
 	//public final static Gains kGains_Velocit = new Gains( 5*(.2*1023)/1163, 0.001,  0, 80*(.7*1023)/6000,  50,  1 );
     //public final static Gains kGains_MotProf = new Gains( 5*(.2*1023)/1163, 0.001,  0, 80*(.7*1023)/6000,  50,  1.00 );
     // (.5*1023)/19939, 80*(.7*1023)/6000
-    
+    public final static Gains kGains_Turning = new Gains( 0, 0.0,  0, 0.0,            0,  0 );
     public final static Gains kGains_Distanc = new Gains( 0.1, 0.0,  0.0, 0.0,            100,  0.50 );
-	public final static Gains kGains_Turning = new Gains( 2.0, 0.0,  4.0, 0.0,            200,  1.00 );
+	//public final static Gains kGains_Turning = new Gains( 2.0, 0.0,  0, 0.0,            200,  1.00 );
 	public final static Gains kGains_Velocit = new Gains( 0.1, 0.0, 20.0, 1023.0/6800.0,  300,  0.50 );
 	public final static Gains kGains_MotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
 	/** ---- Flat constants, you should not need to change these ---- */

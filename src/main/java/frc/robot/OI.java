@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 
 /**
  * Add your docs here.
@@ -15,4 +16,6 @@ import edu.wpi.first.wpilibj.Joystick;
 public class OI {
 
 public static Joystick joystick = new Joystick(0);
+
+public static XboxController xbox = new XboxController(0);
 }

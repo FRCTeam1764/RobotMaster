@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Commands;
+package frc.robot.Commands.LimelightMovement;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.SPI;
 import java.util.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
+import frc.robot.constants.PIDConstants;
 import frc.robot.Robot;
 
 public class LimelightDrive extends Command {
@@ -40,14 +40,9 @@ public class LimelightDrive extends Command {
     }
   }
 
-  // Called just before this Command runs the first time
-  @Override
-  protected void initialize() {
-
-  }
 
   final double kP = 0.11 / 29.8; // (kP/MaxDegreesOutputted)
-  final double constantSpeed = 0.025; // Constant added during turning
+  final double constantSpeed = 0.03; // Constant added during turning
   final double deadband = 0.45;
   double turningSpeed = 0;
   double xDegrees = 0;
@@ -57,9 +52,9 @@ public class LimelightDrive extends Command {
 
   double distanceTalonFX = 0; // Distance needed to be travelled, in Talon FX's arbitary units
 
-  boolean firstCallGetAngle = true;
   boolean firstCallGetDistance = true;
   boolean firstCallStartTimer = true;
+  public static boolean travelledToTarget = false;
 
   double intAngle;
 
@@ -71,35 +66,33 @@ public class LimelightDrive extends Command {
   final double distanceFromTarget = 120; // The distance the robot needs to stop at in front of the target
                                          // In inches
 
+  // Called just before this Command runs the first time
+  @Override
+  protected void initialize() {
+    getDistanceToTravel();
+
+  }
+
   @Override
   protected void execute() {
 
-    getXDeg();
-    turnRobotToTarget();
-    getDistanceToTravel();
+    /*getXDeg();
+    turnRobotToTarget();*/
     moveRobotForward();
 
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
-  protected boolean isFinished() {
-    return true;
+public boolean isFinished() {
+  return travelledToTarget;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    DriverStation.reportError("reached timer", true);
     _leftMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, 0);
     _rightMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, 0);
-
-    try {
-      Robot.limelight.victoryFlash();
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
   }
 
   // Called when another command which requires one or more of the same
@@ -122,70 +115,6 @@ public class LimelightDrive extends Command {
     return inches / unitToInchFactor;
   }
 
-  public void getXDeg() {
-    // Aligns robot to target; turning the robot
-
-    // Gets angle from limelight and relates the angle to the navx
-
-    if (firstCallGetAngle) {
-      navx.zeroYaw();
-
-      try {
-        xDegrees = Robot.limelight.getAngle();
-      } catch (final InterruptedException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-
-      navx.setAngleAdjustment(xDegrees);
-      DriverStation.reportError("Angle = " + navx.getAngle() + ", xDegrees = " + xDegrees, true);
-
-      navxDegrees = navx.getAngle();
-      firstCallGetAngle = false;
-
-      DriverStation.reportWarning("started", true);
-
-      final double intSpeed = kP * navxDegrees + (navxDegrees > 0 ? constantSpeed : -constantSpeed);
-      intAngle = navxDegrees;
-
-      SmartDashboard.putNumber("intSpeed", intSpeed);
-      SmartDashboard.putNumber("intAngle", intAngle);
-
-      navx.zeroYaw();
-    }
-  }
-
-  double errorDegrees;
-
-  public void turnRobotToTarget() {
-
-    errorDegrees = navxDegrees;
-
-    /*
-     * while (navxDegrees > 0.8 || navxDegrees < -0.8) { turningSpeed = kP *
-     * navxDegrees + constantSpeed; //(turningSpeed < .1? (kI) : 0);
-     * 
-     * DriverStation.reportError(navxDegrees + "," + turningSpeed, true); //
-     * xDegrees = limelightTable.getEntry("tx").getDouble(0);
-     * 
-     * navxDegrees = navx.getAngle(); _leftMaster.set(ControlMode.PercentOutput, 0,
-     * DemandType.ArbitraryFeedForward, +turningSpeed);
-     * _rightMaster.set(ControlMode.PercentOutput, 0,
-     * DemandType.ArbitraryFeedForward, -turningSpeed); }
-     */
-
-    while (errorDegrees > deadband || errorDegrees < -deadband) {
-      turningSpeed = kP * errorDegrees + (errorDegrees > 0 ? constantSpeed : -constantSpeed); // (turningSpeed < .1?
-                                                                                              // (kI) : 0);
-
-      DriverStation.reportError(errorDegrees + "," + turningSpeed, true);
-      // xDegrees = limelightTable.getEntry("tx").getDouble(0);
-
-      errorDegrees = intAngle - navx.getYaw();
-      _leftMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, +turningSpeed);
-      _rightMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, -turningSpeed);
-    }
-  }
 
   public void getDistanceToTravel() {
     if (firstCallGetDistance) {
@@ -213,8 +142,8 @@ public class LimelightDrive extends Command {
 
     firstCallGetDistance = false;
 
-    _rightMaster.selectProfileSlot(Constants.kSlot_Distanc, Constants.PID_PRIMARY);
-    _rightMaster.selectProfileSlot(Constants.kSlot_Turning, Constants.PID_TURN);
+    _rightMaster.selectProfileSlot(PIDConstants.kSlot_Distanc, PIDConstants.PID_PRIMARY);
+    _rightMaster.selectProfileSlot(PIDConstants.kSlot_Turning, PIDConstants.PID_TURN);
 
     zeroSensors();
   }
@@ -226,7 +155,8 @@ public class LimelightDrive extends Command {
     /* !--------------------------------------!
        Same as motion magic mode in Drive class
        !--------------------------------------! */
-       while(true){
+
+
       final double target_turn = _rightMaster.getSelectedSensorPosition(1);
 
        /*
@@ -238,22 +168,20 @@ public class LimelightDrive extends Command {
 
      error = _rightMaster.getSensorCollection().getIntegratedSensorPosition();
 
-     DriverStation.reportError(""+_rightMaster.getSensorCollection().getIntegratedSensorVelocity()+","+error, true);
+     //DriverStation.reportError(""+_rightMaster.getSensorCollection().getIntegratedSensorVelocity()+","+error, true);
 
-     if(firstCallStartTimer && error>distanceTalonFX-325 && error<distanceTalonFX+325){ // allow +/-3 inches of error
+     if(error>(distanceTalonFX-convertInchesToUnits(3)) && error<(distanceTalonFX+convertInchesToUnits(3)) && firstCallStartTimer){ // allow +/-3 inches of error
       timer.schedule(new StopRobot(), 2000);
       
 
       firstCallStartTimer = false;
      }
-    }
-    
   
   }
 
   void zeroSensors() {
-    _leftMaster.getSensorCollection().setIntegratedSensorPosition(0.0, Constants.kTimeoutMs);
-    _rightMaster.getSensorCollection().setIntegratedSensorPosition(0.0, Constants.kTimeoutMs);
+    _leftMaster.getSensorCollection().setIntegratedSensorPosition(0.0, PIDConstants.kTimeoutMs);
+    _rightMaster.getSensorCollection().setIntegratedSensorPosition(0.0, PIDConstants.kTimeoutMs);
     System.out.println("All sensors are zeroed.\n" );
   }
 }
