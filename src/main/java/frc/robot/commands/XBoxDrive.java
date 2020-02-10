@@ -7,39 +7,23 @@
 
 package frc.robot.Commands;
 
-import com.ctre.phoenix.motorcontrol.Faults;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.hal.sim.DriverStationSim;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import frc.robot.Robot;
-import frc.robot.Subsystems.Limelight;
-import frc.robot.OI;
-
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.command.Command;
+import frc.robot.OI;
+import frc.robot.Robot;
+import frc.robot.util.Limelight;
 import frc.robot.constants.PIDConstants;
-
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
-import com.ctre.phoenix.motorcontrol.SensorTerm;
-import com.ctre.phoenix.motorcontrol.StatusFrame;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FollowerType;
-import com.ctre.phoenix.motorcontrol.DemandType;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 public class XBoxDrive extends Command {
   public XBoxDrive() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.drivetrain);
-    requires(Robot.limelight);
 
   }
 
@@ -76,11 +60,11 @@ public class XBoxDrive extends Command {
     }*/
 		if(_gamepad.getAButton()) {
       
-      Robot.limelight.turnLEDOn();
+      Limelight.turnLEDOn();
     }
     if(!_gamepad.getAButton()) {
       
-      Robot.limelight.turnLEDOff();
+      Limelight.turnLEDOff();
 		}
     
     if( _gamepad.getTriggerAxis(Hand.kRight)>.4){

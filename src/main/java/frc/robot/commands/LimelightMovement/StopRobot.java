@@ -11,6 +11,7 @@ import java.util.TimerTask;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Robot;
+import frc.robot.util.Limelight;
 
 /**
  * Add your docs here.
@@ -24,7 +25,7 @@ public class StopRobot extends TimerTask{
         Robot.lldrive.isFinished();
         DriverStation.reportError("reached timer", true);
         try {
-            Robot.limelight.victoryFlash();
+           Limelight.victoryFlash();
           } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

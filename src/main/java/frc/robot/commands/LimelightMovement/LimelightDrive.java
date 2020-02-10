@@ -21,6 +21,7 @@ import java.util.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.PIDConstants;
+import frc.robot.util.Limelight;
 import frc.robot.Robot;
 
 public class LimelightDrive extends Command {
@@ -31,7 +32,6 @@ public class LimelightDrive extends Command {
   public LimelightDrive() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.drivetrain);
-    requires(Robot.limelight);
 
     try {
       navx = new AHRS(SPI.Port.kMXP);
@@ -123,7 +123,7 @@ public boolean isFinished() {
       _rightMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, 0);
 
       try {
-        distanceTalonFX = convertInchesToUnits(Robot.limelight.getDistanceFixed() - distanceFromTarget);
+        distanceTalonFX = convertInchesToUnits(Limelight.getDistanceFixed() - distanceFromTarget);
       } catch (final InterruptedException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();

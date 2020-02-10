@@ -8,54 +8,55 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Commands.ColorSensor;
 import frc.robot.Commands.Drive;
 import frc.robot.Commands.PIDControls;
+import frc.robot.Commands.PathFollowing;
 import frc.robot.Commands.XBoxDrive;
 import frc.robot.Commands.LimelightMovement.LimelightDrive;
 import frc.robot.Commands.LimelightMovement.LimelightTurn;
 import frc.robot.Subsystems.Drivetrain;
 import frc.robot.Subsystems.FieldPositioning;
-import frc.robot.Subsystems.Limelight;
 
 public class Robot extends TimedRobot {
 
-	public static Drivetrain drivetrain =  new Drivetrain();
-    public static Limelight limelight = new Limelight();
-    public static FieldPositioning fieldpos = new FieldPositioning(1); // 0=left, 1=middle, 2=right, driverstation's perspective
+  public static Drivetrain drivetrain = new Drivetrain();
+  public static FieldPositioning fieldpos = new FieldPositioning(1); // 0=left, 1=middle, 2=right, driverstation's
+                                                                     // perspective
+  public static PathFollowing pathfollowing = new PathFollowing();
 
-    Drive drive = new Drive();
-    XBoxDrive xboxdrive = new XBoxDrive();
-    LimelightTurn llturn = new LimelightTurn();
-    public static LimelightDrive lldrive = new LimelightDrive();
-    PIDControls pidcontrols = new PIDControls();
-    ColorSensor colorsensor = new ColorSensor();
-    
-    @Override
-    public void autonomousInit() {
-        Scheduler.getInstance().add(llturn);
-        lldrive.isCanceled();
+  Drive drive = new Drive();
+  XBoxDrive xboxdrive = new XBoxDrive();
+  LimelightTurn llturn = new LimelightTurn();
+  public static LimelightDrive lldrive = new LimelightDrive();
+  PIDControls pidcontrols = new PIDControls();
+  ColorSensor colorsensor = new ColorSensor();
 
-        //pidcontrols.start();
-    }
-    
-    @Override
-    public void autonomousPeriodic() {
-        Scheduler.getInstance().run();
-        
-    }
+  @Override
+  public void autonomousInit() {
+    pathfollowing.runCommand().schedule();
 
-    
+    // Scheduler.getInstance().add(llturn);
+    // lldrive.isCanceled();
 
-    @Override
-	public void teleopInit() {
-    Scheduler.getInstance().close();
+    // pidcontrols.start();
+  }
 
-    //Scheduler.getInstance().add(drive);
-    Scheduler.getInstance().add(xboxdrive);
+  @Override
+  public void autonomousPeriodic() {
+    CommandScheduler.getInstance().run();
+
+  }
+
+  @Override
+  public void teleopInit() {
+
+    ((Command) drive).schedule();
+   // Scheduler.getInstance().add(xboxdrive);
     }
 
 	/**
@@ -64,7 +65,7 @@ public class Robot extends TimedRobot {
 
   public static NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 	public void teleopPeriodic() {
-    Scheduler.getInstance().run();
+    CommandScheduler.getInstance().run();
     
     SmartDashboard.putNumber("LimelightSkew", limelightTable.getEntry("ts").getDouble(0));
     }
@@ -100,7 +101,7 @@ public class Robot extends TimedRobot {
     public void testPeriodic() {
         // TODO Auto-generated method stub
 
-        Scheduler.getInstance().run();
+        CommandScheduler.getInstance().run();
 
         detectedColor = sensor.getColor();
 
@@ -129,7 +130,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("Confidence", result.confidence);
     SmartDashboard.putString("Detected Color", colorString);
        
-    }
+      }
 }
 
 

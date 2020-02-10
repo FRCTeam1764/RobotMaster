@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.util.Limelight;
 import frc.robot.Robot;
 
 public class LimelightTurn extends Command {
@@ -25,7 +26,6 @@ public class LimelightTurn extends Command {
   public LimelightTurn() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.drivetrain);
-    requires(Robot.limelight);
 
     try {
       navx = new AHRS(SPI.Port.kMXP);
@@ -92,7 +92,7 @@ public class LimelightTurn extends Command {
       navx.zeroYaw();
 
       try {
-        xDegrees = Robot.limelight.getAngle();
+        xDegrees = Limelight.getAngle();
       } catch (final InterruptedException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();

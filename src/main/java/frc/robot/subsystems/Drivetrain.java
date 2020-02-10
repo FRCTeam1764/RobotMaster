@@ -8,6 +8,7 @@
 package frc.robot.Subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.Faults;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
@@ -191,17 +192,12 @@ public class Drivetrain extends Subsystem {
 	}
   
 
-  /*public void drive(final double leftSpeed, final double rightSpeed){
-    leftMotors[0].set(ControlMode.PercentOutput, leftSpeed);
-    rightMotors[0].set(ControlMode.PercentOutput, rightSpeed);
-    SmartDashboard.putString("Percent Output", ControlMode.PercentOutput.toString());
-  }*/
 
   /** Zero quadrature encoders on Talon */
 	void zeroSensors() {
 		_leftMaster.getSensorCollection().setIntegratedSensorPosition(0, PIDConstants.kTimeoutMs);
 		_rightMaster.getSensorCollection().setIntegratedSensorPosition(0, PIDConstants.kTimeoutMs);
-		System.out.println("[Quadrature Encoders] All sensors are zeroed.\n");
+		System.out.println("All sensors are zeroed.\n");
 	}
 
   @Override

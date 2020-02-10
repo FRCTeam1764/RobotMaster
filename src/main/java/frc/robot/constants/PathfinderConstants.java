@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
  * Add your docs here.
  */
 public class PathfinderConstants {
-    public static final double kTrackwidthMeters = 0.69;
+    public static final double kTrackwidthMeters = 27*.0254;
     public static final DifferentialDriveKinematics kDriveKinematics =
         new DifferentialDriveKinematics(kTrackwidthMeters);
 
@@ -35,7 +35,7 @@ public class PathfinderConstants {
     public static final double kaVoltSecondsSquaredPerMeter = 0.2;
 
     // Example value only - as above, this must be tuned for your drive!
-    public static final double kPDriveVel = 8.5;
+    public static final double kPDriveVel = 1;
 
 
     public static final double kMaxSpeedMetersPerSecond = 3;
