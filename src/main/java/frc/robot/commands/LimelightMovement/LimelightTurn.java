@@ -14,18 +14,18 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.util.Limelight;
 import frc.robot.Robot;
 
-public class LimelightTurn extends Command {
+public class LimelightTurn extends CommandBase {
 
   AHRS navx;
   
   public LimelightTurn() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.drivetrain);
+    addRequirements(Robot.drivetrain);
 
     try {
       navx = new AHRS(SPI.Port.kMXP);
@@ -52,35 +52,26 @@ public class LimelightTurn extends Command {
 
   // Called just before this Command runs the first time
   @Override
-  protected void initialize() {
+  public void initialize() {
     getXDeg();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
-  protected void execute() {
+  public void execute() {
     turnRobotToTarget();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
-  protected boolean isFinished() {
-    if(isAtTarget){
-      return true;
-    }
-    return false;
+  public boolean isFinished() {
+    return isAtTarget;
   }
 
   // Called once after isFinished returns true
   @Override
-  protected void end() {
-    Robot.lldrive.start();
-  }
-
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
+  public void end(boolean interrupted) {
+    Robot.lldrive.schedule();
   }
 
   public void getXDeg() {

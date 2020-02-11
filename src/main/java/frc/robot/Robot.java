@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.Commands.ColorSensor;
 import frc.robot.Commands.Drive;
-import frc.robot.Commands.PIDControls;
 import frc.robot.Commands.PathFollowing;
 import frc.robot.Commands.XBoxDrive;
 import frc.robot.Commands.LimelightMovement.LimelightDrive;
@@ -33,8 +32,7 @@ public class Robot extends TimedRobot {
   XBoxDrive xboxdrive = new XBoxDrive();
   LimelightTurn llturn = new LimelightTurn();
   public static LimelightDrive lldrive = new LimelightDrive();
-  PIDControls pidcontrols = new PIDControls();
-  ColorSensor colorsensor = new ColorSensor();
+  //ColorSensor colorsensor = new ColorSensor();
 
   @Override
   public void autonomousInit() {
@@ -132,55 +130,3 @@ public class Robot extends TimedRobot {
        
       }
 }
-
-
-
-
-/*
-package frc.robot;
-
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import frc.robot.Commands.*;
-import frc.robot.Subsystems.*;
-
-public class Robot extends TimedRobot {
-
-    
-    public static Drivetrain drivetrain =  new Drivetrain();
-    public static Limelight limelight = new Limelight();
-    Drive drive = new Drive();
-    LimelightDrive lldrive = new LimelightDrive();
-    PIDControls pidcontrols = new PIDControls();
-
-    @Override
-    public void autonomousInit() {
-        lldrive.start();
-        //pidcontrols.start();
-    }
-    
-    @Override
-    public void autonomousPeriodic() {
-        Scheduler.getInstance().run();
-        
-    }
-
-    @Override
-    public void teleopInit() {
-        drive.start();
-        
-    }
-
-    @Override
-    public void teleopPeriodic() {
-        Scheduler.getInstance().run();
-       
-    }
-
-    @Override
-    public void robotInit() {
-       
-    }
-}*/

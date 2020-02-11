@@ -13,16 +13,16 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.OI;
 import frc.robot.Robot;
 import frc.robot.constants.PIDConstants;
 import frc.robot.util.Limelight;
 
-public class Drive extends Command {
+public class Drive extends CommandBase {
   public Drive() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.drivetrain);
+    addRequirements(Robot.drivetrain);
 
   }
 
@@ -36,13 +36,9 @@ public class Drive extends Command {
   boolean[] _btns = new boolean[PIDConstants.kNumButtonsPlusOne];
 	boolean[] btns = new boolean[PIDConstants.kNumButtonsPlusOne];
 
-  @Override
-  protected void initialize() {
-  }
-
   // Called repeatedly when this Command is scheduled to run
   @Override
-  protected void execute() {
+  public void execute() {
     double forward = -1 * _gamepad.getY();
 		double turn = _gamepad.getZ();
 		forward = ForwardDeadband(forward);
@@ -132,19 +128,13 @@ public class Drive extends Command {
     }
   }
     
-    @Override
-  protected boolean isFinished() {
+  @Override
+  public boolean isFinished() {
     return false;
   }
 
   // Called once after isFinished returns true
   @Override
-  protected void end() {
+  public void end(boolean interrupted) {
   }
-
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
-  }
-	}
+}

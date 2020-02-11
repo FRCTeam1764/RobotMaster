@@ -18,20 +18,20 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import java.util.Timer;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.PIDConstants;
 import frc.robot.util.Limelight;
 import frc.robot.Robot;
 
-public class LimelightDrive extends Command {
+public class LimelightDrive extends CommandBase {
 
   NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
   AHRS navx;
 
   public LimelightDrive() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.drivetrain);
+    addRequirements(Robot.drivetrain);
 
     try {
       navx = new AHRS(SPI.Port.kMXP);
@@ -68,16 +68,17 @@ public class LimelightDrive extends Command {
 
   // Called just before this Command runs the first time
   @Override
-  protected void initialize() {
+  public void initialize() {
     getDistanceToTravel();
 
   }
 
   @Override
-  protected void execute() {
+  public void execute() {
 
-    /*getXDeg();
-    turnRobotToTarget();*/
+    /*
+     * getXDeg(); turnRobotToTarget();
+     */
     moveRobotForward();
 
   }
@@ -90,15 +91,7 @@ public boolean isFinished() {
 
   // Called once after isFinished returns true
   @Override
-  protected void end() {
-    _leftMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, 0);
-    _rightMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, 0);
-  }
-
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
+  public void end(boolean interrupted) {
     _leftMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, 0);
     _rightMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, 0);
   }

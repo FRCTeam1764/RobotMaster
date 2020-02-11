@@ -7,12 +7,10 @@
 
 package frc.robot.Commands;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.List;
-import java.util.function.*;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -20,32 +18,32 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import frc.robot.Subsystems.PathFollower;
+import frc.robot.Robot;
 import frc.robot.constants.PathfinderConstants;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class PathFollowing extends CommandBase {
   /**
    * Creates a new PathFollowing.
    */
 
-  PathFollower pathfollower = new PathFollower();
+  //Robot.drivetrain Robot.drivetrain = new Robot.drivetrain();
 
   public PathFollowing() {
     // Use addRequirements() here to declare subsystem dependencies.
 
-    addRequirements(pathfollower);
-    pathfollower.resetEncoders();
+    addRequirements(Robot.drivetrain);
+    Robot.drivetrain.resetEncoders();
   }
 
-  DifferentialDrive diffDrive = pathfollower.diffDrive;
+  DifferentialDrive diffDrive = Robot.drivetrain.diffDrive;
 
 
   // Called once the command ends or is interrupted.
@@ -86,19 +84,19 @@ public class PathFollowing extends CommandBase {
 
   // Run path following command, then stop at the end.
 
-  Supplier<DifferentialDriveWheelSpeeds> getWheelSpeed = () -> pathfollower.getWheelSpeeds();
-  BiConsumer<Double, Double> setTankDriveVoltage = (leftVolts, rightVolts) -> pathfollower.tankDriveVolts(leftVolts, rightVolts);
+  Supplier<DifferentialDriveWheelSpeeds> getWheelSpeed = () -> Robot.drivetrain.getWheelSpeeds();
+  BiConsumer<Double, Double> setTankDriveVoltage = (leftVolts, rightVolts) -> Robot.drivetrain.tankDriveVolts(leftVolts, rightVolts);
 
  public Command runCommand(){
 
-  pathfollower.resetEncoders();
-  pathfollower.resetOdometry(new Pose2d());
-  pathfollower.zeroHeading();
+  Robot.drivetrain.resetEncoders();
+  Robot.drivetrain.resetOdometry(new Pose2d());
+  Robot.drivetrain.zeroHeading();
 
 
- RamseteCommand ramseteCommand = new RamseteCommand(
+  RamseteCommand ramseteCommand = new RamseteCommand(
   exampleTrajectory,
-  pathfollower::getPose,
+  Robot.drivetrain::getPose,
   new RamseteController(PathfinderConstants.kRamseteB, PathfinderConstants.kRamseteZeta),
   new SimpleMotorFeedforward(PathfinderConstants.ksVolts,
                             PathfinderConstants.kvVoltSecondsPerMeter,
@@ -109,11 +107,11 @@ public class PathFollowing extends CommandBase {
   new PIDController(PathfinderConstants.kPDriveVel, 0, 0),
   // RamseteCommand passes volts to the callback
   setTankDriveVoltage,
-  pathfollower 
+  Robot.drivetrain 
   );
 
   return ramseteCommand;
 
-//ramseteCommand.andThen(() -> pathfollower.tankDriveVolts(0, 0));
+//ramseteCommand.andThen(() -> Robot.drivetrain.tankDriveVolts(0, 0));
 }
 }

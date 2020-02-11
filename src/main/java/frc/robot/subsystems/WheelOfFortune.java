@@ -7,19 +7,40 @@
 
 package frc.robot.Subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Interfaces.WheelOfFortuneInterface;
 
 /**
  * Add your docs here.
  */
-public class WheelOfFortune extends Subsystem {
+public class WheelOfFortune extends SubsystemBase implements WheelOfFortuneInterface {
+
+  @Override
+  public void brake() {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void moveWheel() {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void setSelectedColor(Button btn) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public String getSelectedColor() {
+    // TODO Auto-generated method stub
+    return null;
+  }
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  @Override
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
-  }
 
 }
