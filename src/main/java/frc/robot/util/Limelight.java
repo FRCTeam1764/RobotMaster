@@ -71,10 +71,15 @@ public class Limelight {
   
   final static int delay = 500; //in milliseconds
 
+
+  /** 
+   *  Finds the distance from the target to the front of the robot in inches, assuming the target is in a fixed position.
+   */
+
   public static double getDistanceFixed() throws InterruptedException { // Finds the distance from the front of the robot to
                                                                  // target in inches, assuming fixed position
       turnLEDOn();
-      Thread.sleep(delay+300);
+      Thread.sleep(delay);
       distance = targetHeight - cameraHeight; 
       distance /= Math.tan((cameraAngle + getYDeg()) * (Math.PI/180));
       distance -= frontToCamera;
@@ -86,7 +91,7 @@ public class Limelight {
 
   public static double getAngle() throws InterruptedException {
     turnLEDOn();
-    Thread.sleep(delay + 300);
+    Thread.sleep(delay);
     angle = getXDeg();
       turnLEDOff();
       return angle;

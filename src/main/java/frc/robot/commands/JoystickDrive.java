@@ -19,19 +19,19 @@ import frc.robot.Robot;
 import frc.robot.constants.PIDConstants;
 import frc.robot.util.Limelight;
 
-public class Drive extends CommandBase {
-  public Drive() {
+public class JoystickDrive extends CommandBase {
+  public JoystickDrive() {
     // Use requires() here to declare subsystem dependencies
     addRequirements(Robot.drivetrain);
 
   }
 
-  TalonFX _rightMaster = Robot.drivetrain._rightMaster;
-  TalonFX _leftMaster = Robot.drivetrain._leftMaster;
+  TalonFX _rightMaster = Robot.drivetrain.rightTalons[0];
+  TalonFX _leftMaster = Robot.drivetrain.leftTalons[0];
 
   int _smoothing;
 
-  Joystick _gamepad = OI.joystick;
+  Joystick joystick = OI.driverJoystick;
   
   boolean[] _btns = new boolean[PIDConstants.kNumButtonsPlusOne];
 	boolean[] btns = new boolean[PIDConstants.kNumButtonsPlusOne];
@@ -39,13 +39,13 @@ public class Drive extends CommandBase {
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    double forward = -1 * _gamepad.getY();
-		double turn = _gamepad.getZ();
+    double forward = -1 * joystick.getY();
+		double turn = joystick.getZ();
 		forward = ForwardDeadband(forward);
 		turn = TurningDeadband(turn);
 	
 		/* Button processing for state toggle and sensor zeroing */
-		getButtons(btns, _gamepad);
+		getButtons(btns, joystick);
 		
     if (btns[1] && !_btns[1]) {
 			zeroSensors();			// Zero Sensors
@@ -115,7 +115,7 @@ public class Drive extends CommandBase {
   }
 
   double getThrottle(){
-    return -0.5 *_gamepad.getRawAxis(3) + 0.5;
+    return -0.5 *joystick.getRawAxis(3) + 0.5;
 
     /*Uses the equation .5(axisvalue) +.5 to give an equation
       with the domain [-1,1] and the range [0,1]*/

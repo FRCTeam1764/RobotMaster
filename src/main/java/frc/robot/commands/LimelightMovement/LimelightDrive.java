@@ -17,7 +17,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
-import java.util.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.PIDConstants;
@@ -54,14 +53,12 @@ public class LimelightDrive extends CommandBase {
 
   boolean firstCallGetDistance = true;
   boolean firstCallStartTimer = true;
-  public static boolean travelledToTarget = false;
+  public boolean travelledToTarget = false;
 
   double intAngle;
 
-  Timer timer = new Timer();
-
-  TalonFX _rightMaster = Robot.drivetrain._rightMaster;
-  TalonFX _leftMaster = Robot.drivetrain._leftMaster;
+  TalonFX _rightMaster = Robot.drivetrain.rightTalons[0];
+  TalonFX _leftMaster = Robot.drivetrain.leftTalons[0];
 
   final double distanceFromTarget = 120; // The distance the robot needs to stop at in front of the target
                                          // In inches
@@ -96,16 +93,14 @@ public boolean isFinished() {
     _rightMaster.set(ControlMode.PercentOutput, 0, DemandType.ArbitraryFeedForward, 0);
   }
 
-  private double unitToInchFactor = (6 * Math.PI) / (2048*9.5); // 2048 units per rotation of motor, ~9.5 gear box ratio, Circumference of wheels = 6PI in
-
   // Converts the Talon FX's arbitary units to inches
   public double convertUnitToInches(final double units) {
-    return units * unitToInchFactor;
+    return units / PIDConstants.CLICKS_PER_INCH;
   }
 
   // Opposite of convertUnitToInches()
   public double convertInchesToUnits(final double inches) {
-    return inches / unitToInchFactor;
+    return inches * PIDConstants.CLICKS_PER_INCH;
   }
 
 
@@ -136,7 +131,6 @@ public boolean isFinished() {
     firstCallGetDistance = false;
 
     _rightMaster.selectProfileSlot(PIDConstants.kSlot_Distanc, PIDConstants.PID_PRIMARY);
-    _rightMaster.selectProfileSlot(PIDConstants.kSlot_Turning, PIDConstants.PID_TURN);
 
     zeroSensors();
   }
@@ -163,11 +157,10 @@ public boolean isFinished() {
 
      //DriverStation.reportError(""+_rightMaster.getSensorCollection().getIntegratedSensorVelocity()+","+error, true);
 
-     if(error>(distanceTalonFX-convertInchesToUnits(3)) && error<(distanceTalonFX+convertInchesToUnits(3)) && firstCallStartTimer){ // allow +/-3 inches of error
-      timer.schedule(new StopRobot(), 2000);
+     if(error>(distanceTalonFX-convertInchesToUnits(1)) && error<(distanceTalonFX+convertInchesToUnits(1))){ // allow +/-3 inches of error
       
 
-      firstCallStartTimer = false;
+      travelledToTarget =  true;
      }
   
   }

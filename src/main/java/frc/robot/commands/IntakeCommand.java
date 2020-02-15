@@ -8,13 +8,19 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Subsystems.TeleopSubsystems.Intake;
 
-public class XBoxControllerDrive extends CommandBase {
+public class IntakeCommand extends CommandBase {
   /**
-   * Creates a new XBoxControllerDrive.
+   * Creates a new IntakeCommand.
    */
-  public XBoxControllerDrive() {
-    // Use addRequirements() here to declare subsystem dependencies.
+
+  public Intake intake;
+
+  public IntakeCommand(double intakeSpeed) {
+    intake = new Intake(intakeSpeed);
+
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
@@ -25,11 +31,13 @@ public class XBoxControllerDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    intake.intake();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    intake.stopIntake();
   }
 
   // Returns true when the command should end.

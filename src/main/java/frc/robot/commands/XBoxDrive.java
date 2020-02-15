@@ -27,8 +27,8 @@ public class XBoxDrive extends CommandBase {
 
   }
 
-  TalonFX _rightMaster = Robot.drivetrain._rightMaster;
-  TalonFX _leftMaster = Robot.drivetrain._leftMaster;
+  TalonFX _rightMaster = Robot.drivetrain.rightTalons[0];
+  TalonFX _leftMaster = Robot.drivetrain.leftTalons[0];
 
   boolean _firstCall = true;
 	boolean _state = false;
@@ -36,34 +36,34 @@ public class XBoxDrive extends CommandBase {
   double _targetAngle = 0;
   int _smoothing;
 
-  XboxController _gamepad = OI.xbox;
+  XboxController controller = OI.driverXbox;
   
   // Called repeatedly when this Command is scheduled to run
   @Override
   public void execute() {
-    double forward = -_gamepad.getY(Hand.kLeft);
-    double turn = _gamepad.getX(Hand.kRight);
+    double forward = -controller.getY(Hand.kLeft);
+    double turn = controller.getX(Hand.kRight);
     forward = ForwardDeadband(forward);
     turn = TurningDeadband(turn);
 
     /* Button processing for state toggle and sensor zeroing */
-    // getButtons(btns, _gamepad);
+    // getButtons(btns, controller);
     /*
      * if(btns[2] && !_btns[2]){ _state = !_state; // Toggle state _firstCall =
      * true; // State change, do first call operation _targetAngle =
      * _rightMaster.getSelectedSensorPosition(1); _lockedDistance =
      * _rightMaster.getSelectedSensorPosition(0); }
      */
-    if (_gamepad.getAButton()) {
+    if (controller.getAButton()) {
 
       Limelight.turnLEDOn();
     }
-    if (!_gamepad.getAButton()) {
+    if (!controller.getAButton()) {
 
       Limelight.turnLEDOff();
     }
 
-    if (_gamepad.getTriggerAxis(Hand.kRight) > .4) {
+    if (controller.getTriggerAxis(Hand.kRight) > .4) {
       forward = 0;
       turn = 0;
     }
@@ -115,7 +115,7 @@ public class XBoxDrive extends CommandBase {
   }
 
   double getThrottle(){
-    //return _gamepad.getTriggerAxis(Hand.kRight);
+    //return controller.getTriggerAxis(Hand.kRight);
     return .75;
 
     /*Uses the equation .5(axisvalue) +.5 to give an equation

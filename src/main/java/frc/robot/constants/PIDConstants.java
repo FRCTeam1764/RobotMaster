@@ -11,26 +11,7 @@ public class PIDConstants {
 	 * 10 means buttons[1,9] are polled, which is actually 9 buttons.
 	 */
 	public final static int kNumButtonsPlusOne = 10;
-	
-	/**
-	 * How many sensor units per rotation.
-	 * Using CTRE Magnetic Encoder.
-	 * @link https://github.com/CrossTheRoadElec/Phoenix-Documentation#what-are-the-units-of-my-sensor
-	 */
-	public final static int kSensorUnitsPerRotation = 2048;
-	
-	/**
-	 * Number of rotations to drive when performing Distance Closed Loop
-	 */
-	public final static double kRotationsToTravel = 6;
-	
-	/**
-	 * Empirically measure what the difference between encoders per 360'
-	 * Drive the robot in clockwise rotations and measure the units per rotation.
-	 * Drive the robot in counter clockwise rotations and measure the units per rotation.
-	 * Take the average of the two.
-	 */
-	public final static int kEncoderUnitsPerRotation = 51711;
+
 	/**
 	 * Set to zero to skip waiting for confirmation.
 	 * Set to nonzero to wait and report to DS if action fails.
@@ -50,14 +31,15 @@ public class PIDConstants {
 	 * 	                                    			  kP                 kI   kD   kF                  Iz    PeakOut */
 	//public final static Gains kGains_Distanc = new Gains( 5*(.2*1023)/1163, 0.001,  0, 80*(.7*1023)/6000,  50,  1 );
 	//public final static Gains kGains_Turning = new Gains( 5*(.2*1023)/1163, 0.001,  0, 80*(.7*1023)/6000,  50,  1 );
-	//public final static Gains kGains_Velocit = new Gains( 5*(.2*1023)/1163, 0.001,  0, 80*(.7*1023)/6000,  50,  1 );
-    //public final static Gains kGains_MotProf = new Gains( 5*(.2*1023)/1163, 0.001,  0, 80*(.7*1023)/6000,  50,  1.00 );
-    // (.5*1023)/19939, 80*(.7*1023)/6000
-    public final static Gains kGains_Turning = new Gains( 0, 0.0,  0, 0.0,            0,  0 );
-    public final static Gains kGains_Distanc = new Gains( 0.1, 0.0,  0.0, 0.0,            100,  0.50 );
 	//public final static Gains kGains_Turning = new Gains( 2.0, 0.0,  0, 0.0,            200,  1.00 );
-	public final static Gains kGains_Velocit = new Gains( 0.1, 0.0, 20.0, 1023.0/6800.0,  300,  0.50 );
-	public final static Gains kGains_MotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
+	//public final static Gains kGains_Velocit = new Gains( 0.1, 0.0, 20.0, 1023.0/6800.0,  300,  0.50 );
+	//public final static Gains kGains_MotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
+	// (.5*1023)/19939, 80*(.7*1023)/6000
+	//                                                    kP   kI    kD   kF   Iz    PeakOut
+	public final static Gains kGains_Distanc = new Gains( 0.1, 0.0,  0.0, 0.0, 100,   0.50 );
+	public final static Gains kGains_Turning = new Gains( 0,   0.0,  0,   0.0,  0,     0 );
+	public final static Gains kGains_Velocity_Shooter = new Gains(0,0,0,0,0,0);
+	
 	/** ---- Flat constants, you should not need to change these ---- */
 	/* We allow either a 0 or 1 when selecting an ordinal for remote devices [You can have up to 2 devices assigned remotely to a talon/victor] */
 	public final static int REMOTE_0 = 0;
@@ -74,5 +56,26 @@ public class PIDConstants {
 	public final static int kSlot_Distanc = SLOT_0;
 	public final static int kSlot_Turning = SLOT_1;
 	public final static int kSlot_Velocit = SLOT_2;
-    public final static int kSlot_MotProf = SLOT_3;
+	public final static int kSlot_MotProf = SLOT_3;
+
+	public final static int kSlot_Shooter_Velocity = SLOT_0;
+
+	/* ---- Conversion Rates ---- */
+
+	public static final double WHEEL_CIRCUMFERENCE = (6 * Math.PI);
+	public static final double ROBOT_ROTATION_CIRCUMFERENCE = 26.5 * Math.PI;
+	public static final double GEAR_BOX_RATIO = (52/12)*(52/22);
+
+	public static final double WHEEL_ROTATION_PER_ROBOT_ROTATION = ROBOT_ROTATION_CIRCUMFERENCE/WHEEL_CIRCUMFERENCE;
+	public static final double CLICKS_PER_ROBOT_ROTATION = WHEEL_ROTATION_PER_ROBOT_ROTATION *2048 * GEAR_BOX_RATIO;
+	public static final double CLICKS_PER_INCH = (2048*GEAR_BOX_RATIO) /WHEEL_CIRCUMFERENCE ; 
+	public static final double CLICKS_PER_DEGREES = CLICKS_PER_ROBOT_ROTATION/360;
+
+	public static final double TALON_VELOCITY_PER_ROBOT_VELOCITY = (1/100)*1000/CLICKS_PER_INCH; //Ticks/100ms per inches/second
+	public static final double MAX_VELOCITY_INCH_PER_SECOND = 0;
+	
+
+	/* ---- Error Values ---- */
+
+	public static final int TICKS_ERROR = 250;
 }

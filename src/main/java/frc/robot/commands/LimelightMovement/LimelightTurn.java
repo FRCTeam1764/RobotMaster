@@ -14,15 +14,18 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.util.Limelight;
 import frc.robot.Robot;
 
 public class LimelightTurn extends CommandBase {
 
   AHRS navx;
-  
+
   public LimelightTurn() {
     // Use requires() here to declare subsystem dependencies
     addRequirements(Robot.drivetrain);
@@ -47,8 +50,8 @@ public class LimelightTurn extends CommandBase {
 
   double intAngle;
 
-  TalonFX _rightMaster = Robot.drivetrain._rightMaster;
-  TalonFX _leftMaster = Robot.drivetrain._leftMaster;
+  TalonFX _rightMaster = Robot.drivetrain.rightTalons[0];
+  TalonFX _leftMaster = Robot.drivetrain.leftTalons[0];
 
   // Called just before this Command runs the first time
   @Override
@@ -71,7 +74,9 @@ public class LimelightTurn extends CommandBase {
   // Called once after isFinished returns true
   @Override
   public void end(boolean interrupted) {
-    Robot.lldrive.schedule();
+    if(!interrupted){ CommandScheduler.getInstance().schedule(Robot.lldrive);}
+    else{Robot.drivetrain.stopDrivetrain();}
+   
   }
 
   public void getXDeg() {
