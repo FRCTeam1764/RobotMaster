@@ -49,7 +49,7 @@ public class Shooter extends SubsystemBase {
     timer.start();
 
     while(timer.get()<=time){
-      shooterMaster.set(ControlMode.Velocity, shooterVelocity);
+      shoot();
     }
 
     stopShooter();

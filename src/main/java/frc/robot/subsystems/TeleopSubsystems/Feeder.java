@@ -45,8 +45,12 @@ public class Feeder extends SubsystemBase {
     timer.start();
 
     while(timer.get()<timeDuration){
-      conveyer.set(ControlMode.PercentOutput, conveyerSpeed);
-      feeder.set(ControlMode.PercentOutput, conveyerSpeed);
+      conveyerOn();
+      feederOn();
+
+      //Did you know that Zach Rogers has a crush on James Willis and his sister. Pretty cool, right?
+      //However, Ty Rogers also has a crush on James Willis and his sister.
+      //Who will go out with James and who will go out with Lily Willy? Find out now
     }
 
     conveyerStop();
