@@ -19,6 +19,8 @@ public class Robot extends TimedRobot {
 
   public static Drivetrain drivetrain = new Drivetrain();
 
+  public static OI oi = new OI();
+
   JoystickDrive joystickdrive = new JoystickDrive();
   XBoxDrive xboxdrive = new XBoxDrive();
   FarmingSimulatorDrive jaxonDumbDrive = new FarmingSimulatorDrive();
