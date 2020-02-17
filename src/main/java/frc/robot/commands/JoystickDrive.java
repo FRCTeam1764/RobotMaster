@@ -31,7 +31,7 @@ public class JoystickDrive extends CommandBase {
 
   int _smoothing;
 
-  Joystick joystick = OI.driverJoystick;
+  Joystick joystick = Robot.oi.driverJoystick;
   
   boolean[] _btns = new boolean[PIDConstants.kNumButtonsPlusOne];
 	boolean[] btns = new boolean[PIDConstants.kNumButtonsPlusOne];
