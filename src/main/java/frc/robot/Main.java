@@ -7,6 +7,9 @@ import edu.wpi.first.wpilibj.RobotBase;
  * Unless you know what you are doing, do not modify this file except to
  * change the parameter class to the startRobot call.
  */
+
+ //Did you know that Zach has a crush on James Willis and his sister. Neat, right?
+ 
 public final class Main {
   private Main() {
   }

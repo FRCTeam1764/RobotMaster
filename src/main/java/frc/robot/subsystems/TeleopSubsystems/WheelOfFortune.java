@@ -7,8 +7,10 @@
 
 package frc.robot.Subsystems.TeleopSubsystems;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.PortConstants;
 import frc.robot.util.ColorSensor;
@@ -21,6 +23,7 @@ public class WheelOfFortune extends SubsystemBase {
 
   double wheelSpeed;
   Spark wheelMotor = new Spark(PortConstants.CONTROL_PANEL_WHEEL_MOTOR_PORT);
+  Solenoid controlPanelWheelExtender = new Solenoid(PortConstants.CONTROL_PANEL_WHEEL_SOLENOID_PORT);
 
   boolean rotationControlComplete = false;
   boolean positionControlComplete = false;
@@ -36,6 +39,10 @@ public class WheelOfFortune extends SubsystemBase {
 
   public void moveWheel() {
     wheelMotor.set(wheelSpeed);
+  }
+
+  public void extendWheel(boolean shouldExtend){
+    controlPanelWheelExtender.set(shouldExtend);
   }
 
   int count;

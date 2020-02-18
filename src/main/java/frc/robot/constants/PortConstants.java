@@ -21,6 +21,8 @@ public class PortConstants {
     public static final int SHOOTER_MASTER_MOTOR_PORT = 4;
     public static final int SHOOTER_FOLLOWER_MOTOR_PORT = 5;
 
+    public static final int CONTROL_PANEL_WHEEL_SOLENOID_PORT = 69;
+
     public static final int CONTROL_PANEL_WHEEL_MOTOR_PORT = 6;
     
     public static final int DRIVER_CONTROLLER_USB_PORT = 0;

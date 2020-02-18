@@ -7,6 +7,7 @@
 
 package frc.robot.Commands.PIDMovementCommands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commands.PIDMovementCommands.PIDDrive;
 import frc.robot.Commands.PIDMovementCommands.PIDDrive.MovementType;
@@ -18,13 +19,29 @@ public class PIDPath extends SequentialCommandGroup {
   /**
    * Creates a new PIDPath.
    */
+
+  static int robotPos = DriverStation.getInstance().getLocation();
+
+  static PIDDrive[] leftPath = new PIDDrive[] { 
+    new PIDDrive(12, MovementType.STRAIGHT),
+    new PIDDrive(90, MovementType.TURN), 
+    new PIDDrive(5, MovementType.SHOOT, 5) };
+
+  static PIDDrive[] middlePath = new PIDDrive[]{
+    new PIDDrive(-24, MovementType.STRAIGHT)
+  };
+
+  static PIDDrive[] rightPath = new PIDDrive[]{
+    new PIDDrive(90, MovementType.TURN),
+    new PIDDrive(-90, MovementType.TURN),
+    new PIDDrive(4, MovementType.SHOOT, 3)
+  };
+
   public PIDPath() {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(
-      new PIDDrive(12, MovementType.STRAIGHT), 
-      new PIDDrive(90, MovementType.TURN), 
-      new PIDDrive(5, MovementType.SHOOT, 5)
-    );
+    super(robotPos == 1 ? leftPath : 
+          robotPos == 2 ? middlePath:
+                          rightPath);
   }
 }

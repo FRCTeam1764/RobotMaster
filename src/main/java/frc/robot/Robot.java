@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -44,9 +45,13 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     drivetrain.setDrivetrainNeturalMode(NeutralMode.Brake);
 
-    CommandScheduler.getInstance().schedule(joystickdrive);
-   // CommandScheduler.getInstance().schedule(xboxdrive);
-   // CommandScheduler.getInstance().schedule(jaxonDumbDrive);
+    if(DriverStation.getInstance().getJoystickIsXbox(0)){
+      CommandScheduler.getInstance().schedule(xboxdrive);
+    }
+    else{
+      CommandScheduler.getInstance().schedule(joystickdrive);
+    }
+   
     }
 
 	/**
@@ -61,6 +66,7 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         // TODO Auto-generated method stub
+        CommandScheduler.getInstance().schedule(jaxonDumbDrive);
         
     }
   
