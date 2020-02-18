@@ -14,9 +14,11 @@ import edu.wpi.first.wpilibj2.command.button.*;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.constants.ControlsConstants;
 import frc.robot.constants.PortConstants;
+import frc.robot.util.ColorSensor.ColorType;
 import frc.robot.Commands.FeederCommand;
 import frc.robot.Commands.IntakeCommand;
 import frc.robot.Commands.ShooterCommand;
+import frc.robot.Commands.WheelOfFortuneCommand;
 
 /**
  * Add your docs here.
@@ -25,25 +27,30 @@ public class OI {
 
 
 /* ---- For Joystick Controls ---- */
-public static Joystick driverJoystick = new Joystick(PortConstants.DRIVER_CONTROLLER_USB_PORT);
-public static Joystick coDriverJoystick = new Joystick(PortConstants.CO_DRIVER_CONTROLLER_USB_PORT);
+public Joystick driverJoystick = new Joystick(PortConstants.DRIVER_CONTROLLER_USB_PORT);
+public Joystick coDriverJoystick = new Joystick(PortConstants.CO_DRIVER_CONTROLLER_USB_PORT);
 
 // Driver Joystick Config
 
-public static JoystickButton intakeButton = new JoystickButton(driverJoystick,ControlsConstants.INTAKE_BUTTON);
-public static JoystickButton feederButton = new JoystickButton(driverJoystick,ControlsConstants.FEEDER_BUTTON);
-public static JoystickButton shooterButton = new JoystickButton(driverJoystick, ControlsConstants.SHOOTER_BUTTON);
+public JoystickButton intakeButton = new JoystickButton(driverJoystick,ControlsConstants.INTAKE_BUTTON);
+public JoystickButton feederButton = new JoystickButton(driverJoystick,ControlsConstants.FEEDER_BUTTON);
+public JoystickButton shooterButton = new JoystickButton(driverJoystick, ControlsConstants.SHOOTER_BUTTON);
+
+public JoystickButton redControlPanelButton = new JoystickButton(driverJoystick, ControlsConstants.CONTROL_PANEL_RED_SELECTED);
+public JoystickButton blueControlPanelButton = new JoystickButton(driverJoystick, ControlsConstants.CONTROL_PANEL_BLUE_SELECTED);
+public JoystickButton yellowControlPanelButton = new JoystickButton(driverJoystick, ControlsConstants.CONTROL_PANEL_YELLOW_SELECTED);
+public JoystickButton greenControlPanelButton = new JoystickButton(driverJoystick, ControlsConstants.CONTROL_PANEL_GREEN_SELECTED);
 
 /* ---- For XBox Controls ---- */
 
-public static XboxController driverXbox = new XboxController(PortConstants.DRIVER_CONTROLLER_USB_PORT);
-public static XboxController coDriverXbox = new XboxController(PortConstants.CO_DRIVER_CONTROLLER_USB_PORT);
+public XboxController driverXbox = new XboxController(PortConstants.DRIVER_CONTROLLER_USB_PORT);
+public XboxController coDriverXbox = new XboxController(PortConstants.CO_DRIVER_CONTROLLER_USB_PORT);
 
 //Xbox Controller Config
 
-public static JoystickButton intakeButtonXbox = new JoystickButton(driverXbox, ControlsConstants.RIGHT_SHOULDER_BUTTON);
-public static JoystickButton feederButtonXbox = new JoystickButton(driverXbox, ControlsConstants.LEFT_SHOULDER_BUTTON);
-public static JoystickButton shooterButtonXbox = new JoystickButton(driverXbox,ControlsConstants.A_BUTTON);
+public JoystickButton intakeButtonXbox = new JoystickButton(driverXbox, ControlsConstants.RIGHT_SHOULDER_BUTTON);
+public JoystickButton feederButtonXbox = new JoystickButton(driverXbox, ControlsConstants.LEFT_SHOULDER_BUTTON);
+public JoystickButton shooterButtonXbox = new JoystickButton(driverXbox,ControlsConstants.A_BUTTON);
 
 
     public OI(){
@@ -53,6 +60,11 @@ public static JoystickButton shooterButtonXbox = new JoystickButton(driverXbox,C
      intakeButton.whileHeld(new IntakeCommand(0.8));
      feederButton.whileHeld(new FeederCommand(0.5, 0.5));
      shooterButton.toggleWhenPressed(new ShooterCommand(0.9));
+
+     redControlPanelButton.whileHeld(new WheelOfFortuneCommand(.8,ColorType.RED));
+     blueControlPanelButton.whileHeld(new WheelOfFortuneCommand(.8,ColorType.BLUE));
+     yellowControlPanelButton.whileHeld(new WheelOfFortuneCommand(.8,ColorType.YELLOW));
+     greenControlPanelButton.whileHeld(new WheelOfFortuneCommand(.8,ColorType.GREEN));
 
      //On XBox Controller
      intakeButtonXbox.whileHeld(new IntakeCommand(0.8));

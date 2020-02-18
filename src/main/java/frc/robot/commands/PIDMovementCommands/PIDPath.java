@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Commands;
+package frc.robot.Commands.PIDMovementCommands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commands.PIDMovementCommands.PIDDrive;
@@ -21,6 +21,10 @@ public class PIDPath extends SequentialCommandGroup {
   public PIDPath() {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new PIDDrive(12, MovementType.STRAIGHT), new PIDDrive(90, MovementType.TURN), new PIDDrive(5, MovementType.SHOOT, 5));
+    super(
+      new PIDDrive(12, MovementType.STRAIGHT), 
+      new PIDDrive(90, MovementType.TURN), 
+      new PIDDrive(5, MovementType.SHOOT, 5)
+    );
   }
 }

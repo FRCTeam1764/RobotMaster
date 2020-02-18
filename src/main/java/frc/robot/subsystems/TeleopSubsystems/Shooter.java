@@ -24,7 +24,7 @@ import frc.robot.Subsystems.AutoSubsystems.PIDMovement;
 public class Shooter extends SubsystemBase {
   
   public static WPI_TalonFX shooterMaster = configShooterMotors(PortConstants.SHOOTER_MASTER_MOTOR_PORT, true, false);
-  static WPI_TalonFX shooterFollower = configShooterMotors(PortConstants.SHOOTER_FOLLOWER_MOTOR_PORT, false, false);
+  static WPI_TalonFX shooterFollower = configShooterMotors(PortConstants.SHOOTER_FOLLOWER_MOTOR_PORT, false, true);
 
   double shooterVelocity;
   double shooter;
@@ -72,6 +72,8 @@ public class Shooter extends SubsystemBase {
   }
 
   public static void setPIDShooterVelocityConfig(WPI_TalonFX talon) {
+    Robot.pidMovement.setPIDConfig(talon, false);
+
     talon.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, PIDConstants.kTimeoutMs);
     talon.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 20, PIDConstants.kTimeoutMs);
     

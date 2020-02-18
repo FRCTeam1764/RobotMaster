@@ -19,7 +19,7 @@ public class WheelOfFortuneCommand extends CommandBase {
 
   ColorType firstColorDetected;
 
-  public WheelOfFortuneCommand(int motorSpeed, ColorType colorNeeded){
+  public WheelOfFortuneCommand(double motorSpeed, ColorType colorNeeded){
     wheelOfFortune = new WheelOfFortune(motorSpeed);
     colorSelected = colorNeeded;
 

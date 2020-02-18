@@ -36,7 +36,7 @@ public class XBoxDrive extends CommandBase {
   double _targetAngle = 0;
   int _smoothing;
 
-  XboxController controller = OI.driverXbox;
+  XboxController controller = Robot.oi.driverXbox;
   
   // Called repeatedly when this Command is scheduled to run
   @Override
@@ -46,22 +46,14 @@ public class XBoxDrive extends CommandBase {
     forward = ForwardDeadband(forward);
     turn = TurningDeadband(turn);
 
-    /* Button processing for state toggle and sensor zeroing */
-    // getButtons(btns, controller);
-    /*
-     * if(btns[2] && !_btns[2]){ _state = !_state; // Toggle state _firstCall =
-     * true; // State change, do first call operation _targetAngle =
-     * _rightMaster.getSelectedSensorPosition(1); _lockedDistance =
-     * _rightMaster.getSelectedSensorPosition(0); }
-     */
-    if (controller.getAButton()) {
+   /* if (controller.getAButton()) {
 
       Limelight.turnLEDOn();
     }
     if (!controller.getAButton()) {
 
       Limelight.turnLEDOff();
-    }
+    }*/
 
     if (controller.getTriggerAxis(Hand.kRight) > .4) {
       forward = 0;

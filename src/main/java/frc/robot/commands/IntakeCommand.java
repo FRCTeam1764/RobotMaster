@@ -16,9 +16,16 @@ public class IntakeCommand extends CommandBase {
    */
 
   public Intake intake;
+  public double time = -1;
 
   public IntakeCommand(double intakeSpeed) {
     intake = new Intake(intakeSpeed);
+
+    addRequirements(intake);
+  }
+  public IntakeCommand(double intakeSpeed, double timeDuration) {
+    intake = new Intake(intakeSpeed);
+    time = timeDuration;
 
     addRequirements(intake);
   }
@@ -31,7 +38,13 @@ public class IntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.intake();
+    if(time>0){
+      intake.timedIntake(time);
+      end(false);
+    }
+    else{
+      intake.intake();
+    }
   }
 
   // Called once the command ends or is interrupted.

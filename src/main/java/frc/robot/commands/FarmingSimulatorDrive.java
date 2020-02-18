@@ -21,7 +21,7 @@ public class FarmingSimulatorDrive extends CommandBase {
     addRequirements(Robot.drivetrain);
   }
 
-  XboxController xbox = OI.driverXbox;
+  XboxController xbox = Robot.oi.driverXbox;
 
   double leftfactor = 1;
   double rightfactor = 1;

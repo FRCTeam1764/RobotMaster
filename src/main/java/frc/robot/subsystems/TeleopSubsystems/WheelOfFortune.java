@@ -25,7 +25,7 @@ public class WheelOfFortune extends SubsystemBase {
   boolean rotationControlComplete = false;
   boolean positionControlComplete = false;
 
-  public WheelOfFortune(int motorSpeed){
+  public WheelOfFortune(double motorSpeed){
     wheelSpeed=motorSpeed;
   }
 

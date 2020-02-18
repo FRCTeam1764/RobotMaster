@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
    */
 
   public static WPI_TalonSRX intakeMotor = new WPI_TalonSRX(PortConstants.INTAKE_MOTOR_PORT);
-  public static double intakeSpeed;
+  public double intakeSpeed;
 
   public Intake(double motorIntakeSpeed) {
     intakeSpeed = motorIntakeSpeed;
