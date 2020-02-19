@@ -22,9 +22,9 @@ public class Feeder extends SubsystemBase {
   double conveyerSpeed;
   double feederSpeed;
 
-  public Feeder(double conveyerMotorSpeed, double feederMotorSpeed) {
-    conveyerSpeed = conveyerMotorSpeed;
-    feederSpeed = feederMotorSpeed;
+  public Feeder(double conveyerSpeed, double feederSpeed) {
+    this.conveyerSpeed = conveyerSpeed;
+    this.feederSpeed = feederSpeed;
   }
 
   @Override

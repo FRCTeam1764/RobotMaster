@@ -9,6 +9,8 @@ package frc.robot.util;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.robot.constants.FieldDimensionConstants;
+import frc.robot.constants.RobotDimensionConstants;
 
 /**
  * Add your docs here.
@@ -63,13 +65,9 @@ public class Limelight {
     return limelightTable.getEntry("ledMode").getValue().toString().equals("1")? true : false;
   }
  
-  private static final double targetHeight = 78.25+2.5+8.75; //May be inaccurate //Height to center of target in inches (no skew) //Note: remeasure
-  private static final double cameraHeight = 13;//+21; //Height to center of camera lens in inches
-  private static final double cameraAngle = 20.55; //Angle camera is mounted at in degrees
-  private static final double frontToCamera = 12.25; //Distance from front of robot to camera, in inches
   private static double distance = 0;
   
-  final static int delay = 500; //in milliseconds
+  final static int delay = 400; //in milliseconds
 
 
   /** 
@@ -80,9 +78,10 @@ public class Limelight {
                                                                  // target in inches, assuming fixed position
       turnLEDOn();
       Thread.sleep(delay);
-      distance = targetHeight - cameraHeight; 
-      distance /= Math.tan((cameraAngle + getYDeg()) * (Math.PI/180));
-      distance -= frontToCamera;
+      distance = FieldDimensionConstants.POWER_PORT_OUTER_PORT_CENTER_HEIGHT;
+      distance -= RobotDimensionConstants.LIMELIGHT_HEIGHT_FROM_GROUND; 
+      distance /= Math.tan((RobotDimensionConstants.LIMELIGHT_CAMERA_ANGLE + getYDeg()) * (Math.PI/180));
+      distance -= RobotDimensionConstants.LIMELIGHT_DISTANCE_FROM_FRONT;
       turnLEDOff();
       return distance;
   }

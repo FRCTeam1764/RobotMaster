@@ -62,13 +62,10 @@ public class PIDConstants {
 
 	/* ---- Conversion Rates ---- */
 
-	public static final double WHEEL_CIRCUMFERENCE = (6 * Math.PI);
-	public static final double ROBOT_ROTATION_CIRCUMFERENCE = 26.5 * Math.PI;
-	public static final double GEAR_BOX_RATIO = (52/12)*(52/22);
 
-	public static final double WHEEL_ROTATION_PER_ROBOT_ROTATION = ROBOT_ROTATION_CIRCUMFERENCE/WHEEL_CIRCUMFERENCE;
-	public static final double CLICKS_PER_ROBOT_ROTATION = WHEEL_ROTATION_PER_ROBOT_ROTATION *2048 * GEAR_BOX_RATIO;
-	public static final double CLICKS_PER_INCH = (2048*GEAR_BOX_RATIO) /WHEEL_CIRCUMFERENCE ; 
+	public static final double WHEEL_ROTATION_PER_ROBOT_ROTATION = RobotDimensionConstants.ROBOT_ROTATION_CIRCUMFERENCE/RobotDimensionConstants.WHEEL_CIRCUMFERENCE;
+	public static final double CLICKS_PER_ROBOT_ROTATION = WHEEL_ROTATION_PER_ROBOT_ROTATION *2048 * RobotDimensionConstants.GEAR_BOX_RATIO;
+	public static final double CLICKS_PER_INCH = (2048*RobotDimensionConstants.GEAR_BOX_RATIO) /RobotDimensionConstants.WHEEL_CIRCUMFERENCE ; 
 	public static final double CLICKS_PER_DEGREES = CLICKS_PER_ROBOT_ROTATION/360;
 
 	public static final double TALON_VELOCITY_PER_ROBOT_VELOCITY = (1/100)*1000/CLICKS_PER_INCH; //Ticks/100ms per inches/second

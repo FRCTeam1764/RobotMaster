@@ -23,13 +23,13 @@ public class WheelOfFortune extends SubsystemBase {
 
   double wheelSpeed;
   Spark wheelMotor = new Spark(PortConstants.CONTROL_PANEL_WHEEL_MOTOR_PORT);
-  Solenoid controlPanelWheelExtender = new Solenoid(PortConstants.CONTROL_PANEL_WHEEL_SOLENOID_PORT);
+  public static Solenoid controlPanelWheelExtender = new Solenoid(PortConstants.CONTROL_PANEL_WHEEL_SOLENOID_PORT);
 
   boolean rotationControlComplete = false;
   boolean positionControlComplete = false;
 
-  public WheelOfFortune(double motorSpeed){
-    wheelSpeed=motorSpeed;
+  public WheelOfFortune(double wheelSpeed){
+    this.wheelSpeed=wheelSpeed;
   }
 
   public void stopWheel() {
@@ -41,7 +41,7 @@ public class WheelOfFortune extends SubsystemBase {
     wheelMotor.set(wheelSpeed);
   }
 
-  public void extendWheel(boolean shouldExtend){
+  public static void extendWheel(boolean shouldExtend){
     controlPanelWheelExtender.set(shouldExtend);
   }
 

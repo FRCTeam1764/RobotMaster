@@ -2,17 +2,12 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.Commands.FarmingSimulatorDrive;
-import frc.robot.Commands.JoystickDrive;
-import frc.robot.Commands.XBoxDrive;
-import frc.robot.Commands.LimelightMovement.LimelightDrive;
+import frc.robot.Commands.DriveCommands.FarmingSimulatorDrive;
+import frc.robot.Commands.DriveCommands.JoystickDrive;
+import frc.robot.Commands.DriveCommands.XBoxDrive;
 import frc.robot.Subsystems.Drivetrain;
 import frc.robot.Subsystems.AutoSubsystems.PIDMovement;
 
@@ -26,8 +21,6 @@ public class Robot extends TimedRobot {
   XBoxDrive xboxdrive = new XBoxDrive();
   FarmingSimulatorDrive jaxonDumbDrive = new FarmingSimulatorDrive();
   public static PIDMovement pidMovement = new PIDMovement();
-
-  public static LimelightDrive lldrive = new LimelightDrive();
 
   @Override
   public void autonomousInit() {

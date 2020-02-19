@@ -11,18 +11,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.PIDConstants;
-import frc.robot.constants.PathfinderConstants;
 import frc.robot.constants.PortConstants;
 import frc.robot.constants.VoltageConstants;
 
@@ -30,8 +22,6 @@ import frc.robot.constants.VoltageConstants;
  * Add your docs here.
  */
 public class Drivetrain extends SubsystemBase {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
 
   public WPI_TalonFX[] leftTalons = new WPI_TalonFX[3];
   public WPI_TalonFX[] rightTalons = new WPI_TalonFX[3];

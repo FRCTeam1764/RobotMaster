@@ -5,12 +5,11 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Commands;
+package frc.robot.Commands.DriveCommands;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.OI;
 import frc.robot.Robot;
 
 public class FarmingSimulatorDrive extends CommandBase {
@@ -73,10 +72,6 @@ public class FarmingSimulatorDrive extends CommandBase {
   @Override
   public boolean isFinished() {
     return false;
-  }
-
-  private double getThrottleXbox(){
-    return throttlefactor;
   }
 
   double deadband(double dooble){

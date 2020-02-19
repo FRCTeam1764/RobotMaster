@@ -8,18 +8,13 @@
 package frc.robot.Commands.PIDMovementCommands;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
-import com.ctre.phoenix.motorcontrol.FollowerType;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Robot;
-import frc.robot.Subsystems.Drivetrain;
-import frc.robot.Subsystems.AutoSubsystems.PIDMovement;
 import frc.robot.Subsystems.TeleopSubsystems.Shooter;
 import frc.robot.constants.PIDConstants;
+import frc.robot.util.Limelight;
 
 public class PIDDrive extends CommandBase {
   /**
@@ -28,29 +23,28 @@ public class PIDDrive extends CommandBase {
 
   WPI_TalonFX leftMaster = Robot.drivetrain.leftTalons[0];
   WPI_TalonFX rightMaster = Robot.drivetrain.rightTalons[0];
-  //Shooter motor is within the shooter object
+  // Shooter motor is within the shooter object
 
   Shooter shooter;
 
-
-  public enum MovementType{
-    STRAIGHT,
-    TURN,
-    SHOOT
+  public enum MovementType {
+    STRAIGHT, TURN, SHOOT, LIMELIGHT_TURN
   }
 
-  private double units;
+  private double units=0;
   private MovementType type;
   private double timeDuration = 0;
 
   /**
-   * Used to move a part of the robot using PID loops.
-   * Currently used for moving forward, turning, and for the shooter.
+   * Used to move a part of the robot using PID loops. Currently used for moving
+   * forward, turning, and for the shooter.
    *
-   * @param inputUnits Units given to motors. 
-   *                   For moving forward: Inches (to travel), for turning: Degrees (to rotate), 
-   *                   for the shooter: Inches/Second (the target velocity of the shooter)
-   * @param movementType Specified type of movement needed (ie. MovementType.STRAIGHT)
+   * @param inputUnits   Units given to motors. For moving forward: Inches (to
+   *                     travel), for turning (regular or with limelight): Degrees
+   *                     (to rotate), for the shooter: Inches/Second (the target
+   *                     velocity of the shooter)
+   * @param movementType Specified type of movement needed (ie.
+   *                     MovementType.STRAIGHT)
    */
   public PIDDrive(double inputUnits, MovementType movementType) {
     addRequirements(Robot.pidMovement);
@@ -58,23 +52,29 @@ public class PIDDrive extends CommandBase {
 
     Robot.pidMovement.setPIDConfig(leftMaster, false);
     Robot.pidMovement.setPIDConfig(rightMaster, false);
-    //Shooter Master is already config in the shooter subsystem
+    // Shooter Master is already config in the shooter subsystem
 
     type = movementType;
 
-    if(movementType == MovementType.STRAIGHT){
+    if (movementType == MovementType.STRAIGHT) {
       units = inputUnits * PIDConstants.CLICKS_PER_INCH;
       Robot.pidMovement.setDistancePIDConfig(rightMaster);
       Robot.pidMovement.setDistancePIDConfig(leftMaster);
     }
 
-    else if (movementType == MovementType.TURN){
+    else if (movementType == MovementType.TURN) {
       units = inputUnits * PIDConstants.CLICKS_PER_DEGREES;
-      Robot.pidMovement.setDistancePIDConfig(rightMaster);
-      Robot.pidMovement.setDistancePIDConfig(leftMaster);
-    }
-    else if(movementType == MovementType.SHOOT){
-      shooter = new Shooter(units * PIDConstants.TALON_VELOCITY_PER_ROBOT_VELOCITY);
+      Robot.pidMovement.setTurningPIDConfig(rightMaster);
+      Robot.pidMovement.setTurningPIDConfig(leftMaster);
+    } else if (movementType == MovementType.SHOOT) {
+      shooter = new Shooter(inputUnits * PIDConstants.TALON_VELOCITY_PER_ROBOT_VELOCITY);
+    } else if (movementType == MovementType.LIMELIGHT_TURN) {
+      try {
+        units = Limelight.getAngle();
+      } catch (InterruptedException e) {
+        units = 0;
+        e.printStackTrace();
+      }
     }
   }
 
@@ -104,14 +104,62 @@ public class PIDDrive extends CommandBase {
 
     else if (movementType == MovementType.TURN){
       units = inputUnits * PIDConstants.CLICKS_PER_DEGREES;
-      Robot.pidMovement.setDistancePIDConfig(rightMaster);
-      Robot.pidMovement.setDistancePIDConfig(leftMaster);
+      Robot.pidMovement.setTurningPIDConfig(rightMaster);
+      Robot.pidMovement.setTurningPIDConfig(leftMaster);
     }
     else if(movementType == MovementType.SHOOT){
-      shooter = new Shooter(units * PIDConstants.TALON_VELOCITY_PER_ROBOT_VELOCITY);
+      shooter = new Shooter(inputUnits * PIDConstants.TALON_VELOCITY_PER_ROBOT_VELOCITY);
+    }
+    else if (movementType == MovementType.LIMELIGHT_TURN) {
+      try {
+        units = inputUnits * Limelight.getAngle();
+      } catch (InterruptedException e) {
+        units = 0;
+        e.printStackTrace();
+      }
     }
   }
 
+  /**
+   * Used to move a part of the robot using PID loops. Currently used for moving
+   * forward, turning, and for the shooter. This constructor should only be used only for
+   * movements that don't need the programmer to input units, such as the limelight drive.
+   * The default units of movement is zero.
+   *
+   * @param movementType Specified type of movement needed (ie.
+   *                     MovementType.STRAIGHT)
+   */
+
+  public PIDDrive(MovementType movementType) {
+    addRequirements(Robot.pidMovement);
+    addRequirements(Robot.drivetrain);
+
+    Robot.pidMovement.setPIDConfig(leftMaster, false);
+    Robot.pidMovement.setPIDConfig(rightMaster, false);
+    // Shooter Master is already config in the shooter subsystem
+
+    type = movementType;
+
+    if (movementType == MovementType.STRAIGHT) {
+      Robot.pidMovement.setDistancePIDConfig(rightMaster);
+      Robot.pidMovement.setDistancePIDConfig(leftMaster);
+    }
+    else if (movementType == MovementType.TURN) {
+      Robot.pidMovement.setTurningPIDConfig(rightMaster);
+      Robot.pidMovement.setTurningPIDConfig(leftMaster);
+    } 
+    else if (movementType == MovementType.SHOOT) {
+      shooter = new Shooter(0);
+    } 
+    else if (movementType == MovementType.LIMELIGHT_TURN) {
+      try {
+        units = Limelight.getAngle();
+      } catch (InterruptedException e) {
+        units = 0;
+        e.printStackTrace();
+      }
+    }
+  }
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
@@ -125,7 +173,7 @@ public class PIDDrive extends CommandBase {
       rightMaster.set(ControlMode.Position, units);
       leftMaster.set(ControlMode.Position, units);
     }
-    else if(type == MovementType.TURN){
+    else if(type == MovementType.TURN || type == MovementType.LIMELIGHT_TURN){
       rightMaster.set(ControlMode.Position, -units);
       leftMaster.set(ControlMode.Position, units);
     }

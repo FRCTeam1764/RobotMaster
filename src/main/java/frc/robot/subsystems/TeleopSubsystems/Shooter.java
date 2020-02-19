@@ -29,8 +29,8 @@ public class Shooter extends SubsystemBase {
   double shooterVelocity;
   double shooter;
 
-  public Shooter(double targetVelocity) {
-    shooterVelocity = targetVelocity;
+  public Shooter(double shooterVelocity) {
+    this.shooterVelocity = shooterVelocity;
 
     shooterFollower.follow(shooterMaster);
   }

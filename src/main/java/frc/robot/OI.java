@@ -19,6 +19,8 @@ import frc.robot.Commands.FeederCommand;
 import frc.robot.Commands.IntakeCommand;
 import frc.robot.Commands.ShooterCommand;
 import frc.robot.Commands.WheelOfFortuneCommand;
+import frc.robot.Commands.WheelOfFortuneSolenoidCommand;
+import frc.robot.Commands.PIDMovementCommands.PIDDrive.MovementType;
 
 /**
  * Add your docs here.
@@ -34,7 +36,11 @@ public Joystick coDriverJoystick = new Joystick(PortConstants.CO_DRIVER_CONTROLL
 
 public JoystickButton intakeButton = new JoystickButton(driverJoystick,ControlsConstants.INTAKE_BUTTON);
 public JoystickButton feederButton = new JoystickButton(driverJoystick,ControlsConstants.FEEDER_BUTTON);
+
 public JoystickButton shooterButton = new JoystickButton(driverJoystick, ControlsConstants.SHOOTER_BUTTON);
+public JoystickButton shooterAutoAdjustButton = new JoystickButton(driverJoystick, ControlsConstants.SHOOTER_AUTO_ADJUST_BUTTON);
+
+public JoystickButton controlPanelSolenoidButton = new JoystickButton(driverJoystick, ControlsConstants.CONTROL_PANEL_SOLENOID_BUTTON);
 
 public JoystickButton redControlPanelButton = new JoystickButton(driverJoystick, ControlsConstants.CONTROL_PANEL_RED_SELECTED);
 public JoystickButton blueControlPanelButton = new JoystickButton(driverJoystick, ControlsConstants.CONTROL_PANEL_BLUE_SELECTED);
@@ -58,8 +64,12 @@ public JoystickButton shooterButtonXbox = new JoystickButton(driverXbox,Controls
 
     //On Joysticks
      intakeButton.whileHeld(new IntakeCommand(0.8));
-     feederButton.whileHeld(new FeederCommand(0.5, 0.5));
-     shooterButton.toggleWhenPressed(new ShooterCommand(0.9));
+     feederButton.whileHeld(new FeederCommand(0.3, 1));
+
+     shooterButton.toggleWhenPressed(new ShooterCommand(0.8));
+     shooterButton.whenPressed(new PIDDrive(-24, MovementType.STRAIGHT));
+
+     controlPanelSolenoidButton.toggleWhenPressed(new WheelOfFortuneSolenoidCommand());
 
      redControlPanelButton.whileHeld(new WheelOfFortuneCommand(.8,ColorType.RED));
      blueControlPanelButton.whileHeld(new WheelOfFortuneCommand(.8,ColorType.BLUE));
@@ -72,6 +82,7 @@ public JoystickButton shooterButtonXbox = new JoystickButton(driverXbox,Controls
      shooterButtonXbox.toggleWhenPressed(new ShooterCommand(0.9));
     }
 
+    //Used for xbox triggers
     public double deadBand(double input, double deadRange){
         if(input>deadRange || input<-deadRange){
             return input;

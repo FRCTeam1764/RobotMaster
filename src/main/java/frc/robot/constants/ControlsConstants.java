@@ -10,6 +10,8 @@ public class ControlsConstants {
     public static final int FEEDER_BUTTON = 2;
     public static final int SHOOTER_BUTTON =11;
 
+    public static final int CONTROL_PANEL_SOLENOID_BUTTON = 3;
+
     public static final int CONTROL_PANEL_BLUE_SELECTED = 7;
     public static final int CONTROL_PANEL_RED_SELECTED = 8;
     public static final int CONTROL_PANEL_YELLOW_SELECTED = 9;
