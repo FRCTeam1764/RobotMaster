@@ -19,9 +19,9 @@ public class WheelOfFortuneCommand extends CommandBase {
 
   ColorType firstColorDetected;
 
-  public WheelOfFortuneCommand(double motorSpeed, ColorType colorNeeded){
+  public WheelOfFortuneCommand(double motorSpeed){
     wheelOfFortune = new WheelOfFortune(motorSpeed);
-    colorSelected = colorNeeded;
+    colorSelected = ColorSensor.getControlPanelRequiredColor();
 
     addRequirements(wheelOfFortune);
   }
@@ -30,6 +30,10 @@ public class WheelOfFortuneCommand extends CommandBase {
   @Override
   public void initialize() {
     firstColorDetected = ColorSensor.getColorType();
+
+    if( colorSelected == ColorType.UNKNOWN){
+      end(false);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.

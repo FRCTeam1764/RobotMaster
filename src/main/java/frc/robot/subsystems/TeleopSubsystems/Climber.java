@@ -5,14 +5,15 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Subsystems.AutoSubsystems;
+package frc.robot.Subsystems.TeleopSubsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Commands.PIDMovementCommands.PIDDrive;
 
-public class Pathfollwer extends SubsystemBase {
-
-  public Pathfollwer() {
+public class Climber extends SubsystemBase {
+  /**
+   * Creates a new Climber.
+   */
+  public Climber() {
 
   }
 
@@ -21,7 +22,11 @@ public class Pathfollwer extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void followPath(){
+  public void climbDown(){
 
+  }
+
+  public void climbUp(){
+    
   }
 }

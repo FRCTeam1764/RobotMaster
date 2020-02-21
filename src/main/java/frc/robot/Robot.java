@@ -2,6 +2,7 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -10,6 +11,7 @@ import frc.robot.Commands.DriveCommands.JoystickDrive;
 import frc.robot.Commands.DriveCommands.XBoxDrive;
 import frc.robot.Subsystems.Drivetrain;
 import frc.robot.Subsystems.AutoSubsystems.PIDMovement;
+import frc.robot.util.ShuffleboardCamera;
 
 public class Robot extends TimedRobot {
 
@@ -21,6 +23,12 @@ public class Robot extends TimedRobot {
   XBoxDrive xboxdrive = new XBoxDrive();
   FarmingSimulatorDrive jaxonDumbDrive = new FarmingSimulatorDrive();
   public static PIDMovement pidMovement = new PIDMovement();
+
+  @Override
+  public void robotInit() {
+    ShuffleboardCamera.camera = CameraServer.getInstance().startAutomaticCapture(ShuffleboardCamera.cameraPort);
+    ShuffleboardCamera.camera.setConnectVerbose(0);
+  }
 
   @Override
   public void autonomousInit() {
@@ -58,14 +66,13 @@ public class Robot extends TimedRobot {
 
     @Override
     public void testInit() {
-        // TODO Auto-generated method stub
+        
         CommandScheduler.getInstance().schedule(jaxonDumbDrive);
         
     }
   
     @Override
   public void testPeriodic() {
-        // TODO Auto-generated method stub
 
         CommandScheduler.getInstance().run();
   }
@@ -77,7 +84,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    // TODO Auto-generated method stub
+    
     super.disabledPeriodic();
   }
 }

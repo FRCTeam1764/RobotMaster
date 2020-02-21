@@ -13,13 +13,11 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import edu.wpi.first.wpilibj.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.constants.PIDConstants;
 import frc.robot.constants.PortConstants;
-import frc.robot.Robot;
-import frc.robot.Subsystems.AutoSubsystems.PIDMovement;
 
 public class Shooter extends SubsystemBase {
   

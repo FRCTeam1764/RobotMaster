@@ -12,6 +12,7 @@ import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -105,6 +106,29 @@ public class ColorSensor {
         }
 
         return colorType;
+    }
+
+    public static ColorType getControlPanelRequiredColor(){
+      String gameData;
+      gameData = DriverStation.getInstance().getGameSpecificMessage();
+      if(gameData.length() > 0)
+      {
+        switch (gameData.charAt(0))
+        {
+          case 'B' :
+            return ColorType.BLUE;
+          case 'G' :
+            return ColorType.GREEN;
+          case 'R' :
+            return ColorType.RED;
+          case 'Y' :
+            return ColorType.YELLOW;
+          default :
+            return ColorType.UNKNOWN; 
+        }
+      } else {
+          return ColorType.UNKNOWN; 
+      }
     }
 
     public static Color getRawColor(){

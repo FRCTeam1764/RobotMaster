@@ -9,18 +9,17 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj2.command.button.*;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.constants.ControlsConstants;
-import frc.robot.constants.PortConstants;
-import frc.robot.util.ColorSensor.ColorType;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Commands.FeederCommand;
 import frc.robot.Commands.IntakeCommand;
 import frc.robot.Commands.ShooterCommand;
 import frc.robot.Commands.WheelOfFortuneCommand;
 import frc.robot.Commands.WheelOfFortuneSolenoidCommand;
+import frc.robot.Commands.PIDMovementCommands.PIDDrive;
 import frc.robot.Commands.PIDMovementCommands.PIDDrive.MovementType;
+import frc.robot.constants.ControlsConstants;
+import frc.robot.constants.PortConstants;
+import frc.robot.util.ColorSensor.ColorType;
 
 /**
  * Add your docs here.
@@ -42,10 +41,7 @@ public JoystickButton shooterAutoAdjustButton = new JoystickButton(driverJoystic
 
 public JoystickButton controlPanelSolenoidButton = new JoystickButton(driverJoystick, ControlsConstants.CONTROL_PANEL_SOLENOID_BUTTON);
 
-public JoystickButton redControlPanelButton = new JoystickButton(driverJoystick, ControlsConstants.CONTROL_PANEL_RED_SELECTED);
-public JoystickButton blueControlPanelButton = new JoystickButton(driverJoystick, ControlsConstants.CONTROL_PANEL_BLUE_SELECTED);
-public JoystickButton yellowControlPanelButton = new JoystickButton(driverJoystick, ControlsConstants.CONTROL_PANEL_YELLOW_SELECTED);
-public JoystickButton greenControlPanelButton = new JoystickButton(driverJoystick, ControlsConstants.CONTROL_PANEL_GREEN_SELECTED);
+public JoystickButton controlPanelButton = new JoystickButton(driverJoystick, ControlsConstants.CONTROL_PANEL_BUTTON);
 
 /* ---- For XBox Controls ---- */
 
@@ -63,18 +59,15 @@ public JoystickButton shooterButtonXbox = new JoystickButton(driverXbox,Controls
     /* ---- Binds commands to button presses ---- */
 
     //On Joysticks
-     intakeButton.whileHeld(new IntakeCommand(0.8));
+     intakeButton.whileHeld(new IntakeCommand(1));
      feederButton.whileHeld(new FeederCommand(0.3, 1));
 
      shooterButton.toggleWhenPressed(new ShooterCommand(0.8));
-     shooterButton.whenPressed(new PIDDrive(-24, MovementType.STRAIGHT));
+     //shooterAutoAdjustButton.whenPressed(new PIDDrive(-24, MovementType.STRAIGHT));
 
-     controlPanelSolenoidButton.toggleWhenPressed(new WheelOfFortuneSolenoidCommand());
+     //controlPanelSolenoidButton.toggleWhenPressed(new WheelOfFortuneSolenoidCommand());
 
-     redControlPanelButton.whileHeld(new WheelOfFortuneCommand(.8,ColorType.RED));
-     blueControlPanelButton.whileHeld(new WheelOfFortuneCommand(.8,ColorType.BLUE));
-     yellowControlPanelButton.whileHeld(new WheelOfFortuneCommand(.8,ColorType.YELLOW));
-     greenControlPanelButton.whileHeld(new WheelOfFortuneCommand(.8,ColorType.GREEN));
+     //controlPanelButton.whileHeld(new WheelOfFortuneCommand(.8));
 
      //On XBox Controller
      intakeButtonXbox.whileHeld(new IntakeCommand(0.8));

@@ -7,10 +7,11 @@
 
 package frc.robot.Subsystems.TeleopSubsystems;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.PortConstants;
 import frc.robot.util.ColorSensor;
@@ -24,6 +25,15 @@ public class WheelOfFortune extends SubsystemBase {
   double wheelSpeed;
   Spark wheelMotor = new Spark(PortConstants.CONTROL_PANEL_WHEEL_MOTOR_PORT);
   public static Solenoid controlPanelWheelExtender = new Solenoid(PortConstants.CONTROL_PANEL_WHEEL_SOLENOID_PORT);
+
+  //Used for position control; a color's complement is the color 90 degrees from it.
+  public static Map<ColorType, ColorType> colorComplements = Map.of(
+  ColorType.BLUE, ColorType.RED,
+  ColorType.RED, ColorType.BLUE,
+  ColorType.GREEN, ColorType.YELLOW,
+  ColorType.YELLOW, ColorType.GREEN,
+  ColorType.UNKNOWN, ColorType.UNKNOWN
+  );
 
   boolean rotationControlComplete = false;
   boolean positionControlComplete = false;
@@ -45,7 +55,8 @@ public class WheelOfFortune extends SubsystemBase {
     controlPanelWheelExtender.set(shouldExtend);
   }
 
-  int count;
+  int count=0;
+  boolean recentlyDetected = false;
 
   /**
   * Rotates the control panel enough times to count the first detected color 9 times.
@@ -55,9 +66,14 @@ public class WheelOfFortune extends SubsystemBase {
 
   public void rotationControl(ColorType color){
     moveWheel();
-    if(ColorSensor.getColorType() == color){
+    if(ColorSensor.getColorType() == color && !recentlyDetected){
       rotationControlCounter();
+      recentlyDetected = true;
     }
+    else if(ColorSensor.getColorType() != color){
+      recentlyDetected = false;
+    }
+
   }
 
   public void rotationControlCounter(){
@@ -65,7 +81,7 @@ public class WheelOfFortune extends SubsystemBase {
 
     System.out.println("Times Counted Color: " + count);
 
-    if(count>=9){
+    if(count>6){
       rotationControlComplete = true;
     }
   }
@@ -75,7 +91,8 @@ public class WheelOfFortune extends SubsystemBase {
   }
 
   public void positionControl(ColorType selectedColor){
-    if(ColorSensor.getColorType() != selectedColor){
+    //Stops at the color's complement to stop the wanted color underneath the sensor
+    if(ColorSensor.getColorType() != colorComplements.get(selectedColor)){
       moveWheel();
     }
     else{

@@ -6,16 +6,15 @@ public class ControlsConstants {
     /* ---- Button Binding Constants ---- */
 
     //For Joysticks
-    public static final int INTAKE_BUTTON = 1;
-    public static final int FEEDER_BUTTON = 2;
-    public static final int SHOOTER_BUTTON =11;
+    public static final int INTAKE_BUTTON = 2;
+    public static final int FEEDER_BUTTON = 5;
+
+    public static final int SHOOTER_BUTTON =1;
+    public static final int SHOOTER_AUTO_ADJUST_BUTTON = 11;
 
     public static final int CONTROL_PANEL_SOLENOID_BUTTON = 3;
 
-    public static final int CONTROL_PANEL_BLUE_SELECTED = 7;
-    public static final int CONTROL_PANEL_RED_SELECTED = 8;
-    public static final int CONTROL_PANEL_YELLOW_SELECTED = 9;
-    public static final int CONTROL_PANEL_GREEN_SELECTED = 10;
+    public static final int CONTROL_PANEL_BUTTON = 7;
 
     //For Xbox
     public static final int A_BUTTON = 1;
