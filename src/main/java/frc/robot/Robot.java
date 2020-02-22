@@ -31,11 +31,11 @@ public class Robot extends TimedRobot {
 
   public static Drivetrain drivetrain = new Drivetrain();
 
-  public static int ballCount = 0;
 
+  public static int ballCount = 0;
   public static OI oi = new OI();
-  
   public static SharpIRSensor feederIRSensor = new SharpIRSensor(PortConstants.SHARP_IR_SENSOR_FEEDER_ANALOG_PORT);
+  
   public static SharpIRSensor intakeIRSensor = new SharpIRSensor(PortConstants.SHARP_IR_SENSOR_INTAKE_ANALOG_PORT);
 
   JoystickDrive joystickdrive = new JoystickDrive();
