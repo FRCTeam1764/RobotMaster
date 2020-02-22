@@ -7,13 +7,12 @@
 
 package frc.robot.Commands.DriveCommands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.constants.PIDConstants;
@@ -27,6 +26,8 @@ public class XBoxDrive extends CommandBase {
 
   TalonFX _rightMaster = Robot.drivetrain.rightTalons[0];
   TalonFX _leftMaster = Robot.drivetrain.leftTalons[0];
+
+  DifferentialDrive diffDrive = Robot.drivetrain.diffDrive;
 
   boolean _firstCall = true;
 	boolean _state = false;
@@ -61,10 +62,7 @@ public class XBoxDrive extends CommandBase {
     // System.out.println("This is Acade Drive.\n");
 
     // Apply throttle to everything just to make sure nothing is overpowered
-    _leftMaster.set(ControlMode.PercentOutput, forward * getThrottle(), DemandType.ArbitraryFeedForward,
-        +turn * getThrottle());
-    _rightMaster.set(ControlMode.PercentOutput, forward * getThrottle(), DemandType.ArbitraryFeedForward,
-        -turn * getThrottle());
+    diffDrive.arcadeDrive(forward*getThrottle(), turn*Math.abs(turn)*getThrottle());
 
     // DriverStation.reportError("" +turn , true);
 
@@ -93,11 +91,11 @@ public class XBoxDrive extends CommandBase {
 
   double TurningDeadband(final double value) {
     /* Upper deadband */
-    if (value >= +0.25)
+    if (value >= +0.15)
       return value;
 
     /* Lower deadband */
-    if (value <= -0.25)
+    if (value <= -0.15)
       return value;
 
     /* Outside deadband */

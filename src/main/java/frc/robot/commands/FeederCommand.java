@@ -9,11 +9,19 @@ package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
+import frc.robot.SharpIRSensor;
 import frc.robot.Subsystems.TeleopSubsystems.Feeder;
+import frc.robot.Subsystems.TeleopSubsystems.Intake;
+import frc.robot.constants.PortConstants;
 
 public class FeederCommand extends CommandBase {
   
   Feeder feeder;
+  Intake intake;
+
+  //SharpIRSensor intakeIRSensor = new SharpIRSensor(PortConstants.SHARP_IR_SENSOR_INTAKE_PWN_PORT);
+  //SharpIRSensor shooterIRSensor = new SharpIRSensor(PortConstants.SHARP_IR_SENSOR_SHOOTER_PWN_PORT);
 
   double time=-1;
   Timer timer = new Timer();
@@ -24,7 +32,14 @@ public class FeederCommand extends CommandBase {
     addRequirements(feeder);
   }
 
-  public FeederCommand(double conveyerSpeed, double feederSpeed, double timeDuration) {
+  public FeederCommand(double intakeSpeed, double conveyerSpeed, double feederSpeed) {
+    feeder = new Feeder(conveyerSpeed, feederSpeed);
+    intake = new Intake(intakeSpeed);
+
+    addRequirements(feeder);
+  }
+
+  public FeederCommand(double conveyerSpeed, double feederSpeed, float timeDuration) {
     feeder = new Feeder(conveyerSpeed, feederSpeed);
     time = timeDuration;
 
@@ -45,10 +60,17 @@ public class FeederCommand extends CommandBase {
       feeder.timedFeeder(time);
       end(false);
     }
-    else{
+    else if(intake == null){
       feeder.conveyerOn();
       feeder.feederOn();
     }
+    /*else{
+      if(intakeIRSensor.getVoltage()>1){
+        Robot.ballCount += Robot.ballCount>=5 ? 0 : 1;
+      }
+      
+
+    }*/
   }
 
   // Called once the command ends or is interrupted.

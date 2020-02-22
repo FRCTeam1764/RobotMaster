@@ -18,17 +18,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.constants.PIDConstants;
 import frc.robot.constants.PortConstants;
+import frc.robot.Commands.ShooterCommand.ShooterControlMode;
 
 public class Shooter extends SubsystemBase {
   
-  public static WPI_TalonFX shooterMaster = configShooterMotors(PortConstants.SHOOTER_MASTER_MOTOR_PORT, true, false);
-  static WPI_TalonFX shooterFollower = configShooterMotors(PortConstants.SHOOTER_FOLLOWER_MOTOR_PORT, false, true);
+  public WPI_TalonFX shooterMaster;
+  WPI_TalonFX shooterFollower;
 
   double shooterVelocity;
+  ShooterControlMode controlMode;
   double shooter;
 
-  public Shooter(double shooterVelocity) {
+  public Shooter(double shooterVelocity, ShooterControlMode controlMode) {
     this.shooterVelocity = shooterVelocity;
+    this.controlMode = controlMode;
+
+    shooterMaster = configShooterMotors(PortConstants.SHOOTER_MASTER_MOTOR_PORT, true, false);
+    shooterFollower = configShooterMotors(PortConstants.SHOOTER_FOLLOWER_MOTOR_PORT, false, true);
 
     shooterFollower.follow(shooterMaster);
   }
@@ -39,7 +45,12 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shoot() {
-    shooterMaster.set(ControlMode.Velocity, shooterVelocity);
+    if(controlMode == ShooterControlMode.PID){
+      shooterMaster.set(ControlMode.Velocity, shooterVelocity);
+    }
+    else if(controlMode == ShooterControlMode.STANDARD){
+      shooterMaster.set(ControlMode.PercentOutput, shooterVelocity);
+    }
   }
 
   public void shoot(double time){
@@ -58,12 +69,11 @@ public class Shooter extends SubsystemBase {
   }
 
   public static WPI_TalonFX configShooterMotors(int portNum, boolean isMaster, boolean isInverted) {
-    WPI_TalonFX talon = Robot.drivetrain.configTalons(PortConstants.SHOOTER_MASTER_MOTOR_PORT, isMaster, isInverted);
-    talon.setNeutralMode(NeutralMode.Brake);
+    WPI_TalonFX talon = Robot.drivetrain.configTalons(portNum, isMaster, isInverted);
+    talon.setNeutralMode(NeutralMode.Coast);
 
     if(isMaster){
-      Robot.pidMovement.setPIDConfig(shooterMaster, false);
-      setPIDShooterVelocityConfig(talon);
+     // setPIDShooterVelocityConfig(talon);
     }
 
     return talon;

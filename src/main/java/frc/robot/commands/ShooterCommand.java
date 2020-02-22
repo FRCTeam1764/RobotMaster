@@ -8,14 +8,20 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
 import frc.robot.Subsystems.TeleopSubsystems.Shooter;
 
 public class ShooterCommand extends CommandBase {
   
   Shooter shooter;
 
-  public ShooterCommand(double shooterMotorSpeed) {
-    shooter = new Shooter(shooterMotorSpeed);
+  public enum ShooterControlMode{
+    PID,
+    STANDARD
+  }
+
+  public ShooterCommand(double shooterMotorSpeed, ShooterControlMode controlMode) {
+    shooter = new Shooter(shooterMotorSpeed, controlMode);
 
     addRequirements(shooter);
   }
@@ -35,6 +41,7 @@ public class ShooterCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     shooter.stopShooter();
+    Robot.ballCount = 0;
   }
 
   // Returns true when the command should end.

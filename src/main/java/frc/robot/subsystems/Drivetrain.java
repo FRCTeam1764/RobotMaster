@@ -26,18 +26,18 @@ public class Drivetrain extends SubsystemBase {
   public WPI_TalonFX[] leftTalons = new WPI_TalonFX[3];
   public WPI_TalonFX[] rightTalons = new WPI_TalonFX[3];
 
-  public final DifferentialDrive diffDrive = new DifferentialDrive(leftTalons[0], rightTalons[0]);
-  private final TalonFXSensorCollection m_leftEncoder = leftTalons[0].getSensorCollection();
-  private final TalonFXSensorCollection m_rightEncoder = rightTalons[0].getSensorCollection();
+  public DifferentialDrive diffDrive;
+  private TalonFXSensorCollection m_leftEncoder;
+  private TalonFXSensorCollection m_rightEncoder;
 
   public Drivetrain(){
 
     for(int i=0; i<PortConstants.LEFT_MOTORS_IDS.length; i++){
       if(i==0){
-        leftTalons[i] = configTalons(PortConstants.LEFT_MOTORS_IDS[i], true, true);
+        leftTalons[i] = configTalons(PortConstants.LEFT_MOTORS_IDS[i], true, false);
       }
       else{
-        leftTalons[i] = configTalons(PortConstants.LEFT_MOTORS_IDS[i], false, true);
+        leftTalons[i] = configTalons(PortConstants.LEFT_MOTORS_IDS[i], false, false);
         leftTalons[i].follow(leftTalons[0]);
       }
     }
@@ -48,9 +48,14 @@ public class Drivetrain extends SubsystemBase {
       }
       else{
         rightTalons[i] = configTalons(PortConstants.RIGHT_MOTORS_IDS[i], false, false);
-        leftTalons[i].follow(rightTalons[0]);
+        rightTalons[i].follow(rightTalons[0]);
       }
     }
+
+    diffDrive = new DifferentialDrive(leftTalons[0], rightTalons[0]);
+
+    m_leftEncoder = leftTalons[0].getSensorCollection();
+    m_rightEncoder = rightTalons[0].getSensorCollection();
 		
   }
   

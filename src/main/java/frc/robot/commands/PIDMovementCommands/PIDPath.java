@@ -40,8 +40,10 @@ public class PIDPath extends SequentialCommandGroup {
   public PIDPath() {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(robotPos == 1 ? leftPath : 
+   /* super(robotPos == 1 ? leftPath : 
           robotPos == 2 ? middlePath:
-                          rightPath);
+                          rightPath);*/
+
+    super(new PIDDrive(60, MovementType.STRAIGHT));
   }
 }

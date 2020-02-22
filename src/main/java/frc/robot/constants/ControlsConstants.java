@@ -6,7 +6,7 @@ public class ControlsConstants {
     /* ---- Button Binding Constants ---- */
 
     //For Joysticks
-    public static final int INTAKE_BUTTON = 2;
+    public static final int INTAKE_BUTTON = 9;
     public static final int FEEDER_BUTTON = 5;
 
     public static final int SHOOTER_BUTTON =1;

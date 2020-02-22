@@ -7,15 +7,26 @@
 
 package frc.robot.Commands;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Robot;
+import frc.robot.SharpIRSensor;
+import frc.robot.Subsystems.TeleopSubsystems.Feeder;
 import frc.robot.Subsystems.TeleopSubsystems.Intake;
+import frc.robot.constants.PortConstants;
 
 public class IntakeCommand extends CommandBase {
   /**
    * Creates a new IntakeCommand.
    */
 
+  // SharpIRSensor intakeIRSensor = new
+  // SharpIRSensor(PortConstants.SHARP_IR_SENSOR_INTAKE_ANALOG_PORT);
+
   public Intake intake;
+  public Feeder feeder;
+
   public double time = -1;
 
   public IntakeCommand(double intakeSpeed) {
@@ -23,17 +34,26 @@ public class IntakeCommand extends CommandBase {
 
     addRequirements(intake);
   }
-  public IntakeCommand(double intakeSpeed, double timeDuration) {
+  public IntakeCommand(double intakeSpeed, float timeDuration) {
     intake = new Intake(intakeSpeed);
     time = timeDuration;
 
     addRequirements(intake);
   }
 
+  public IntakeCommand(double intakeSpeed, double feederSpeed) {
+    intake = new Intake(intakeSpeed);
+    feeder = new Feeder(0, feederSpeed);
+
+    addRequirements(intake, feeder);
+  }
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
   }
+
+  boolean thereIsBall = false;
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -42,8 +62,34 @@ public class IntakeCommand extends CommandBase {
       intake.timedIntake(time);
       end(false);
     }
-    else{
+    else if(feeder==null){
       intake.intake();
+    }
+    else{
+      if(Robot.intakeIRSensor.getVoltage()>2.0){
+        thereIsBall=true;
+      }
+      else{
+        if(thereIsBall){
+          Robot.ballCount++;
+        }
+
+        thereIsBall = false;
+      }
+
+      if(Robot.feederIRSensor.getVoltage()<1.0 && Robot.ballCount<5){
+        feeder.feederOn();
+        intake.intake();
+        
+      }
+      else if(Robot.ballCount<5){
+        feeder.feederStop();
+        intake.intake();
+      }
+      else{
+        feeder.feederStop();
+        intake.stopIntake();
+      }
     }
   }
 
@@ -51,6 +97,7 @@ public class IntakeCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     intake.stopIntake();
+    feeder.feederStop();
   }
 
   // Returns true when the command should end.

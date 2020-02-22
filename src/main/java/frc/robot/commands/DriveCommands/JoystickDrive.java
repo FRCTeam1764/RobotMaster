@@ -7,16 +7,13 @@
 
 package frc.robot.Commands.DriveCommands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.constants.PIDConstants;
-import frc.robot.util.Limelight;
 
 public class JoystickDrive extends CommandBase {
   public JoystickDrive() {
@@ -28,12 +25,11 @@ public class JoystickDrive extends CommandBase {
   TalonFX _rightMaster = Robot.drivetrain.rightTalons[0];
   TalonFX _leftMaster = Robot.drivetrain.leftTalons[0];
 
+  DifferentialDrive diffDrive = Robot.drivetrain.diffDrive;
+
   int _smoothing;
 
   Joystick joystick = Robot.oi.driverJoystick;
-  
-  boolean[] _btns = new boolean[PIDConstants.kNumButtonsPlusOne];
-	boolean[] btns = new boolean[PIDConstants.kNumButtonsPlusOne];
 
   // Called repeatedly when this Command is scheduled to run
   @Override
@@ -42,40 +38,14 @@ public class JoystickDrive extends CommandBase {
 		double turn = joystick.getZ();
 		forward = ForwardDeadband(forward);
 		turn = TurningDeadband(turn);
-	
-		/* Button processing for state toggle and sensor zeroing */
-		getButtons(btns, joystick);
-		
-    if (btns[1] && !_btns[1]) {
-			zeroSensors();			// Zero Sensors
-		}
-		if(btns[5] && !_btns[5]) {
-      _smoothing--; // Decrement smoothing
-      
-      Limelight.turnLEDOn();
-
-			if(_smoothing < 0) _smoothing = 0; // Cap smoothing
-			_rightMaster.configMotionSCurveStrength(_smoothing);
-
-			System.out.println("Smoothing value is: " + _smoothing);
-		}
-		if(btns[6] && !_btns[6]) {
-
-      Limelight.turnLEDOff();
-
-			_smoothing++; // Increment smoothing
-			if(_smoothing > 8) _smoothing = 8; // Cap smoothing
-			_rightMaster.configMotionSCurveStrength(_smoothing);
-			
-			System.out.println("Smoothing value is: " + _smoothing);
-		}
-		System.arraycopy(btns, 0, _btns, 0, PIDConstants.kNumButtonsPlusOne);
 
       //Apply throttle to everything just to make sure nothing is overpowered
-			_leftMaster.set(ControlMode.PercentOutput, forward*getThrottle(), DemandType.ArbitraryFeedForward, +turn*getThrottle());
-      _rightMaster.set(ControlMode.PercentOutput, forward*getThrottle(), DemandType.ArbitraryFeedForward, -turn*getThrottle());
+		/*	_leftMaster.set(ControlMode.PercentOutput, forward-turn);
+      _rightMaster.set(ControlMode.PercentOutput, forward+turn);*/
+
+      diffDrive.arcadeDrive(forward*getThrottle(), turn*Math.abs(turn)*getThrottle());
       
-      DriverStation.reportError("" +turn*getThrottle()  , true);
+      //DriverStation.reportError("" +turn*getThrottle()  , true);
   
   }
 
@@ -102,11 +72,11 @@ public class JoystickDrive extends CommandBase {
 
   double TurningDeadband(final double value) {
     /* Upper deadband */
-    if (value >= +0.14)
+    if (value >= +0.12)
       return value;
 
     /* Lower deadband */
-    if (value <= -0.14)
+    if (value <= -0.12)
       return value;
 
     /* Outside deadband */
@@ -118,13 +88,6 @@ public class JoystickDrive extends CommandBase {
 
     /*Uses the equation .5(axisvalue) +.5 to give an equation
       with the domain [-1,1] and the range [0,1]*/
-  }
-
-  /** Gets all buttons from gamepad */
-  void getButtons(final boolean[] btns, final Joystick gamepad) {
-		for (int i = 1; i < PIDConstants.kNumButtonsPlusOne; ++i) {
-			btns[i] = gamepad.getRawButton(i);
-    }
   }
     
   @Override

@@ -20,8 +20,12 @@ public class SharpIRSensor {
         irSensor = new AnalogInput(port);
     }
 
-    public double getDistance(){
+    public double getVoltage(){
         return irSensor.getVoltage();
+    }
+
+    public int getValue(){
+        return irSensor.getValue();
     }
 
 }

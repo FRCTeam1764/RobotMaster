@@ -8,10 +8,15 @@
 package frc.robot.Commands.PIDMovementCommands;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
+import frc.robot.Commands.ShooterCommand.ShooterControlMode;
 import frc.robot.Subsystems.TeleopSubsystems.Shooter;
 import frc.robot.constants.PIDConstants;
 import frc.robot.util.Limelight;
@@ -67,7 +72,7 @@ public class PIDDrive extends CommandBase {
       Robot.pidMovement.setTurningPIDConfig(rightMaster);
       Robot.pidMovement.setTurningPIDConfig(leftMaster);
     } else if (movementType == MovementType.SHOOT) {
-      shooter = new Shooter(inputUnits * PIDConstants.TALON_VELOCITY_PER_ROBOT_VELOCITY);
+      shooter = new Shooter(inputUnits * PIDConstants.TALON_VELOCITY_PER_ROBOT_VELOCITY, ShooterControlMode.PID);
     } else if (movementType == MovementType.LIMELIGHT_TURN) {
       try {
         units = Limelight.getAngle();
@@ -108,7 +113,7 @@ public class PIDDrive extends CommandBase {
       Robot.pidMovement.setTurningPIDConfig(leftMaster);
     }
     else if(movementType == MovementType.SHOOT){
-      shooter = new Shooter(inputUnits * PIDConstants.TALON_VELOCITY_PER_ROBOT_VELOCITY);
+      shooter = new Shooter(inputUnits * PIDConstants.TALON_VELOCITY_PER_ROBOT_VELOCITY, ShooterControlMode.PID);
     }
     else if (movementType == MovementType.LIMELIGHT_TURN) {
       try {
@@ -134,22 +139,29 @@ public class PIDDrive extends CommandBase {
     addRequirements(Robot.pidMovement);
     addRequirements(Robot.drivetrain);
 
-    Robot.pidMovement.setPIDConfig(leftMaster, false);
-    Robot.pidMovement.setPIDConfig(rightMaster, false);
+    TalonFXConfiguration configs = new TalonFXConfiguration();
+    configs.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor;
+    rightMaster.configAllSettings(configs);
+    rightMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
+    leftMaster.configAllSettings(configs);
+    leftMaster.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 20);
+
+    //Robot.pidMovement.setPIDConfig(leftMaster, false);
+    //Robot.pidMovement.setPIDConfig(rightMaster, false);
     // Shooter Master is already config in the shooter subsystem
 
     type = movementType;
 
     if (movementType == MovementType.STRAIGHT) {
-      Robot.pidMovement.setDistancePIDConfig(rightMaster);
-      Robot.pidMovement.setDistancePIDConfig(leftMaster);
+      //Robot.pidMovement.setDistancePIDConfig(rightMaster);
+      //Robot.pidMovement.setDistancePIDConfig(leftMaster);
     }
     else if (movementType == MovementType.TURN) {
       Robot.pidMovement.setTurningPIDConfig(rightMaster);
       Robot.pidMovement.setTurningPIDConfig(leftMaster);
     } 
     else if (movementType == MovementType.SHOOT) {
-      shooter = new Shooter(0);
+      shooter = new Shooter(0, ShooterControlMode.STANDARD);
     } 
     else if (movementType == MovementType.LIMELIGHT_TURN) {
       try {

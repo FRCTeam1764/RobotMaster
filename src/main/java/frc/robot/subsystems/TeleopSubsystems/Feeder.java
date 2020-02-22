@@ -10,13 +10,17 @@ package frc.robot.Subsystems.TeleopSubsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.PortConstants;
 
 public class Feeder extends SubsystemBase {
   WPI_TalonSRX feeder = new WPI_TalonSRX(PortConstants.FEEDER_MOTOR_PORT);
-  WPI_TalonSRX conveyer = new WPI_TalonSRX(PortConstants.CONVEYER_MOTOR_PORT);
+  CANSparkMax conveyer = new CANSparkMax(PortConstants.CONVEYER_MOTOR_PORT, MotorType.kBrushless);
 
 
   double conveyerSpeed;
@@ -25,6 +29,8 @@ public class Feeder extends SubsystemBase {
   public Feeder(double conveyerSpeed, double feederSpeed) {
     this.conveyerSpeed = conveyerSpeed;
     this.feederSpeed = feederSpeed;
+
+    feeder.setInverted(true);
   }
 
   @Override
@@ -33,7 +39,7 @@ public class Feeder extends SubsystemBase {
   }
 
   public void conveyerOn(){
-    conveyer.set(ControlMode.PercentOutput, conveyerSpeed);
+    conveyer.set(conveyerSpeed);
   }
 
   public void feederOn(){
@@ -56,7 +62,7 @@ public class Feeder extends SubsystemBase {
 
 
   public void conveyerStop() {
-    conveyer.set(ControlMode.PercentOutput, 0);
+    conveyer.set(0);
   }
 
   public void feederStop() {

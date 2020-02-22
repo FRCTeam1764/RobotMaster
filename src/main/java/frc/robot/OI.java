@@ -17,6 +17,7 @@ import frc.robot.Commands.WheelOfFortuneCommand;
 import frc.robot.Commands.WheelOfFortuneSolenoidCommand;
 import frc.robot.Commands.PIDMovementCommands.PIDDrive;
 import frc.robot.Commands.PIDMovementCommands.PIDDrive.MovementType;
+import frc.robot.Commands.ShooterCommand.ShooterControlMode;
 import frc.robot.constants.ControlsConstants;
 import frc.robot.constants.PortConstants;
 import frc.robot.util.ColorSensor.ColorType;
@@ -34,6 +35,7 @@ public Joystick coDriverJoystick = new Joystick(PortConstants.CO_DRIVER_CONTROLL
 // Driver Joystick Config
 
 public JoystickButton intakeButton = new JoystickButton(driverJoystick,ControlsConstants.INTAKE_BUTTON);
+public JoystickButton reverseIntake = new JoystickButton(driverJoystick, 10);
 public JoystickButton feederButton = new JoystickButton(driverJoystick,ControlsConstants.FEEDER_BUTTON);
 
 public JoystickButton shooterButton = new JoystickButton(driverJoystick, ControlsConstants.SHOOTER_BUTTON);
@@ -52,6 +54,7 @@ public XboxController coDriverXbox = new XboxController(PortConstants.CO_DRIVER_
 
 public JoystickButton intakeButtonXbox = new JoystickButton(driverXbox, ControlsConstants.RIGHT_SHOULDER_BUTTON);
 public JoystickButton feederButtonXbox = new JoystickButton(driverXbox, ControlsConstants.LEFT_SHOULDER_BUTTON);
+public JoystickButton feederButtonNoConveyorXbox = new JoystickButton(driverXbox,ControlsConstants.B_BUTTON);
 public JoystickButton shooterButtonXbox = new JoystickButton(driverXbox,ControlsConstants.A_BUTTON);
 
 
@@ -60,9 +63,10 @@ public JoystickButton shooterButtonXbox = new JoystickButton(driverXbox,Controls
 
     //On Joysticks
      intakeButton.whileHeld(new IntakeCommand(1));
-     feederButton.whileHeld(new FeederCommand(0.3, 1));
+     reverseIntake.whileHeld(new FeederCommand(-.6,0));
+     feederButton.whileHeld(new FeederCommand(0.2, 1));
 
-     shooterButton.toggleWhenPressed(new ShooterCommand(0.8));
+     shooterButton.toggleWhenPressed(new ShooterCommand(0.55, ShooterControlMode.STANDARD));
      //shooterAutoAdjustButton.whenPressed(new PIDDrive(-24, MovementType.STRAIGHT));
 
      //controlPanelSolenoidButton.toggleWhenPressed(new WheelOfFortuneSolenoidCommand());
@@ -70,9 +74,10 @@ public JoystickButton shooterButtonXbox = new JoystickButton(driverXbox,Controls
      //controlPanelButton.whileHeld(new WheelOfFortuneCommand(.8));
 
      //On XBox Controller
-     intakeButtonXbox.whileHeld(new IntakeCommand(0.8));
-     feederButtonXbox.whileHeld(new FeederCommand(0.5, 0.5));
-     shooterButtonXbox.toggleWhenPressed(new ShooterCommand(0.9));
+     intakeButtonXbox.whileHeld(new IntakeCommand(1,(double) 1));
+     feederButtonXbox.whileHeld(new FeederCommand(.7, 1));
+     shooterButtonXbox.toggleWhenPressed(new ShooterCommand(.55, ShooterControlMode.STANDARD));
+     feederButtonNoConveyorXbox.whileHeld(new FeederCommand(0, -1));
     }
 
     //Used for xbox triggers
