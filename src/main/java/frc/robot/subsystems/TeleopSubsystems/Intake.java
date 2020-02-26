@@ -44,6 +44,7 @@ public class Intake extends SubsystemBase {
       intake();
     }
 
+    timer.stop();
     stopIntake();
   }
 

@@ -8,10 +8,9 @@
 package frc.robot.Subsystems.TeleopSubsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -19,8 +18,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.PortConstants;
 
 public class Feeder extends SubsystemBase {
-  WPI_TalonSRX feeder = new WPI_TalonSRX(PortConstants.FEEDER_MOTOR_PORT);
+  WPI_TalonSRX leftFeeder = new WPI_TalonSRX(PortConstants.LEFT_FEEDER_MOTOR_PORT);
+  WPI_TalonSRX rightFeeder = new WPI_TalonSRX(PortConstants.RIGHT_FEEDER_MOTOR_PORT);
   CANSparkMax conveyer = new CANSparkMax(PortConstants.CONVEYER_MOTOR_PORT, MotorType.kBrushless);
+  int count=0;
 
 
   double conveyerSpeed;
@@ -30,7 +31,10 @@ public class Feeder extends SubsystemBase {
     this.conveyerSpeed = conveyerSpeed;
     this.feederSpeed = feederSpeed;
 
-    feeder.setInverted(true);
+    rightFeeder.follow(leftFeeder);
+
+    leftFeeder.setInverted(true);
+    rightFeeder.setInverted(false);
   }
 
   @Override
@@ -39,11 +43,17 @@ public class Feeder extends SubsystemBase {
   }
 
   public void conveyerOn(){
-    conveyer.set(conveyerSpeed);
+    if(count<4 && conveyerSpeed > 0.0){
+      conveyer.set(-conveyerSpeed);
+      count++;
+    }
+    else{
+      conveyer.set(conveyerSpeed);
+    }
   }
 
   public void feederOn(){
-    feeder.set(ControlMode.PercentOutput, feederSpeed);
+    leftFeeder.set(ControlMode.PercentOutput, feederSpeed);
   }
 
   public void timedFeeder(double timeDuration){
@@ -55,6 +65,7 @@ public class Feeder extends SubsystemBase {
       feederOn();
     }
 
+    timer.stop();
     conveyerStop();
     feederStop();
   }
@@ -66,6 +77,7 @@ public class Feeder extends SubsystemBase {
   }
 
   public void feederStop() {
-    feeder.set(ControlMode.PercentOutput, 0);
+    count=0;
+    leftFeeder.set(ControlMode.PercentOutput, 0);
   }
 }

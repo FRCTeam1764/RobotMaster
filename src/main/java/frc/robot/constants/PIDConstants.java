@@ -36,8 +36,8 @@ public class PIDConstants {
 	//public final static Gains kGains_MotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
 	// (.5*1023)/19939, 80*(.7*1023)/6000
 	//                                                    kP   kI    kD   kF   Iz    PeakOut
-	public final static Gains kGains_Distanc = new Gains( .03, 0.0,  0, 0.0, 0,   1 );
-	public final static Gains kGains_Turning = new Gains( 0,   0.0,  0,   0.0,  0,     0 );
+	public final static Gains kGains_Distanc = new Gains( 0.08, 0.0,  0.0, 0.0, 100,     1 );
+	public final static Gains kGains_Turning = new Gains( 0.00, 0.0,  0.0, 0.0, 200,     1 );
 	public final static Gains kGains_Velocity_Shooter = new Gains(1,0,0,1/1023,0,.8);
 	
 	/** ---- Flat constants, you should not need to change these ---- */

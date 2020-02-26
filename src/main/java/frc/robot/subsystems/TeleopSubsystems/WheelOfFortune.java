@@ -8,9 +8,9 @@
 package frc.robot.Subsystems.TeleopSubsystems;
 
 import java.util.Map;
-import java.util.Map.Entry;
 
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.PortConstants;
@@ -24,7 +24,8 @@ public class WheelOfFortune extends SubsystemBase {
 
   double wheelSpeed;
   Spark wheelMotor = new Spark(PortConstants.CONTROL_PANEL_WHEEL_MOTOR_PORT);
-  public static Solenoid controlPanelWheelExtender = new Solenoid(PortConstants.CONTROL_PANEL_WHEEL_SOLENOID_PORT);
+  DoubleSolenoid controlPanelWheelExtender = 
+  new DoubleSolenoid(PortConstants.CONTROL_PANEL_CAN_PORT, PortConstants.CONTROL_PANEL_FORWARD_PORT, PortConstants.CONTROL_PANEL_REVERSE_PORT);
 
   //Used for position control; a color's complement is the color 90 degrees from it.
   public static Map<ColorType, ColorType> colorComplements = Map.of(
@@ -35,8 +36,8 @@ public class WheelOfFortune extends SubsystemBase {
   ColorType.UNKNOWN, ColorType.UNKNOWN
   );
 
-  boolean rotationControlComplete = false;
-  boolean positionControlComplete = false;
+  static boolean rotationControlComplete = false;
+  static boolean positionControlComplete = false;
 
   public WheelOfFortune(double wheelSpeed){
     this.wheelSpeed=wheelSpeed;
@@ -51,8 +52,8 @@ public class WheelOfFortune extends SubsystemBase {
     wheelMotor.set(wheelSpeed);
   }
 
-  public static void extendWheel(boolean shouldExtend){
-    controlPanelWheelExtender.set(shouldExtend);
+  public void extendWheel(Value extend){
+    controlPanelWheelExtender.set(extend);
   }
 
   int count=0;

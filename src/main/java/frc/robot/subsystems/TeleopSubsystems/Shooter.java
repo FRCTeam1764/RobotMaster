@@ -10,15 +10,16 @@ package frc.robot.Subsystems.TeleopSubsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.StatusFrame;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.Commands.ShooterCommand.ShooterControlMode;
 import frc.robot.constants.PIDConstants;
 import frc.robot.constants.PortConstants;
-import frc.robot.Commands.ShooterCommand.ShooterControlMode;
 
 public class Shooter extends SubsystemBase {
   
@@ -27,11 +28,23 @@ public class Shooter extends SubsystemBase {
 
   double shooterVelocity;
   ShooterControlMode controlMode;
+  public double timeDuration = -1;
   double shooter;
 
   public Shooter(double shooterVelocity, ShooterControlMode controlMode) {
     this.shooterVelocity = shooterVelocity;
     this.controlMode = controlMode;
+
+    shooterMaster = configShooterMotors(PortConstants.SHOOTER_MASTER_MOTOR_PORT, true, false);
+    shooterFollower = configShooterMotors(PortConstants.SHOOTER_FOLLOWER_MOTOR_PORT, false, true);
+
+    shooterFollower.follow(shooterMaster);
+  }
+
+  public Shooter(double shooterVelocity, ShooterControlMode controlMode, double timeDuration) {
+    this.shooterVelocity = shooterVelocity;
+    this.controlMode = controlMode;
+    this.timeDuration = timeDuration;
 
     shooterMaster = configShooterMotors(PortConstants.SHOOTER_MASTER_MOTOR_PORT, true, false);
     shooterFollower = configShooterMotors(PortConstants.SHOOTER_FOLLOWER_MOTOR_PORT, false, true);
@@ -46,10 +59,15 @@ public class Shooter extends SubsystemBase {
 
   public void shoot() {
     if(controlMode == ShooterControlMode.PID){
-      shooterMaster.set(ControlMode.Velocity, shooterVelocity);
+      SimpleMotorFeedforward simpleMotorFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
+      double kF = simpleMotorFeedforward.calculate(shooterVelocity);
+      shooterMaster.set(ControlMode.Velocity, shooterVelocity/60*2048*0.1);
     }
     else if(controlMode == ShooterControlMode.STANDARD){
       shooterMaster.set(ControlMode.PercentOutput, shooterVelocity);
+    }
+    else if(controlMode == ShooterControlMode.TIMED && timeDuration > 0){
+      shoot(timeDuration);
     }
   }
 
@@ -61,6 +79,7 @@ public class Shooter extends SubsystemBase {
       shoot();
     }
 
+    timer.stop();
     stopShooter();
   }
 
@@ -73,38 +92,23 @@ public class Shooter extends SubsystemBase {
     talon.setNeutralMode(NeutralMode.Coast);
 
     if(isMaster){
-     // setPIDShooterVelocityConfig(talon);
+      TalonFXConfiguration config = new TalonFXConfiguration();
+      config.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor;
+      talon.configAllSettings(config);
+
+      talon.config_kP(PIDConstants.kSlot_Shooter_Velocity, 0.066, PIDConstants.kTimeoutMs);
+      talon.config_kD(PIDConstants.kSlot_Shooter_Velocity, 0.0015, PIDConstants.kTimeoutMs);
+      talon.config_kF(PIDConstants.kSlot_Shooter_Velocity, 0.049, PIDConstants.kTimeoutMs);
+      talon.config_IntegralZone(PIDConstants.kSlot_Shooter_Velocity, (int)PIDConstants.kGains_Velocity_Shooter.kIzone, PIDConstants.kTimeoutMs);
+      talon.configClosedLoopPeakOutput(PIDConstants.kSlot_Shooter_Velocity, PIDConstants.kGains_Velocity_Shooter.kPeakOutput, PIDConstants.kTimeoutMs);
+      talon.configAllowableClosedloopError(PIDConstants.kSlot_Shooter_Velocity, 0, PIDConstants.kTimeoutMs);
+      talon.selectProfileSlot(PIDConstants.kSlot_Shooter_Velocity, PIDConstants.PID_PRIMARY);
+      //talon = setPIDShooterVelocityConfig(talon);
     }
 
+    talon.enableVoltageCompensation(true);
+    talon.configVoltageCompSaturation(12.0);
+
     return talon;
-  }
-
-  public static void setPIDShooterVelocityConfig(WPI_TalonFX talon) {
-    Robot.pidMovement.setPIDConfig(talon, false);
-
-    talon.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, PIDConstants.kTimeoutMs);
-    talon.setStatusFramePeriod(StatusFrame.Status_13_Base_PIDF0, 20, PIDConstants.kTimeoutMs);
-    
-    talon.configSelectedFeedbackSensor(	FeedbackDevice.IntegratedSensor, 
-    PIDConstants.PID_PRIMARY,
-    PIDConstants.kTimeoutMs);
-
-    /**
-    * Max out the peak output (for all modes).  
-    * However you can limit the output of a given PID object with configClosedLoopPeakOutput().
-    */
-    talon.configPeakOutputForward(+1.0, PIDConstants.kTimeoutMs);
-    talon.configPeakOutputReverse(0, PIDConstants.kTimeoutMs); //Don't want to reverse
-
-
-    talon.config_kP(PIDConstants.kSlot_Shooter_Velocity, PIDConstants.kGains_Velocity_Shooter.kP, PIDConstants.kTimeoutMs);
-    talon.config_kI(PIDConstants.kSlot_Shooter_Velocity, PIDConstants.kGains_Velocity_Shooter.kI, PIDConstants.kTimeoutMs);
-    talon.config_kD(PIDConstants.kSlot_Shooter_Velocity, PIDConstants.kGains_Velocity_Shooter.kD, PIDConstants.kTimeoutMs);
-    talon.config_kF(PIDConstants.kSlot_Shooter_Velocity, PIDConstants.kGains_Velocity_Shooter.kF, PIDConstants.kTimeoutMs);
-    talon.config_IntegralZone(PIDConstants.kSlot_Shooter_Velocity, (int)PIDConstants.kGains_Velocity_Shooter.kIzone, PIDConstants.kTimeoutMs);
-    talon.configClosedLoopPeakOutput(PIDConstants.kSlot_Shooter_Velocity, PIDConstants.kGains_Velocity_Shooter.kPeakOutput, PIDConstants.kTimeoutMs);
-    talon.configAllowableClosedloopError(PIDConstants.kSlot_Shooter_Velocity, 0, PIDConstants.kTimeoutMs);
-
-    talon.selectProfileSlot(PIDConstants.kSlot_Shooter_Velocity, PIDConstants.PID_PRIMARY);
   }
 }

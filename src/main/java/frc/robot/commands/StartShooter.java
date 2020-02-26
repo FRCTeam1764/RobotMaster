@@ -8,27 +8,18 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
+import frc.robot.Commands.ShooterCommand.ShooterControlMode;
 import frc.robot.Subsystems.TeleopSubsystems.Shooter;
 
-public class ShooterCommand extends CommandBase {
-  
+public class StartShooter extends CommandBase {
+  /**
+   * Creates a new StartShooter.
+   */
+
   Shooter shooter;
 
-  public enum ShooterControlMode{
-    PID,
-    STANDARD,
-    TIMED
-  }
-
-  public ShooterCommand(double shooterMotorSpeed, ShooterControlMode controlMode) {
-    shooter = new Shooter(shooterMotorSpeed, controlMode);
-
-    addRequirements(shooter);
-  }
-
-  public ShooterCommand(double shooterMotorSpeed, ShooterControlMode controlMode, double timeDuration) {
-    shooter = new Shooter(shooterMotorSpeed, controlMode, timeDuration);
+  public StartShooter(double speed) {
+    shooter = new Shooter(speed, ShooterControlMode.STANDARD);
 
     addRequirements(shooter);
   }
@@ -36,30 +27,25 @@ public class ShooterCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    shooter.shoot();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(shooter.timeDuration >0){
-      shooter.shoot();
-      end(false);
-    }
-    else{
-      shooter.shoot();
-    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.stopShooter();
-    Robot.ballCount = 0;
+    if(interrupted){
+      shooter.stopShooter();
+    }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

@@ -7,20 +7,19 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Commands.ClimberCommand;
 import frc.robot.Commands.FeederCommand;
 import frc.robot.Commands.IntakeCommand;
 import frc.robot.Commands.ShooterCommand;
-import frc.robot.Commands.WheelOfFortuneCommand;
-import frc.robot.Commands.WheelOfFortuneSolenoidCommand;
-import frc.robot.Commands.PIDMovementCommands.PIDDrive;
-import frc.robot.Commands.PIDMovementCommands.PIDDrive.MovementType;
 import frc.robot.Commands.ShooterCommand.ShooterControlMode;
+import frc.robot.Subsystems.TeleopSubsystems.Climber.ClimberControlType;
 import frc.robot.constants.ControlsConstants;
 import frc.robot.constants.PortConstants;
-import frc.robot.util.ColorSensor.ColorType;
 
 /**
  * Add your docs here.
@@ -52,15 +51,32 @@ public XboxController coDriverXbox = new XboxController(PortConstants.CO_DRIVER_
 
 //Xbox Controller Config
 
-public JoystickButton intakeButtonXbox = new JoystickButton(driverXbox, ControlsConstants.RIGHT_SHOULDER_BUTTON);
-public JoystickButton feederButtonXbox = new JoystickButton(driverXbox, ControlsConstants.LEFT_SHOULDER_BUTTON);
-public JoystickButton feederButtonNoConveyorXbox = new JoystickButton(driverXbox,ControlsConstants.B_BUTTON);
-public JoystickButton shooterButtonXbox = new JoystickButton(driverXbox,ControlsConstants.A_BUTTON);
+public JoystickButton shooterButtonXbox = new JoystickButton(driverXbox, ControlsConstants.RIGHT_SHOULDER_BUTTON);
+public JoystickButton outtakeButtonXbox = new JoystickButton(driverXbox, ControlsConstants.LEFT_SHOULDER_BUTTON);
+public JoystickButton climberWinchButtonXbox = new JoystickButton(driverXbox,ControlsConstants.Y_BUTTON);
+public JoystickButton climberPneumaticsButtonXbox = new JoystickButton(driverXbox,ControlsConstants.X_BUTTON);
+
+Trigger leftIntakeTrigger = new Trigger(() -> driverXbox.getTriggerAxis(Hand.kLeft)>.3);
+Trigger rightFeederTrigger = new Trigger(() -> driverXbox.getTriggerAxis(Hand.kRight)>.3);
+
+Trigger upDPadClimbUp = new Trigger(() -> driverXbox.getPOV()==0);
+Trigger downDPadClimbDown = new Trigger(() -> driverXbox.getPOV()==180);
+
+public JoystickButton coShooterButtonXbox = new JoystickButton(coDriverXbox, ControlsConstants.RIGHT_SHOULDER_BUTTON);
+public JoystickButton coOuttakeButtonXbox = new JoystickButton(coDriverXbox, ControlsConstants.LEFT_SHOULDER_BUTTON);
+public JoystickButton coClimberWinchButtonXbox = new JoystickButton(coDriverXbox,ControlsConstants.Y_BUTTON);
+public JoystickButton coClimberPneumaticsButtonXbox = new JoystickButton(coDriverXbox,ControlsConstants.X_BUTTON);
+
+Trigger coLeftIntakeTrigger = new Trigger(() -> coDriverXbox.getTriggerAxis(Hand.kLeft)>.3);
+Trigger coRightFeederTrigger = new Trigger(() -> coDriverXbox.getTriggerAxis(Hand.kRight)>.3);
+
+Trigger coUpDPadClimbUp = new Trigger(() -> coDriverXbox.getPOV()==0);
+Trigger coDownDPadClimbDown = new Trigger(() -> coDriverXbox.getPOV()==180);
 
 
     public OI(){
     /* ---- Binds commands to button presses ---- */
-
+ 
     //On Joysticks
      intakeButton.whileHeld(new IntakeCommand(1));
      reverseIntake.whileHeld(new FeederCommand(-.6,0));
@@ -74,10 +90,28 @@ public JoystickButton shooterButtonXbox = new JoystickButton(driverXbox,Controls
      //controlPanelButton.whileHeld(new WheelOfFortuneCommand(.8));
 
      //On XBox Controller
-     intakeButtonXbox.whileHeld(new IntakeCommand(1,(double) 1));
-     feederButtonXbox.whileHeld(new FeederCommand(.7, 1));
-     shooterButtonXbox.toggleWhenPressed(new ShooterCommand(.55, ShooterControlMode.STANDARD));
-     feederButtonNoConveyorXbox.whileHeld(new FeederCommand(0, -1));
+     //3050, 3100
+     shooterButtonXbox.toggleWhenPressed(new ShooterCommand(1000, ShooterControlMode.PID));
+     leftIntakeTrigger.whenActive(new FeederCommand(1,.5));
+     rightFeederTrigger.whenActive(new FeederCommand(1, .4, 1.0));
+
+     climberWinchButtonXbox.toggleWhenActive(new ClimberCommand(true, ClimberControlType.WINCH));
+     climberWinchButtonXbox.negate().toggleWhenActive(new ClimberCommand(false, ClimberControlType.WINCH));
+     climberPneumaticsButtonXbox.whenActive(new ClimberCommand(true, ClimberControlType.PNEUMATICS));
+     //climberPneumaticsButtonXbox.negate().toggleWhenActive(new ClimberCommand(false, ClimberControlType.PNEUMATICS));
+
+     outtakeButtonXbox.whenPressed(new FeederCommand(-1, -1, -1, .3));
+
+     coShooterButtonXbox.toggleWhenPressed(new ShooterCommand(3100, ShooterControlMode.PID));
+     coLeftIntakeTrigger.whenActive(new FeederCommand(1,.5));
+     coRightFeederTrigger.whenActive(new FeederCommand(1, .4, 1.0));
+
+     coClimberWinchButtonXbox.toggleWhenActive(new ClimberCommand(true, ClimberControlType.WINCH));
+     coClimberWinchButtonXbox.negate().toggleWhenActive(new ClimberCommand(false, ClimberControlType.WINCH));
+     coClimberPneumaticsButtonXbox.whenActive(new ClimberCommand(true, ClimberControlType.PNEUMATICS));
+     //climberPneumaticsButtonXbox.negate().toggleWhenActive(new ClimberCommand(false, ClimberControlType.PNEUMATICS));
+
+     coOuttakeButtonXbox.whenPressed(new FeederCommand(-1, -1, -1, .3));
     }
 
     //Used for xbox triggers

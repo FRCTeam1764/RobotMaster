@@ -44,10 +44,10 @@ public class Drivetrain extends SubsystemBase {
 
     for(int i=0; i<PortConstants.RIGHT_MOTORS_IDS.length; i++){
       if(i==0){
-        rightTalons[i] = configTalons(PortConstants.RIGHT_MOTORS_IDS[i], true, false);
+        rightTalons[i] = configTalons(PortConstants.RIGHT_MOTORS_IDS[i], true, true);
       }
       else{
-        rightTalons[i] = configTalons(PortConstants.RIGHT_MOTORS_IDS[i], false, false);
+        rightTalons[i] = configTalons(PortConstants.RIGHT_MOTORS_IDS[i], false, true);
         rightTalons[i].follow(rightTalons[0]);
       }
     }

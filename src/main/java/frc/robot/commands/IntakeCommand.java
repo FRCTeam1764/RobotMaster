@@ -7,14 +7,10 @@
 
 package frc.robot.Commands;
 
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.SharpIRSensor;
 import frc.robot.Subsystems.TeleopSubsystems.Feeder;
 import frc.robot.Subsystems.TeleopSubsystems.Intake;
-import frc.robot.constants.PortConstants;
 
 public class IntakeCommand extends CommandBase {
   /**
@@ -43,7 +39,7 @@ public class IntakeCommand extends CommandBase {
 
   public IntakeCommand(double intakeSpeed, double feederSpeed) {
     intake = new Intake(intakeSpeed);
-    feeder = new Feeder(0, feederSpeed);
+    feeder = new Feeder(.2, feederSpeed);
 
     addRequirements(intake, feeder);
   }
@@ -66,29 +62,14 @@ public class IntakeCommand extends CommandBase {
       intake.intake();
     }
     else{
-      if(Robot.intakeIRSensor.getVoltage()>2.0){
-        thereIsBall=true;
-      }
-      else{
-        if(thereIsBall){
-          Robot.ballCount++;
-        }
-
-        thereIsBall = false;
-      }
-
-      if(Robot.feederIRSensor.getVoltage()<1.0 && Robot.ballCount<5){
+      if(Robot.feederIRSensor.getVoltage() < 1.0){
         feeder.feederOn();
         intake.intake();
         
       }
-      else if(Robot.ballCount<5){
-        feeder.feederStop();
-        intake.intake();
-      }
       else{
         feeder.feederStop();
-        intake.stopIntake();
+        intake.intake();
       }
     }
   }

@@ -104,7 +104,7 @@ public class XBoxDrive extends CommandBase {
 
   double getThrottle(){
     //return controller.getTriggerAxis(Hand.kRight);
-    return .75;
+    return 1;
 
     /*Uses the equation .5(axisvalue) +.5 to give an equation
       with the domain [-1,1] and the range [0,1]*/
