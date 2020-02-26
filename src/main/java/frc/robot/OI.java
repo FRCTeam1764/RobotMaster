@@ -92,7 +92,7 @@ Trigger coDownDPadClimbDown = new Trigger(() -> coDriverXbox.getPOV()==180);
      //On XBox Controller
      //3050, 3100
      shooterButtonXbox.toggleWhenPressed(new ShooterCommand(1000, ShooterControlMode.PID));
-     leftIntakeTrigger.whenActive(new FeederCommand(1,.5));
+     leftIntakeTrigger.whenActive(new FeederCommand(1,.2,.4));
      rightFeederTrigger.whenActive(new FeederCommand(1, .4, 1.0));
 
      climberWinchButtonXbox.toggleWhenActive(new ClimberCommand(true, ClimberControlType.WINCH));
@@ -102,8 +102,8 @@ Trigger coDownDPadClimbDown = new Trigger(() -> coDriverXbox.getPOV()==180);
 
      outtakeButtonXbox.whenPressed(new FeederCommand(-1, -1, -1, .3));
 
-     coShooterButtonXbox.toggleWhenPressed(new ShooterCommand(3100, ShooterControlMode.PID));
-     coLeftIntakeTrigger.whenActive(new FeederCommand(1,.5));
+     coShooterButtonXbox.toggleWhenPressed(new ShooterCommand(1000, ShooterControlMode.PID));
+     coLeftIntakeTrigger.whenActive(new FeederCommand(1,.2,.4));
      coRightFeederTrigger.whenActive(new FeederCommand(1, .4, 1.0));
 
      coClimberWinchButtonXbox.toggleWhenActive(new ClimberCommand(true, ClimberControlType.WINCH));

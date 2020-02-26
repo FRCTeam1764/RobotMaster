@@ -61,4 +61,6 @@ public class ClimberCommand extends CommandBase {
   public boolean isFinished() {
     return timer.get()>.5 || climberControlType == ClimberControlType.PNEUMATICS;
   }
+
+  //zach is a simp
 }
