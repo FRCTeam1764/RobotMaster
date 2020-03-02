@@ -15,6 +15,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.Commands.ShooterCommand.ShooterControlMode;
@@ -52,9 +54,14 @@ public class Shooter extends SubsystemBase {
     shooterFollower.follow(shooterMaster);
   }
 
+  double velocity;
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    velocity = shooterMaster.getSelectedSensorVelocity(0);
+     SmartDashboard.putNumber("Shooter's Velocity", velocity);
+     SmartDashboard.putBoolean("Shooter Status", velocity>9500.0 );
+    
   }
 
   public void shoot() {
@@ -63,12 +70,10 @@ public class Shooter extends SubsystemBase {
       double kF = simpleMotorFeedforward.calculate(shooterVelocity);
       shooterMaster.set(ControlMode.Velocity, shooterVelocity/60*2048*0.1);
     }
-    else if(controlMode == ShooterControlMode.STANDARD){
+    else{
       shooterMaster.set(ControlMode.PercentOutput, shooterVelocity);
     }
-    else if(controlMode == ShooterControlMode.TIMED && timeDuration > 0){
-      shoot(timeDuration);
-    }
+
   }
 
   public void shoot(double time){
@@ -85,6 +90,7 @@ public class Shooter extends SubsystemBase {
 
   public void stopShooter(){
     shooterMaster.set(ControlMode.PercentOutput,0);
+  
   }
 
   public static WPI_TalonFX configShooterMotors(int portNum, boolean isMaster, boolean isInverted) {
@@ -97,6 +103,7 @@ public class Shooter extends SubsystemBase {
       talon.configAllSettings(config);
 
       talon.config_kP(PIDConstants.kSlot_Shooter_Velocity, 0.066, PIDConstants.kTimeoutMs);
+      talon.config_kI(PIDConstants.kSlot_Shooter_Velocity, 0.0, PIDConstants.kTimeoutMs);
       talon.config_kD(PIDConstants.kSlot_Shooter_Velocity, 0.0015, PIDConstants.kTimeoutMs);
       talon.config_kF(PIDConstants.kSlot_Shooter_Velocity, 0.049, PIDConstants.kTimeoutMs);
       talon.config_IntegralZone(PIDConstants.kSlot_Shooter_Velocity, (int)PIDConstants.kGains_Velocity_Shooter.kIzone, PIDConstants.kTimeoutMs);

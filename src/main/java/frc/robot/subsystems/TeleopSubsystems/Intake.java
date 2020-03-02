@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.PortConstants;
 
@@ -29,11 +30,12 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    
   }
 
   public void intake() {
     intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
+    SmartDashboard.putBoolean("Intake Status",intakeSpeed>0.0);
   }
 
   public void timedIntake(double timeDuration){
@@ -50,6 +52,7 @@ public class Intake extends SubsystemBase {
 
   public void stopIntake(){
     intakeMotor.set(ControlMode.PercentOutput, 0);
+    SmartDashboard.putBoolean("Intake Status",false);
   }
 
 }

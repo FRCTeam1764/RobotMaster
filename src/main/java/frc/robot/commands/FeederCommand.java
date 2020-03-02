@@ -48,7 +48,16 @@ public class FeederCommand extends CommandBase {
     feeder = new Feeder(conveyerSpeed, feederSpeed);
     shooter = new Shooter(shooterSpeed, ShooterControlMode.STANDARD);
 
-    addRequirements(feeder);
+    addRequirements(intake, feeder, shooter);
+  }
+
+  public FeederCommand(double intakeSpeed, double conveyerSpeed, double feederSpeed, double shooterSpeed, double time) {
+    intake = new Intake(intakeSpeed);
+    feeder = new Feeder(conveyerSpeed, feederSpeed);
+    shooter = new Shooter(shooterSpeed, ShooterControlMode.PID);
+    this.time = time;
+
+    addRequirements(intake, feeder, shooter);
   }
 
   @Override
@@ -62,28 +71,39 @@ public class FeederCommand extends CommandBase {
   @Override
   public void execute() {
     if(time>0){
-      feeder.timedFeeder(time);
-      end(false);
+      if(shooter != null && intake != null){
+        shooter.shoot();
+        feeder.conveyerOn();
+        feeder.feederOn();
+        intake.intake();
+      }
+      else{
+        feeder.timedFeeder(time);
+        end(false);
+      }
     }
-    feeder.conveyerOn();
-    feeder.feederOn();
-    intake.intake();
-    
+    else{
+      feeder.conveyerOn();
+      feeder.feederOn();
+      if(intake != null){intake.intake();}
+      if(shooter != null){shooter.shoot();}
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    timer.stop();
+    //System.out.println("it has reached end");
     feeder.conveyerStop();
     feeder.feederStop();
-    intake.stopIntake();
-    shooter.stopShooter();
+    if(intake != null){intake.stopIntake();}
+    if(shooter != null){shooter.stopShooter();}
+    timer.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return (time!=-1 && timer.get()>time);
   }
 }

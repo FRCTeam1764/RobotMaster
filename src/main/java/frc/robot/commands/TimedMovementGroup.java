@@ -18,21 +18,16 @@ import frc.robot.Commands.TimedDrive.DriveType;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 public class TimedMovementGroup extends SequentialCommandGroup {
   
-  static int robotPos = DriverStation.getInstance().getLocation();
-
-  static CommandBase[] leftMovement = new CommandBase[] {new StartShooter(.5),
-  new TimedDrive(.7, 2.5, DriveType.STRAIGHT),
-  new ShooterCommand(.5, ShooterControlMode.STANDARD, 5)};
-
-  static CommandBase[] rightMovement = new CommandBase[] {new TimedDrive(0,5, DriveType.TURN)};
+  
 
   public TimedMovementGroup() {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(robotPos == 1 ? 
-          leftMovement
-          : rightMovement
-          /*robotPos == 2 ? middlePath:
-                          rightPath*/);
+    super(
+          new StartShooter(3075), new TimedDrive(.5, 5, DriveType.STRAIGHT),
+          new TimedDrive(-.75, .2, DriveType.STRAIGHT),
+          new FeederCommand(0, .6, 1.0, 3075, 5),
+          new StartShooter(0), new TimedDrive(-.6, 3, DriveType.STRAIGHT));
+   //super(new TimedDrive(.5, 2.3, DriveType.STRAIGHT));
   }
 }

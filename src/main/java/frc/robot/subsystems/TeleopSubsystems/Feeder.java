@@ -8,7 +8,6 @@
 package frc.robot.Subsystems.TeleopSubsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -33,7 +32,7 @@ public class Feeder extends SubsystemBase {
 
     rightFeeder.follow(leftFeeder);
 
-    leftFeeder.setInverted(true);
+    leftFeeder.setInverted(false);
     rightFeeder.setInverted(false);
   }
 
@@ -43,13 +42,13 @@ public class Feeder extends SubsystemBase {
   }
 
   public void conveyerOn(){
-    if(count<4 && conveyerSpeed > 0.0){
+    /*if(count<4 && conveyerSpeed > 0.0){
       conveyer.set(-conveyerSpeed);
       count++;
     }
-    else{
+    else{*/
       conveyer.set(conveyerSpeed);
-    }
+    //}
   }
 
   public void feederOn(){

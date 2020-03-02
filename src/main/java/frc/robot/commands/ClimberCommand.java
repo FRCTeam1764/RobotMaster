@@ -36,31 +36,28 @@ public class ClimberCommand extends CommandBase {
     if(climberControlType == ClimberControlType.PNEUMATICS){
       climber.extendPneumatics();
     }
-    else if(climberControlType == ClimberControlType.WINCH){
-      timer.start();
-    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     if(climberControlType == ClimberControlType.WINCH){
-
+      climber.spinWinchMotors(mechanismOn);
+      //System.out.println("reached here");
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    timer.stop();
     climber.stopWinchMotors();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return timer.get()>.5 || climberControlType == ClimberControlType.PNEUMATICS;
+    return climberControlType == ClimberControlType.PNEUMATICS;
   }
 
-  //zach is a simp
+  //zach is a simp and likes hannah
 }

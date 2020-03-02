@@ -39,7 +39,14 @@ public class IntakeCommand extends CommandBase {
 
   public IntakeCommand(double intakeSpeed, double feederSpeed) {
     intake = new Intake(intakeSpeed);
-    feeder = new Feeder(.2, feederSpeed);
+    feeder = new Feeder(0, feederSpeed);
+
+    addRequirements(intake, feeder);
+  }
+
+  public IntakeCommand(double intakeSpeed, double conveyerSpeed, double feederSpeed) {
+    intake = new Intake(intakeSpeed);
+    feeder = new Feeder(conveyerSpeed, feederSpeed);
 
     addRequirements(intake, feeder);
   }
@@ -62,13 +69,15 @@ public class IntakeCommand extends CommandBase {
       intake.intake();
     }
     else{
-      if(Robot.feederIRSensor.getVoltage() < 1.0){
+      if(Robot.feederIRSensor.getVoltage() < 1.1){
         feeder.feederOn();
+        feeder.conveyerOn();
         intake.intake();
         
       }
       else{
         feeder.feederStop();
+        feeder.conveyerOn();
         intake.intake();
       }
     }
@@ -79,6 +88,7 @@ public class IntakeCommand extends CommandBase {
   public void end(boolean interrupted) {
     intake.stopIntake();
     feeder.feederStop();
+    feeder.conveyerStop();
   }
 
   // Returns true when the command should end.

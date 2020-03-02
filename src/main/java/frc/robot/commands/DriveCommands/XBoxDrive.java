@@ -13,14 +13,20 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
+import frc.robot.constants.ControlsConstants;
 import frc.robot.constants.PIDConstants;
 
 public class XBoxDrive extends CommandBase {
+
+  double throttle;
+
   public XBoxDrive() {
     // Use requires() here to declare subsystem dependencies
     addRequirements(Robot.drivetrain);
+    throttle=.75;
 
   }
 
@@ -28,12 +34,6 @@ public class XBoxDrive extends CommandBase {
   TalonFX _leftMaster = Robot.drivetrain.leftTalons[0];
 
   DifferentialDrive diffDrive = Robot.drivetrain.diffDrive;
-
-  boolean _firstCall = true;
-	boolean _state = false;
-	double _lockedDistance = 0;
-  double _targetAngle = 0;
-  int _smoothing;
 
   XboxController controller = Robot.oi.driverXbox;
   
@@ -45,6 +45,11 @@ public class XBoxDrive extends CommandBase {
     forward = ForwardDeadband(forward);
     turn = TurningDeadband(turn);
 
+    throttle = SmartDashboard.getBoolean("Intake Status", false) ?
+               .50 : .75;
+
+    throttle = controller.getStickButtonPressed(Hand.kLeft) ? 1 : throttle;
+
    /* if (controller.getAButton()) {
 
       Limelight.turnLEDOn();
@@ -54,17 +59,14 @@ public class XBoxDrive extends CommandBase {
       Limelight.turnLEDOff();
     }*/
 
-    if (controller.getTriggerAxis(Hand.kRight) > .4) {
-      forward = 0;
-      turn = 0;
-    }
-
     // System.out.println("This is Acade Drive.\n");
 
     // Apply throttle to everything just to make sure nothing is overpowered
-    diffDrive.arcadeDrive(forward*getThrottle(), turn*Math.abs(turn)*getThrottle());
+    diffDrive.arcadeDrive(forward*throttle, turn*Math.abs(turn)*throttle);
 
     // DriverStation.reportError("" +turn , true);
+
+    SmartDashboard.putNumber("throttle", throttle);
 
   }
 

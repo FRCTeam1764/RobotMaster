@@ -7,28 +7,19 @@
 
 package frc.robot.Subsystems.TeleopSubsystems;
 
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.EncoderType;
-import com.revrobotics.SparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.constants.PortConstants;
 
 public class Climber extends SubsystemBase {
-  /**
-   * Creates a new Climber.
-   */
 
-   Solenoid leftSolenoid = new Solenoid(PortConstants.LEFT_CLIMBER_SOLENOID_PORT);
-   Solenoid rightSolenoid = new Solenoid(PortConstants.RIGHT_CLIMBER_SOLENOID_PORT);
-
-   CANSparkMax leftWinchMotor = new CANSparkMax(PortConstants.LEFT_CLIMBER_WINCH_MOTOR, MotorType.kBrushless);
-   CANSparkMax rightWinchMotor = new CANSparkMax(PortConstants.RIGHT_CLIMBER_WINCH_MOTOR, MotorType.kBrushless);
-
-   CANEncoder winchEncoder = leftWinchMotor.getEncoder(EncoderType.kHallSensor, 42);
+   CANSparkMaxLowLevel leftWinchMotor = new CANSparkMax(PortConstants.LEFT_CLIMBER_WINCH_MOTOR, MotorType.kBrushless);
+   CANSparkMaxLowLevel rightWinchMotor = new CANSparkMax(PortConstants.RIGHT_CLIMBER_WINCH_MOTOR, MotorType.kBrushless);
 
    boolean mechanismOn;
 
@@ -42,9 +33,8 @@ public class Climber extends SubsystemBase {
     this.mechanismOn = mechanismOn;
     this.climberControlType = climberControlType;
 
-    rightWinchMotor.follow(leftWinchMotor);
-
-    leftWinchMotor.getEncoder().setPosition(0);
+    leftWinchMotor.restoreFactoryDefaults();
+    rightWinchMotor.restoreFactoryDefaults();
   }
 
   @Override
@@ -53,15 +43,18 @@ public class Climber extends SubsystemBase {
   }
 
   public void extendPneumatics(){
-    leftSolenoid.set(mechanismOn);
-    rightSolenoid.set(mechanismOn);
+    Value on = mechanismOn ? Value.kForward : Value.kReverse;
+    Robot.climberSolenoid.set(on);
   }
 
   public void spinWinchMotors(boolean mechanismOn){
-    leftWinchMotor.set(mechanismOn ? .5 : -.5);
+    double speed = mechanismOn ? .4 : -.4;
+    leftWinchMotor.set(-speed);
+    rightWinchMotor.set(speed);
   }
 
   public void stopWinchMotors(){
     leftWinchMotor.set(0);
+    rightWinchMotor.set(0);
   }
 }

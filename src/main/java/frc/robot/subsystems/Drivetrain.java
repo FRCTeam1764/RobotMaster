@@ -44,10 +44,10 @@ public class Drivetrain extends SubsystemBase {
 
     for(int i=0; i<PortConstants.RIGHT_MOTORS_IDS.length; i++){
       if(i==0){
-        rightTalons[i] = configTalons(PortConstants.RIGHT_MOTORS_IDS[i], true, true);
+        rightTalons[i] = configTalons(PortConstants.RIGHT_MOTORS_IDS[i], true, false);
       }
       else{
-        rightTalons[i] = configTalons(PortConstants.RIGHT_MOTORS_IDS[i], false, true);
+        rightTalons[i] = configTalons(PortConstants.RIGHT_MOTORS_IDS[i], false, false);
         rightTalons[i].follow(rightTalons[0]);
       }
     }
@@ -63,6 +63,8 @@ public class Drivetrain extends SubsystemBase {
     WPI_TalonFX talon = new WPI_TalonFX(_canId);
     talon.configFactoryDefault();
     talon.setInverted(isInverted);
+    talon.enableVoltageCompensation(true);
+    talon.configVoltageCompSaturation(12.0, PIDConstants.kTimeoutMs);
 
     if(isMaster){
       talon.configOpenloopRamp(VoltageConstants.openDriveVoltageRampRate);

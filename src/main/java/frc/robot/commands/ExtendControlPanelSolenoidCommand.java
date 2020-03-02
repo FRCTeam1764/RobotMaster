@@ -7,54 +7,38 @@
 
 package frc.robot.Commands;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
-import frc.robot.Subsystems.TeleopSubsystems.Shooter;
+import frc.robot.Subsystems.TeleopSubsystems.WheelOfFortune;
 
-public class ShooterCommand extends CommandBase {
-  
-  Shooter shooter;
+public class ExtendControlPanelSolenoidCommand extends CommandBase {
+  /**
+   * Creates a new ExtendControlPanelSolenoidCommand.
+   */
 
-  public enum ShooterControlMode{
-    PID,
-    STANDARD,
-    TIMED
-  }
-
-  public ShooterCommand(double shooterMotorSpeed, ShooterControlMode controlMode) {
-    shooter = new Shooter(shooterMotorSpeed, controlMode);
-
-    addRequirements(shooter);
-  }
-
-  public ShooterCommand(double shooterMotorSpeed, ShooterControlMode controlMode, double timeDuration) {
-    shooter = new Shooter(shooterMotorSpeed, controlMode, timeDuration);
-
-    addRequirements(shooter);
+  static boolean extended = false;
+  WheelOfFortune wheel = new WheelOfFortune(0);
+  public ExtendControlPanelSolenoidCommand() {
+    addRequirements(wheel);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    //extended = !extended;
+    wheel.extendWheel(Value.kForward);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(shooter.timeDuration >0){
-      shooter.shoot(shooter.timeDuration);
-      end(false);
-    }
-    else{
-      shooter.shoot();
-    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooter.stopShooter();
-    Robot.ballCount = 0;
+    wheel.extendWheel(Value.kReverse);
+    System.out.println("reached here");
   }
 
   // Returns true when the command should end.

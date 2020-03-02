@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------------*/
+///*----------------------------------------------------------------------------*/
 /* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
@@ -7,12 +7,13 @@
 
 package frc.robot.Subsystems.TeleopSubsystems;
 
-import java.util.Map;
+import java.util.Map;//
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.constants.PortConstants;
 import frc.robot.util.ColorSensor;
 import frc.robot.util.ColorSensor.ColorType;
@@ -23,9 +24,7 @@ import frc.robot.util.ColorSensor.ColorType;
 public class WheelOfFortune extends SubsystemBase {
 
   double wheelSpeed;
-  Spark wheelMotor = new Spark(PortConstants.CONTROL_PANEL_WHEEL_MOTOR_PORT);
-  DoubleSolenoid controlPanelWheelExtender = 
-  new DoubleSolenoid(PortConstants.CONTROL_PANEL_CAN_PORT, PortConstants.CONTROL_PANEL_FORWARD_PORT, PortConstants.CONTROL_PANEL_REVERSE_PORT);
+  //Spark wheelMotor = new Spark(PortConstants.CONTROL_PANEL_WHEEL_MOTOR_PORT);
 
   //Used for position control; a color's complement is the color 90 degrees from it.
   public static Map<ColorType, ColorType> colorComplements = Map.of(
@@ -43,17 +42,17 @@ public class WheelOfFortune extends SubsystemBase {
     this.wheelSpeed=wheelSpeed;
   }
 
-  public void stopWheel() {
+  /*public void stopWheel() {
     wheelMotor.set(0);
 
   }
 
   public void moveWheel() {
     wheelMotor.set(wheelSpeed);
-  }
+  }*/
 
-  public void extendWheel(Value extend){
-    controlPanelWheelExtender.set(extend);
+  public void extendWheel(Value value){
+    Robot.controlPanelWheelExtender.set(value);
   }
 
   int count=0;
@@ -66,7 +65,7 @@ public class WheelOfFortune extends SubsystemBase {
   */
 
   public void rotationControl(ColorType color){
-    moveWheel();
+    //moveWheel();
     if(ColorSensor.getColorType() == color && !recentlyDetected){
       rotationControlCounter();
       recentlyDetected = true;
@@ -94,10 +93,10 @@ public class WheelOfFortune extends SubsystemBase {
   public void positionControl(ColorType selectedColor){
     //Stops at the color's complement to stop the wanted color underneath the sensor
     if(ColorSensor.getColorType() != colorComplements.get(selectedColor)){
-      moveWheel();
+     // moveWheel();
     }
     else{
-      stopWheel();
+    //  stopWheel();
       positionControlComplete = true;
     }
   }

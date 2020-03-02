@@ -19,7 +19,7 @@ public class StartShooter extends CommandBase {
   Shooter shooter;
 
   public StartShooter(double speed) {
-    shooter = new Shooter(speed, ShooterControlMode.STANDARD);
+    shooter = new Shooter(speed, ShooterControlMode.PID);
 
     addRequirements(shooter);
   }

@@ -29,16 +29,16 @@ public class PortConstants {
     public static final int LEFT_CLIMBER_WINCH_MOTOR = 52;
     public static final int RIGHT_CLIMBER_WINCH_MOTOR = 51;
 
-    public static final int LEFT_CLIMBER_SOLENOID_PORT = 1;
-    public static final int RIGHT_CLIMBER_SOLENOID_PORT = 2;
+    public static final int LEFT_CLIMBER_SOLENOID_PORT = 0;
+    public static final int RIGHT_CLIMBER_SOLENOID_PORT = 1;
 
     public static final int LEFT_CLIMBER_SOLENOID_CAN_PORT = 53;
     public static final int RIGHT_CLIMBER_SOLENOID_CAN_PORT = 54;
 
     public static final int CONTROL_PANEL_WHEEL_MOTOR_PORT = 61;
 
-    public static final int CONTROL_PANEL_FORWARD_PORT = 3;
-    public static final int CONTROL_PANEL_REVERSE_PORT = 4;
+    public static final int CONTROL_PANEL_FORWARD_PORT = 2;
+    public static final int CONTROL_PANEL_REVERSE_PORT = 3;
     public static final int CONTROL_PANEL_CAN_PORT = 62;
     
     public static final int DRIVER_CONTROLLER_USB_PORT = 0;
