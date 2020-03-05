@@ -66,6 +66,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     drivetrain.setDrivetrainNeturalMode(NeutralMode.Brake);
     climberSolenoid.set(Value.kReverse);
+    drivetrain.setDrivetrainInverted(false, false);
 
     if(DriverStation.getInstance().getJoystickIsXbox(0)){
       CommandScheduler.getInstance().schedule(xboxdrive);

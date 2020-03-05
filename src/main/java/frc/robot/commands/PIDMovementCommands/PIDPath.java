@@ -9,7 +9,6 @@ package frc.robot.Commands.PIDMovementCommands;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Commands.PIDMovementCommands.PIDDrive.MovementType;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -19,17 +18,9 @@ public class PIDPath extends SequentialCommandGroup {
    * Creates a new PIDPath.
    */
 
-  static int robotPos = DriverStation.getInstance().getLocation();
-
   
 
   public PIDPath() {
-    // Add your commands in the super() call, e.g.
-    // super(new FooCommand(), new BarCommand());
-   /* super(robotPos == 1 ? leftPath : 
-          robotPos == 2 ? middlePath:
-                          rightPath);*/
-
-    super(new PIDDrive(60, MovementType.STRAIGHT));
+    super();
   }
 }

@@ -123,4 +123,21 @@ public class Drivetrain extends SubsystemBase {
   public void setMaxOutput(double maxOutput) {
     diffDrive.setMaxOutput(maxOutput);
   }
+  
+
+  /** 
+   * Sets the motors' inversion for the entire drivetrain
+   * 
+   * @param leftInverted what the entire left side is set to
+   * @param rightInverted what the entire right side is set to
+  */
+  public void setDrivetrainInverted(boolean leftInverted, boolean rightInverted){
+    for(int i=0; i<PortConstants.LEFT_MOTORS_IDS.length; i++){
+      leftTalons[i].setInverted(leftInverted);
+    }
+
+    for(int i=0; i<PortConstants.RIGHT_MOTORS_IDS.length; i++){
+      rightTalons[i].setInverted(rightInverted);
+    }
+  }
 }
