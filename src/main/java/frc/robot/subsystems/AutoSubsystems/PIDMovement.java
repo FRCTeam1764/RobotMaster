@@ -7,10 +7,13 @@
 
 package frc.robot.Subsystems.AutoSubsystems;
 
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.RemoteSensorSource;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
@@ -18,6 +21,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.PIDConstants;
+import frc.robot.constants.RobotDimensionConstants;
 
 public class PIDMovement extends SubsystemBase {
   
@@ -29,6 +33,9 @@ public class PIDMovement extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
   }
+
+  final int kUnitsPerRevolution = 2048;
+  final double kUnitsPerRobotRevolution = RobotDimensionConstants.ROBOT_WIDTH_CENTER_WHEELS * Math.PI / RobotDimensionConstants.WHEEL_CIRCUMFERENCE * RobotDimensionConstants.GEAR_BOX_RATIO* kUnitsPerRevolution;
 
     public void setPIDConfig(WPI_TalonFX talon, boolean setSensorPhase){
     
@@ -73,8 +80,8 @@ public class PIDMovement extends SubsystemBase {
 		_leftConfig.neutralDeadband = PIDConstants.kNeutralDeadband;
 		
 		/* Motion Magic Configurations */
-		_rightConfig.motionAcceleration = 2000;
-		_rightConfig.motionCruiseVelocity = 2000;
+		_rightConfig.motionAcceleration = (int) PIDConstants.kAcceleration;
+		_rightConfig.motionCruiseVelocity = (int) PIDConstants.kCruiseVelocity;
 
 		/**
 		 * Max out the peak output (for all modes).  
@@ -135,6 +142,21 @@ public class PIDMovement extends SubsystemBase {
 		rightMaster.setStatusFramePeriod(StatusFrame.Status_14_Turn_PIDF1, 20, PIDConstants.kTimeoutMs);
 		rightMaster.setStatusFramePeriod(StatusFrame.Status_10_Targets, 20, PIDConstants.kTimeoutMs);
 		leftMaster.setStatusFramePeriod(StatusFrame.Status_2_Feedback0, 5, PIDConstants.kTimeoutMs);
+  }
+
+  /**
+   * Changes how the two sides of the drivetrain interact during the Aux PID loop.
+   * Use this everytime one side of the drivetrain changes their inversion setting.
+   * 
+   * @param masterTalon the talon with the PID values on it. Most likely the right one
+   */
+  public void changeAuxDiffSetting(WPI_TalonFX masterTalon){
+    TalonFXConfiguration config = new TalonFXConfiguration();
+
+    setRobotDistanceConfigs(masterTalon.getInverted(), config);
+    setRobotTurnConfigs(masterTalon.getInverted(), config);
+
+    masterTalon.configAllSettings(config);
   }
 
 
@@ -302,7 +324,7 @@ public class PIDMovement extends SubsystemBase {
 		 *  ... so at 3600 units per 360', that ensures 0.1 degree precision in firmware closed-loop
 		 *  and motion profile trajectory points can range +-2 rotations.
 		 */
-		masterConfig.auxiliaryPID.selectedFeedbackCoefficient = 1;
+		 masterConfig.auxiliaryPID.selectedFeedbackCoefficient = kUnitsPerRevolution/kUnitsPerRobotRevolution;;
 	 }
 
 
@@ -314,5 +336,18 @@ public class PIDMovement extends SubsystemBase {
 	public void selectDistancePIDSlots(WPI_TalonFX masterTalon) {
     masterTalon.selectProfileSlot(PIDConstants.kSlot_Distanc, PIDConstants.PID_PRIMARY);
 		masterTalon.selectProfileSlot(PIDConstants.kSlot_Turning, PIDConstants.PID_TURN);
-	}
+  }
+  //zach has coronavirus
+  public void setMotionMagic(WPI_TalonFX masterTalon, WPI_TalonFX followerTalon, double units, double target_adjust){
+    masterTalon.set(TalonFXControlMode.MotionMagic, units, DemandType.AuxPID, target_adjust);
+    followerTalon.follow(masterTalon, FollowerType.AuxOutput1);
+  }
+
+  public double getDistanceErrorValue(WPI_TalonFX masterTalon){
+    return masterTalon.getClosedLoopError(0);
+  }
+
+  public double getTurningAdjustErrorValue(WPI_TalonFX masterTalon){
+    return masterTalon.getClosedLoopError(1);
+  }
 }

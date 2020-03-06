@@ -10,13 +10,11 @@ package frc.robot.Commands.DriveCommands;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
-import frc.robot.constants.ControlsConstants;
 import frc.robot.constants.PIDConstants;
 
 public class XBoxDrive extends CommandBase {
@@ -62,13 +60,14 @@ public class XBoxDrive extends CommandBase {
     // System.out.println("This is Acade Drive.\n");
 
     // Apply throttle to everything just to make sure nothing is overpowered
-    diffDrive.arcadeDrive(forward*throttle, turn*Math.abs(turn)*throttle);
+    diffDrive.arcadeDrive(forward, turn*Math.abs(turn));
 
     // DriverStation.reportError("" +turn , true);
 
     SmartDashboard.putNumber("throttle", throttle);
 
   }
+//zach likes hannah confirmed
 
   /** Zero quadrature encoders on Talon */
   void zeroSensors() {
@@ -104,19 +103,12 @@ public class XBoxDrive extends CommandBase {
     return 0;
   }
 
-  double getThrottle(){
+  double getThrottle(double axisValue){
     //return controller.getTriggerAxis(Hand.kRight);
-    return 1;
+    return .5*(axisValue) +.5;
 
     /*Uses the equation .5(axisvalue) +.5 to give an equation
       with the domain [-1,1] and the range [0,1]*/
-  }
-
-  /** Gets all buttons from gamepad */
-  void getButtons(final boolean[] btns, final Joystick gamepad) {
-		for (int i = 1; i < PIDConstants.kNumButtonsPlusOne; ++i) {
-			btns[i] = gamepad.getRawButton(i);
-    }
   }
     
     @Override

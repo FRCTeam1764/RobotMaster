@@ -49,6 +49,7 @@ public class Robot extends TimedRobot {
     drivetrain.setDrivetrainNeturalMode(NeutralMode.Brake);
     climberSolenoid.set(Value.kReverse);
     controlPanelWheelExtender.set(Value.kReverse);
+    pidMovement.setDistancePIDConfig(drivetrain.leftTalons[0], drivetrain.rightTalons[0]);
     CommandScheduler.getInstance().schedule(new TimedMovementGroup());
     
   }

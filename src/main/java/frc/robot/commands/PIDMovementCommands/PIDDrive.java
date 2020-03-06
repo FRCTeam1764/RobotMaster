@@ -15,6 +15,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Robot;
 import frc.robot.Subsystems.AutoSubsystems.PIDMovement;
+import frc.robot.constants.PIDConstants;
 
 public class PIDDrive extends CommandBase {
   /**
@@ -44,11 +45,13 @@ public class PIDDrive extends CommandBase {
   public void initialize() {
     if(controlType == PIDDriveControlType.STRAIGHT){
       Robot.drivetrain.setDrivetrainInverted(false, true);
+      pidMovement.changeAuxDiffSetting(rightMaster);
       pidMovement.selectDistancePIDSlots(rightMaster);
       target_adjust = rightMaster.getSelectedSensorVelocity(1);
     }
     else if(controlType == PIDDriveControlType.TURN){
       Robot.drivetrain.setDrivetrainInverted(false, false);
+      pidMovement.changeAuxDiffSetting(rightMaster);
       pidMovement.selectDistancePIDSlots(rightMaster);
       target_adjust = rightMaster.getSelectedSensorVelocity(1);
     }
@@ -58,19 +61,20 @@ public class PIDDrive extends CommandBase {
   @Override
   public void execute() {
     if(controlType == PIDDriveControlType.STRAIGHT || controlType == PIDDriveControlType.TURN){
-      rightMaster.set(TalonFXControlMode.MotionMagic, units, DemandType.AuxPID, target_adjust);
-      leftMaster.follow(rightMaster, FollowerType.AuxOutput1);
+      pidMovement.setMotionMagic(rightMaster, leftMaster, units, target_adjust);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    rightMaster.set(TalonFXControlMode.PercentOutput, 0);
+    leftMaster.set(TalonFXControlMode.PercentOutput, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return pidMovement.getDistanceErrorValue(rightMaster) < PIDConstants.TICKS_ERROR;
   }
 }

@@ -7,12 +7,6 @@ import frc.robot.Gains;
 
 public class PIDConstants {
 	/**
-	 * Number of joystick buttons to poll.
-	 * 10 means buttons[1,9] are polled, which is actually 9 buttons.
-	 */
-	public final static int kNumButtonsPlusOne = 10;
-
-	/**
 	 * Set to zero to skip waiting for confirmation.
 	 * Set to nonzero to wait and report to DS if action fails.
 	 */
@@ -22,6 +16,12 @@ public class PIDConstants {
 	 * Motor neutral dead-band, set to the minimum 0.1%.
 	 */
 	public final static double kNeutralDeadband = 0.001;
+
+	/**
+	 * Variables for Motion Magic
+	 */
+	public final static double kCruiseVelocity = 2000;
+	public final static double kAcceleration = 2000;
 	
 	/**
 	 * PID Gains may have to be adjusted based on the responsiveness of control loop.
@@ -61,7 +61,6 @@ public class PIDConstants {
 	public final static int kSlot_Shooter_Velocity = SLOT_0;
 
 	/* ---- Conversion Rates ---- */
-
 
 	public static final double WHEEL_ROTATION_PER_ROBOT_ROTATION = RobotDimensionConstants.ROBOT_ROTATION_CIRCUMFERENCE/RobotDimensionConstants.WHEEL_CIRCUMFERENCE;
 	public static final double CLICKS_PER_ROBOT_ROTATION = WHEEL_ROTATION_PER_ROBOT_ROTATION *2048 * RobotDimensionConstants.GEAR_BOX_RATIO;
