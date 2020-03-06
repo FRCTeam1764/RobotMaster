@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -96,7 +95,7 @@ Trigger coDownDPadClimbDown = new Trigger(() -> coDriverJoystick.getPOV()==180);
 
      //On XBox Controller
      //3050, 3100
-     shooterButtonXbox.toggleWhenPressed(new ShooterCommand(3075, ShooterControlMode.PID));
+    // shooterButtonXbox.toggleWhenPressed(new ShooterCommand(3075, ShooterControlMode.PID));
      leftOuttakeTrigger.whenHeld(new IntakeCommand(1, .2, .4)); //This is now intake
      rightFeederTrigger.whenHeld(new IntakeCommand(1, .2, .4)); //This is also intake
 
@@ -110,9 +109,9 @@ Trigger coDownDPadClimbDown = new Trigger(() -> coDriverJoystick.getPOV()==180);
 
    /// intakeButtonXbox.whenHeld(new IntakeCommand(1, .2, .4));
 
-     coShooterButtonXbox.toggleWhenPressed(new ShooterCommand(3075, ShooterControlMode.PID));
+     coShooterButtonXbox.toggleWhenPressed(new ShooterCommand(3200, ShooterControlMode.PID));
      coleftOuttakeTrigger.whenHeld(new IntakeCommand(-1,-1, -1.0));
-     coRightFeederTrigger.whenHeld(new FeederCommand(1, .6, 1.0));
+     coRightFeederTrigger.whenHeld(new FeederCommand(1, .8, 1.0));
 
      coSlowIntake.whenHeld(new IntakeCommand(.8, .2, .4));
 

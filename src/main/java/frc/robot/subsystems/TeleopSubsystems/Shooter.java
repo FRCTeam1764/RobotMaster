@@ -33,6 +33,8 @@ public class Shooter extends SubsystemBase {
   public double timeDuration = -1;
   double shooter;
 
+  public static boolean shooterOn = true;
+
   public Shooter(double shooterVelocity, ShooterControlMode controlMode) {
     this.shooterVelocity = shooterVelocity;
     this.controlMode = controlMode;
@@ -61,6 +63,7 @@ public class Shooter extends SubsystemBase {
     velocity = shooterMaster.getSelectedSensorVelocity(0);
      SmartDashboard.putNumber("Shooter's Velocity", velocity);
      SmartDashboard.putBoolean("Shooter Status", velocity>9500.0 );
+     SmartDashboard.putBoolean("Shooter Toggle", shooterOn);
     
   }
 
@@ -102,9 +105,9 @@ public class Shooter extends SubsystemBase {
       config.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor;
       talon.configAllSettings(config);
 
-      talon.config_kP(PIDConstants.kSlot_Shooter_Velocity, 0.066, PIDConstants.kTimeoutMs);
+      talon.config_kP(PIDConstants.kSlot_Shooter_Velocity, 0.001, PIDConstants.kTimeoutMs);
       talon.config_kI(PIDConstants.kSlot_Shooter_Velocity, 0.0, PIDConstants.kTimeoutMs);
-      talon.config_kD(PIDConstants.kSlot_Shooter_Velocity, 0.0015, PIDConstants.kTimeoutMs);
+      talon.config_kD(PIDConstants.kSlot_Shooter_Velocity, 0.02, PIDConstants.kTimeoutMs);
       talon.config_kF(PIDConstants.kSlot_Shooter_Velocity, 0.049, PIDConstants.kTimeoutMs);
       talon.config_IntegralZone(PIDConstants.kSlot_Shooter_Velocity, (int)PIDConstants.kGains_Velocity_Shooter.kIzone, PIDConstants.kTimeoutMs);
       talon.configClosedLoopPeakOutput(PIDConstants.kSlot_Shooter_Velocity, PIDConstants.kGains_Velocity_Shooter.kPeakOutput, PIDConstants.kTimeoutMs);

@@ -36,6 +36,7 @@ public class ShooterCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    Shooter.shooterOn = !Shooter.shooterOn;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -54,6 +55,7 @@ public class ShooterCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     shooter.stopShooter();
+    Shooter.shooterOn = !Shooter.shooterOn;
     Robot.ballCount = 0;
   }
 

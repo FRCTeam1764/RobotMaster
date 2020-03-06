@@ -9,12 +9,9 @@ package frc.robot.Subsystems.TeleopSubsystems;
 
 import java.util.Map;//
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.constants.PortConstants;
 import frc.robot.util.ColorSensor;
 import frc.robot.util.ColorSensor.ColorType;
 

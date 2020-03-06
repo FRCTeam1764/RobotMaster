@@ -92,7 +92,7 @@ public class PIDMovement extends SubsystemBase {
 		_rightConfig.slot0.kF = PIDConstants.kGains_Distanc.kF;
 		_rightConfig.slot0.integralZone = PIDConstants.kGains_Distanc.kIzone;
 		_rightConfig.slot0.closedLoopPeakOutput = PIDConstants.kGains_Distanc.kPeakOutput;
-		_rightConfig.slot0.allowableClosedloopError = 0;
+		_rightConfig.slot0.allowableClosedloopError = PIDConstants.TICKS_ERROR;
 
 		/* FPID Gains for turn servo */
 		_rightConfig.slot1.kP = PIDConstants.kGains_Turning.kP;
@@ -292,8 +292,17 @@ public class PIDMovement extends SubsystemBase {
 			masterConfig.diff1Term = TalonFXFeedbackDevice.IntegratedSensor.toFeedbackDevice(); //Local IntegratedSensor
 			masterConfig.auxiliaryPID.selectedFeedbackSensor = TalonFXFeedbackDevice.SensorDifference.toFeedbackDevice(); //Sum0 + Sum1
 			/* With current diff terms, a counterclockwise rotation results in negative heading with a right master */
-			masterConfig.auxPIDPolarity = true;
-		}
+      masterConfig.auxPIDPolarity = true;
+    }
+
+    /**
+		 * Heading units should be scaled to ~4000 per 360 deg, due to the following limitations...
+		 * - Target param for aux PID1 is 18bits with a range of [-131072,+131072] units.
+		 * - Target for aux PID1 in motion profile is 14bits with a range of [-8192,+8192] units.
+		 *  ... so at 3600 units per 360', that ensures 0.1 degree precision in firmware closed-loop
+		 *  and motion profile trajectory points can range +-2 rotations.
+		 */
+		masterConfig.auxiliaryPID.selectedFeedbackCoefficient = 1;
 	 }
 
 
@@ -305,6 +314,5 @@ public class PIDMovement extends SubsystemBase {
 	public void selectDistancePIDSlots(WPI_TalonFX masterTalon) {
     masterTalon.selectProfileSlot(PIDConstants.kSlot_Distanc, PIDConstants.PID_PRIMARY);
 		masterTalon.selectProfileSlot(PIDConstants.kSlot_Turning, PIDConstants.PID_TURN);
-
 	}
 }

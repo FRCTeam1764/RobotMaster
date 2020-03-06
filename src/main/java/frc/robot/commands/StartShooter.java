@@ -28,6 +28,7 @@ public class StartShooter extends CommandBase {
   @Override
   public void initialize() {
     shooter.shoot();
+    Shooter.shooterOn = true;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
