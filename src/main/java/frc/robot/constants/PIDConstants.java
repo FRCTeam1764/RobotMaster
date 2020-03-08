@@ -36,8 +36,8 @@ public class PIDConstants {
 	//public final static Gains kGains_MotProf = new Gains( 1.0, 0.0,  0.0, 1023.0/6800.0,  400,  1.00 );
 	// (.5*1023)/19939, 80*(.7*1023)/6000
 	//                                                    kP   kI    kD   kF   Iz    PeakOut
-	public final static Gains kGains_Distanc = new Gains( 0.08, 0.0,  0.0, 0.0, 100,     1 );
-	public final static Gains kGains_Turning = new Gains( 0.00, 0.0,  0.0, 0.0, 200,     1 );
+	public final static Gains kGains_Distanc = new Gains( 1, 0.0,  0.0, 0.0, 100,     1 );
+	public final static Gains kGains_Turning = new Gains( 0.1, 0.0,  0.0, 0.0, 200,     1 );
 	public final static Gains kGains_Velocity_Shooter = new Gains(1,0,0,1/1023,0,.8);
 	
 	/** ---- Flat constants, you should not need to change these ---- */
@@ -64,7 +64,7 @@ public class PIDConstants {
 
 	public static final double WHEEL_ROTATION_PER_ROBOT_ROTATION = RobotDimensionConstants.ROBOT_ROTATION_CIRCUMFERENCE/RobotDimensionConstants.WHEEL_CIRCUMFERENCE;
 	public static final double CLICKS_PER_ROBOT_ROTATION = WHEEL_ROTATION_PER_ROBOT_ROTATION *2048 * RobotDimensionConstants.GEAR_BOX_RATIO;
-	public static final double CLICKS_PER_INCH = (2048*RobotDimensionConstants.GEAR_BOX_RATIO) /RobotDimensionConstants.WHEEL_CIRCUMFERENCE ; 
+	public static final double CLICKS_PER_INCH = (2048.0*RobotDimensionConstants.GEAR_BOX_RATIO) /RobotDimensionConstants.WHEEL_CIRCUMFERENCE ; 
 	public static final double CLICKS_PER_DEGREES = CLICKS_PER_ROBOT_ROTATION/360;
 
 	public static final double TALON_VELOCITY_PER_ROBOT_VELOCITY = (1/100)*1000/CLICKS_PER_INCH; //Ticks/100ms per inches/second

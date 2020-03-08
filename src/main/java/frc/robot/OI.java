@@ -111,7 +111,7 @@ Trigger coDownDPadClimbDown = new Trigger(() -> coDriverJoystick.getPOV()==180);
 
      coShooterButtonXbox.toggleWhenPressed(new ShooterCommand(3200, ShooterControlMode.PID));
      coleftOuttakeTrigger.whenHeld(new IntakeCommand(-1,-1, -1.0));
-     coRightFeederTrigger.whenHeld(new FeederCommand(1, .8, 1.0));
+     coRightFeederTrigger.whenHeld(new FeederCommand(1, .6, 1.0));
 
      coSlowIntake.whenHeld(new IntakeCommand(.8, .2, .4));
 
@@ -120,7 +120,7 @@ Trigger coDownDPadClimbDown = new Trigger(() -> coDriverJoystick.getPOV()==180);
      //coClimberPneumaticsButtonXbox.whenActive(new ClimberCommand(true, ClimberControlType.PNEUMATICS));
      //climberPneumaticsButtonXbox.negate().toggleWhenActive(new ClimberCommand(false, ClimberControlType.PNEUMATICS));
 
-     cointakeButtonXbox.whenHeld(new IntakeCommand(1, .2, .4));
+     //cointakeButtonXbox.whenHeld(new IntakeCommand(1, .2, .4));
     }
 
     //Used for xbox triggers

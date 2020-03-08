@@ -1,6 +1,10 @@
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -13,6 +17,8 @@ import frc.robot.Commands.TimedMovementGroup;
 import frc.robot.Commands.DriveCommands.FarmingSimulatorDrive;
 import frc.robot.Commands.DriveCommands.JoystickDrive;
 import frc.robot.Commands.DriveCommands.XBoxDrive;
+import frc.robot.Commands.PIDMovementCommands.PIDDrive;
+import frc.robot.Commands.PIDMovementCommands.PIDDrive.PIDDriveControlType;
 import frc.robot.Subsystems.Drivetrain;
 import frc.robot.Subsystems.AutoSubsystems.PIDMovement;
 import frc.robot.constants.PortConstants;
@@ -28,14 +34,15 @@ public class Robot extends TimedRobot {
   public static SharpIRSensor intakeIRSensor = new SharpIRSensor(PortConstants.SHARP_IR_SENSOR_INTAKE_ANALOG_PORT);
   public static DoubleSolenoid climberSolenoid = new DoubleSolenoid(PortConstants.LEFT_CLIMBER_SOLENOID_PORT, PortConstants.RIGHT_CLIMBER_SOLENOID_PORT);
   public static DoubleSolenoid controlPanelWheelExtender = new DoubleSolenoid(PortConstants.CONTROL_PANEL_FORWARD_PORT, PortConstants.CONTROL_PANEL_REVERSE_PORT);
-  //public static Solenoid controlPanelWheelExtenderOn = new Solenoid(PortConstants.CONTROL_PANEL_FORWARD_PORT);
-
+ 
+  private double distance; //inches
+  private final double TICKS_PER_INCH = (2048*10.24)/(Math.PI*6);
+  private final double kP = .07;
+  private final double DISTANCE_TOLERANCE = .5; //inches
 
   JoystickDrive joystickdrive = new JoystickDrive();
   XBoxDrive xboxdrive = new XBoxDrive();
   FarmingSimulatorDrive jaxonDumbDrive = new FarmingSimulatorDrive();
-
-  public static PIDMovement pidMovement = new PIDMovement();
 
   @Override
   public void robotInit() {
@@ -46,19 +53,44 @@ public class Robot extends TimedRobot {
   
   @Override
   public void autonomousInit() {
+    System.out.println("Start auto");
+    CommandScheduler.getInstance().cancelAll();
     drivetrain.setDrivetrainNeturalMode(NeutralMode.Brake);
     climberSolenoid.set(Value.kReverse);
-    controlPanelWheelExtender.set(Value.kReverse);
-    pidMovement.setDistancePIDConfig(drivetrain.leftTalons[0], drivetrain.rightTalons[0]);
-    CommandScheduler.getInstance().schedule(new TimedMovementGroup());
+    controlPanelWheelExtender.set(Value.kForward);
+    //controlPanelWheelExtender.set(Value.kReverse);
+    drivetrain.setDrivetrainInverted(false, true); //Because it is not performing arcade drive in auto, the right needs to be inverted in order to go forward
+    PIDMovement.setDistancePIDConfig(drivetrain.leftTalons[0], drivetrain.rightTalons[0]);
+   // CommandScheduler.getInstance().schedule(new TimedMovementGroup());
+   CommandScheduler.getInstance().schedule(new PIDDrive(24, PIDDriveControlType.STRAIGHT));
     
+    /*distance = 12;
+    TalonFXConfiguration config = new TalonFXConfiguration();
+    config.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor;
+    drivetrain.leftTalons[0].configAllSettings(config);
+    drivetrain.leftTalons[0].setSelectedSensorPosition(0);*/
+
   }
   
 
   @Override
   public void autonomousPeriodic() {
     CommandScheduler.getInstance().run();
-    
+
+   // PIDMovement.setMotionMagic(drivetrain.rightTalons[0], drivetrain.leftTalons[0], 50000, drivetrain.rightTalons[0].getSelectedSensorPosition(1));
+
+    /*int leftDistanceTraveledTicks = drivetrain.leftTalons[0].getSelectedSensorPosition();
+    double leftDistanceTraveledInches = leftDistanceTraveledTicks/TICKS_PER_INCH;
+    double error = Math.abs(distance-leftDistanceTraveledInches);
+    if (error > DISTANCE_TOLERANCE) {
+      drivetrain.leftTalons[0].set(ControlMode.PercentOutput, error*kP);
+      drivetrain.rightTalons[0].set(ControlMode.PercentOutput, error*kP);
+    }
+    else {
+      drivetrain.rightTalons[0].follow(drivetrain.rightTalons[0]);
+      drivetrain.leftTalons[0].set(TalonFXControlMode.PercentOutput, 0);
+      drivetrain.rightTalons[0].set(TalonFXControlMode.PercentOutput, 0);
+    }*/
   }
 
   @Override
