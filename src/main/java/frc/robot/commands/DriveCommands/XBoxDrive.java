@@ -43,10 +43,10 @@ public class XBoxDrive extends CommandBase {
     forward = ForwardDeadband(forward);
     turn = TurningDeadband(turn);
 
-    throttle = SmartDashboard.getBoolean("Intake Status", false) ?
-               .50 : .75;
+    throttle = SmartDashboard.getBoolean("Slow Mode Active", false) ?
+               .45 : .75;
 
-    throttle = controller.getStickButtonPressed(Hand.kLeft) ? 1 : throttle;
+    //throttle = controller.getStickButtonPressed(Hand.kLeft) ? 1 : throttle;
 
    /* if (controller.getAButton()) {
 
@@ -60,7 +60,7 @@ public class XBoxDrive extends CommandBase {
     // System.out.println("This is Acade Drive.\n");
 
     // Apply throttle to everything just to make sure nothing is overpowered
-    diffDrive.arcadeDrive(forward, turn*Math.abs(turn));
+    diffDrive.arcadeDrive(forward * throttle, turn*Math.abs(turn)* throttle);
 
     // DriverStation.reportError("" +turn , true);
 

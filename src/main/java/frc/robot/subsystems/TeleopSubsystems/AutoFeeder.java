@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.PortConstants;
 
-public class Feeder extends SubsystemBase {
+public class AutoFeeder extends SubsystemBase {
   WPI_TalonSRX leftFeeder = new WPI_TalonSRX(PortConstants.LEFT_FEEDER_MOTOR_PORT);
   WPI_TalonSRX rightFeeder = new WPI_TalonSRX(PortConstants.RIGHT_FEEDER_MOTOR_PORT);
   CANSparkMax conveyer = new CANSparkMax(PortConstants.CONVEYER_MOTOR_PORT, MotorType.kBrushless);
@@ -26,7 +26,7 @@ public class Feeder extends SubsystemBase {
   double conveyerSpeed;
   double feederSpeed;
 
-  public Feeder(double conveyerSpeed, double feederSpeed) {
+  public AutoFeeder(double conveyerSpeed, double feederSpeed) {
     this.conveyerSpeed = conveyerSpeed;
     this.feederSpeed = feederSpeed;
 
@@ -42,13 +42,7 @@ public class Feeder extends SubsystemBase {
   }
 
   public void conveyerOn(){
-    if(count<4 && conveyerSpeed > 0.0){
-      conveyer.set(-conveyerSpeed);
-      count++;
-    }
-    else{
-      conveyer.set(conveyerSpeed);
-    }
+    conveyer.set(conveyerSpeed);
   }
 
   public void feederOn(){
@@ -72,11 +66,11 @@ public class Feeder extends SubsystemBase {
 
 
   public void conveyerStop() {
-    count=0;
     conveyer.set(0);
   }
 
   public void feederStop() {
+    count=0;
     leftFeeder.set(ControlMode.PercentOutput, 0);
   }
 }

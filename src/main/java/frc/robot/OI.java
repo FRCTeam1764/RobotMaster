@@ -16,7 +16,9 @@ import frc.robot.Commands.ExtendControlPanelSolenoidCommand;
 import frc.robot.Commands.FeederCommand;
 import frc.robot.Commands.IntakeCommand;
 import frc.robot.Commands.ShooterCommand;
+import frc.robot.Commands.SlowDownCommand;
 import frc.robot.Commands.ShooterCommand.ShooterControlMode;
+import frc.robot.Subsystems.TeleopSubsystems.Shooter;
 import frc.robot.Subsystems.TeleopSubsystems.Climber.ClimberControlType;
 import frc.robot.constants.ControlsConstants;
 import frc.robot.constants.PortConstants;
@@ -55,24 +57,23 @@ public JoystickButton shooterButtonXbox = new JoystickButton(driverXbox, Control
 public JoystickButton intakeButtonXbox = new JoystickButton(driverXbox, ControlsConstants.LEFT_SHOULDER_BUTTON);
 public JoystickButton climberWinchButtonXbox = new JoystickButton(driverXbox,ControlsConstants.Y_BUTTON);
 public JoystickButton climberPneumaticsButtonXbox = new JoystickButton(driverXbox,ControlsConstants.START_BUTTON);
-public JoystickButton climberPneumaticsButtonOffXbox = new JoystickButton(driverXbox,ControlsConstants.BACK_BUTTON);
+public JoystickButton climberUnwindButton = new JoystickButton(driverXbox,ControlsConstants.BACK_BUTTON);
 
 JoystickButton controlPanelExtendButtonXbox = new JoystickButton(driverXbox, ControlsConstants.X_BUTTON);
 
-JoystickButton leftOuttakeTrigger = new JoystickButton(driverXbox, ControlsConstants.B_BUTTON);//new Trigger(() -> driverXbox.getTriggerAxis(Hand.kLeft)>.3);
-JoystickButton rightFeederTrigger = new JoystickButton(driverXbox, ControlsConstants.RIGHT_SHOULDER_BUTTON);// new Trigger(() -> driverXbox.getTriggerAxis(Hand.kRight)>.3);
+JoystickButton leftSlowModeBumper = new JoystickButton(driverXbox, ControlsConstants.LEFT_SHOULDER_BUTTON);//new Trigger(() -> driverXbox.getTriggerAxis(Hand.kLeft)>.3);
+JoystickButton rightFeederBumper = new JoystickButton(driverXbox, ControlsConstants.RIGHT_SHOULDER_BUTTON);// new Trigger(() -> driverXbox.getTriggerAxis(Hand.kRight)>.3);
 
 Trigger upDPadClimbUp = new Trigger(() -> driverXbox.getPOV()==0);
 Trigger downDPadClimbDown = new Trigger(() -> driverXbox.getPOV()==180);
 
 public JoystickButton coShooterButtonXbox = new JoystickButton(coDriverJoystick, 5);
-public JoystickButton cointakeButtonXbox = new JoystickButton(coDriverJoystick, 1);
 public JoystickButton coClimberWinchButtonXbox = new JoystickButton(coDriverJoystick,12);
 public JoystickButton coClimberPneumaticsButtonXbox = new JoystickButton(coDriverJoystick,11);
 public JoystickButton coSlowIntake = new JoystickButton(coDriverJoystick, 7);
 
 JoystickButton coleftOuttakeTrigger = new JoystickButton(coDriverJoystick, 6);//new Trigger(() -> driverXbox.getTriggerAxis(Hand.kLeft)>.3);
-JoystickButton coRightFeederTrigger = new JoystickButton(coDriverJoystick, 3);// new Trigger(() -> driverXbox.getTriggerAxis(Hand.kRight)>.3);
+JoystickButton coRightFeederTrigger = new JoystickButton(coDriverJoystick, 1);// new Trigger(() -> driverXbox.getTriggerAxis(Hand.kRight)>.3);
 
 Trigger coUpDPadClimbUp = new Trigger(() -> coDriverJoystick.getPOV()==0);
 Trigger coDownDPadClimbDown = new Trigger(() -> coDriverJoystick.getPOV()==180);
@@ -96,20 +97,20 @@ Trigger coDownDPadClimbDown = new Trigger(() -> coDriverJoystick.getPOV()==180);
      //On XBox Controller
      //3050, 3100
     // shooterButtonXbox.toggleWhenPressed(new ShooterCommand(3075, ShooterControlMode.PID));
-     leftOuttakeTrigger.whenHeld(new IntakeCommand(1, .2, .4)); //This is now intake
-     rightFeederTrigger.whenHeld(new IntakeCommand(1, .2, .4)); //This is also intake
+     leftSlowModeBumper.whenHeld(new SlowDownCommand()); //This is now intake
+     rightFeederBumper.whenHeld(new IntakeCommand(1, .1, .4)); //This is also intake
 
      controlPanelExtendButtonXbox.toggleWhenPressed(new ExtendControlPanelSolenoidCommand());
 
      climberWinchButtonXbox.whenHeld(new ClimberCommand(true, ClimberControlType.WINCH));
+     climberUnwindButton.whenHeld(new ClimberCommand(false, ClimberControlType.WINCH));
      //climberWinchButtonXbox.negate().toggleWhenActive(new ClimberCommand(false, ClimberControlType.WINCH));
      climberPneumaticsButtonXbox.whenPressed(new ClimberCommand(true, ClimberControlType.PNEUMATICS));
-     climberPneumaticsButtonOffXbox.whenPressed(new ClimberCommand(false, ClimberControlType.PNEUMATICS));
      //climberPneumaticsButtonXbox.negate().toggleWhenActive(new ClimberCommand(false, ClimberControlType.PNEUMATICS));
 
    /// intakeButtonXbox.whenHeld(new IntakeCommand(1, .2, .4));
 
-     coShooterButtonXbox.toggleWhenPressed(new ShooterCommand(3200, ShooterControlMode.PID));
+     coShooterButtonXbox.toggleWhenPressed(new ShooterCommand(Shooter.shooterRPM, ShooterControlMode.PID));
      coleftOuttakeTrigger.whenHeld(new IntakeCommand(-1,-1, -1.0));
      coRightFeederTrigger.whenHeld(new FeederCommand(1, .6, 1.0));
 

@@ -8,44 +8,42 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Commands.ShooterCommand.ShooterControlMode;
 import frc.robot.Subsystems.TeleopSubsystems.Feeder;
 import frc.robot.Subsystems.TeleopSubsystems.Intake;
 import frc.robot.Subsystems.TeleopSubsystems.Shooter;
 
-public class FeederCommand extends CommandBase {
+public class AutoFeederCommand extends CommandBase {
   
   Feeder feeder;
   Intake intake;
   Shooter shooter;
-  final double minimumVelocityToShoot = 11000.0;
 
   double time=-1;
   Timer timer = new Timer();
 
-  public FeederCommand(double conveyerSpeed, double feederSpeed) {
+  public AutoFeederCommand(double conveyerSpeed, double feederSpeed) {
     feeder = new Feeder(conveyerSpeed, feederSpeed);
 
     addRequirements(feeder);
   }
 
-  public FeederCommand(double intakeSpeed, double conveyerSpeed, double feederSpeed) {
+  public AutoFeederCommand(double intakeSpeed, double conveyerSpeed, double feederSpeed) {
     feeder = new Feeder(conveyerSpeed, feederSpeed);
     intake = new Intake(intakeSpeed);
 
     addRequirements(feeder, intake);
   }
 
-  public FeederCommand(double conveyerSpeed, double feederSpeed, float timeDuration) {
+  public AutoFeederCommand(double conveyerSpeed, double feederSpeed, float timeDuration) {
     feeder = new Feeder(conveyerSpeed, feederSpeed);
     time = timeDuration;
 
     addRequirements(feeder);
   }
 
-  public FeederCommand(double intakeSpeed, double conveyerSpeed, double feederSpeed, double shooterSpeed) {
+  public AutoFeederCommand(double intakeSpeed, double conveyerSpeed, double feederSpeed, double shooterSpeed) {
     intake = new Intake(intakeSpeed);
     feeder = new Feeder(conveyerSpeed, feederSpeed);
     shooter = new Shooter(shooterSpeed, ShooterControlMode.STANDARD);
@@ -53,7 +51,7 @@ public class FeederCommand extends CommandBase {
     addRequirements(intake, feeder, shooter);
   }
 
-  public FeederCommand(double intakeSpeed, double conveyerSpeed, double feederSpeed, double shooterSpeed, double time) {
+  public AutoFeederCommand(double intakeSpeed, double conveyerSpeed, double feederSpeed, double shooterSpeed, double time) {
     intake = new Intake(intakeSpeed);
     feeder = new Feeder(conveyerSpeed, feederSpeed);
     shooter = new Shooter(shooterSpeed, ShooterControlMode.PID);
@@ -85,13 +83,10 @@ public class FeederCommand extends CommandBase {
       }
     }
     else{
-    //  double velocity = SmartDashboard.getNumber("Shooter's Velocity", minimumVelocityToShoot);
-     // if(velocity >= minimumVelocityToShoot){
       feeder.conveyerOn();
       feeder.feederOn();
       if(intake != null){intake.intake();}
       if(shooter != null){shooter.shoot();}
-     // }
     }
   }
 

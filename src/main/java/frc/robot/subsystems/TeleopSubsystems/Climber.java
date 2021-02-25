@@ -44,6 +44,7 @@ public class Climber extends SubsystemBase {
 
   public void extendPneumatics(){
     Value on = mechanismOn ? Value.kForward : Value.kReverse;
+    mechanismOn = !mechanismOn;
     Robot.climberSolenoid.set(on);
   }
 

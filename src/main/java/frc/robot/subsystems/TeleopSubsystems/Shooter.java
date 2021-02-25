@@ -35,6 +35,8 @@ public class Shooter extends SubsystemBase {
 
   public static boolean shooterOn = true;
 
+  public static final double shooterRPM = 3300;
+
   public Shooter(double shooterVelocity, ShooterControlMode controlMode) {
     this.shooterVelocity = shooterVelocity;
     this.controlMode = controlMode;

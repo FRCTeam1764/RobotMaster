@@ -57,12 +57,12 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     drivetrain.setDrivetrainNeturalMode(NeutralMode.Brake);
     climberSolenoid.set(Value.kReverse);
-    controlPanelWheelExtender.set(Value.kForward);
-    //controlPanelWheelExtender.set(Value.kReverse);
-    drivetrain.setDrivetrainInverted(false, true); //Because it is not performing arcade drive in auto, the right needs to be inverted in order to go forward
-    PIDMovement.setDistancePIDConfig(drivetrain.leftTalons[0], drivetrain.rightTalons[0]);
-   // CommandScheduler.getInstance().schedule(new TimedMovementGroup());
-   CommandScheduler.getInstance().schedule(new PIDDrive(24, PIDDriveControlType.STRAIGHT));
+    //controlPanelWheelExtender.set(Value.kForward);
+    controlPanelWheelExtender.set(Value.kReverse);
+    //drivetrain.setDrivetrainInverted(false, true); //Because it is not performing arcade drive in auto, the right needs to be inverted in order to go forward
+    //PIDMovement.setDistancePIDConfig(drivetrain.leftTalons[0], drivetrain.rightTalons[0]);
+    CommandScheduler.getInstance().schedule(new TimedMovementGroup());
+   //CommandScheduler.getInstance().schedule(new PIDDrive(24, PIDDriveControlType.STRAIGHT));
     
     /*distance = 12;
     TalonFXConfiguration config = new TalonFXConfiguration();

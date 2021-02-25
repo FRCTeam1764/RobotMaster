@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Commands.ShooterCommand.ShooterControlMode;
 import frc.robot.Commands.TimedDrive.DriveType;
+import frc.robot.Subsystems.TeleopSubsystems.Shooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -24,10 +25,10 @@ public class TimedMovementGroup extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(
-          new StartShooter(3075), new TimedDrive(.5, 5, DriveType.STRAIGHT),
-          new TimedDrive(-.75, .2, DriveType.STRAIGHT),
-          new FeederCommand(0, .6, 1.0, 3075, 5),
-          new StartShooter(0), new TimedDrive(-.6, 3, DriveType.STRAIGHT));
-   //super(new TimedDrive(.5, 2.3, DriveType.STRAIGHT));
+          new StartShooter(Shooter.shooterRPM), new TimedDrive(.5, 3, DriveType.STRAIGHT),
+          new AutoFeederCommand(0, .6, 1.0, Shooter.shooterRPM, 5)
+          //new StartShooter(0), new TimedDrive(-.6, 3, DriveType.STRAIGHT));
+   //super(new TimedDrive(.5, 2.3, DriveType.STRAIGHT)
+   );
   }
 }
