@@ -3,10 +3,10 @@
 
 ## Table of Contents
 ---
-[Whats in the Base Code](# Whats in the Base Code)
-[How To's](# How To's)
-[To-do's](# To-do's)
-[Resources](# Resources)
+[Whats in the Base Code](#whats-in-the-base-code)  
+[How To's](#how-tos)  
+[To-do's](#to-dos)  
+[Resources](#resources)  
 
 ## Whats in the Base Code
 ---
