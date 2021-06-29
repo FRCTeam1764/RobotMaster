@@ -28,9 +28,6 @@ public class RobotContainer {
         primaryController.getStartButton().whenPressed(
                 drivetrainSubsystem::resetWheelAngles
         );
-        /*primaryController.getXButton().whenPressed(
-            new FollowPathCommand(drivetrainSubsystem)
-        );*/
     }
 
     private Axis getDriveForwardAxis() {

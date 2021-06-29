@@ -25,6 +25,17 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        // this is a sample file read from a pathviewer generated path, not yet tested.
+        // todo: need to implement a auto selector/chooser
+        // try {
+        //   Reader reader = new FileReader("TestPath.path");
+        //   PathReader pathReader = new PathReader(reader);
+        //   Path path = pathReader.read();
+        //   pathReader.close();*/
+        // }
+        // catch(IOException e) {
+        //   e.printStackTrace();
+        // }
     }
 
     @Override

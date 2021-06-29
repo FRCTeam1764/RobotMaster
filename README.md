@@ -1,48 +1,45 @@
-Heading
+1764 Master Robot
 =======
 
-## Sub-heading
+## Table of Contents
+---
+[Whats in the Base Code](# Whats in the Base Code)
+[How To's](# How To's)
+[To-do's](# To-do's)
+[Resources](# Resources)
 
-Paragraphs are separated
-by a blank line.
+## Whats in the Base Code
+---
+*Swervedrive Subsystem
+*Path following command
+*Camera tracking with rotation lock and strafe lock
+*Controller layout
 
-Two spaces at the end of a line  
-produces a line break.
+## How To's
+---
+#### Calibrating Wheels
+#### Generating Paths Using Pathviewer
+#### Generating Paths with SimplePathBuilder and SplinePathBuilder
 
-Text attributes _italic_, 
-**bold**, `monospace`.
+## To-do's
+---
+*Outline controller layout
+*Triggers slow down robot even with no target in sight
+*Juke CW and CCW
+*Triggers turn on camera
+*Setting "Critical Angles" to ABXY
+*Build autonomous selector/chooser
+*Generate trajectories before autonomous starts
 
-Horizontal rule:
-
+## Resources
 ---
 
-Bullet list:
+FRC Documentation [FRC Documentation](https://wpilib.screenstepslive.com/s/currentCS/m/java/l/1027503-installing-c-and-java-development-tools-for-frc)
 
-  * apples
-  * oranges
-  * pears
+CTRE Documentation [CTRE Documentation] (http://www.ctr-electronics.com/control-system/hro.html#product_tabs_technical_resources)
 
-Numbered list:
+Rev Robotics Documentation [REV Robotics Documentation] (http://www.revrobotics.com/sparkmax-software/)
 
-  1. wash
-  2. rinse
-  3. repeat
+NavX Documentation [NavX Documentation] (https://pdocs.kauailabs.com/navx-mxp/software/roborio-libraries/)
 
-
-This is FRC Documentation [FRC Documentation](https://wpilib.screenstepslive.com/s/currentCS/m/java/l/1027503-installing-c-and-java-development-tools-for-frc)
-
-This is CTRE Documentation [CTRE Documentation] (http://www.ctr-electronics.com/control-system/hro.html#product_tabs_technical_resources)
-
-This is Rev Robotics Documentation [REV Robotics Documentation] (http://www.revrobotics.com/sparkmax-software/)
-
-This is NavX Documentation [NavX Documentation] (https://pdocs.kauailabs.com/navx-mxp/software/roborio-libraries/)
-
-This is Limelight Documentation [Limelight Documentation] (http://docs.limelightvision.io/en/latest/)
-  
-  An [example](http://example.com)
-
-![Image](Icon-pictures.png "icon")
-
-> Markdown uses email-style > characters for blockquoting.
-
-Inline <abbr title="Hypertext Markup Language">HTML</abbr> is supported.
+Limelight Documentation [Limelight Documentation] (http://docs.limelightvision.io/en/latest/)
