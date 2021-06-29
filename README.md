@@ -10,10 +10,10 @@
 
 ## Whats in the Base Code
 ---
-*Swervedrive Subsystem
-*Path following command
-*Camera tracking with rotation lock and strafe lock
-*Controller layout
+* Swervedrive Subsystem  
+* Path following command  
+* Camera tracking with rotation lock and strafe lock  
+* Controller layout  
 
 ## How To's
 ---
@@ -23,13 +23,13 @@
 
 ## To-do's
 ---
-*Outline controller layout
-*Triggers slow down robot even with no target in sight
-*Juke CW and CCW
-*Triggers turn on camera
-*Setting "Critical Angles" to ABXY
-*Build autonomous selector/chooser
-*Generate trajectories before autonomous starts
+* Outline controller layout  
+* Triggers slow down robot even with no target in sight  
+* Juke CW and CCW  
+* Triggers turn on camera  
+* Setting "Critical Angles" to ABXY  
+* Build autonomous selector/chooser  
+* Generate trajectories before autonomous starts  
 
 ## Resources
 ---
