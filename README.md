@@ -6,6 +6,7 @@
 [Whats in the Base Code](#whats-in-the-base-code)  
 [How To's](#how-tos)  
 [To-do's](#to-dos)  
+[Needs Tested](#needs-tested)  
 [Resources](#resources)  
 
 ## Whats in the Base Code
@@ -23,13 +24,21 @@
 
 ## To-do's
 ---
+* Tested "Needs Tested"  
+* Clean out dead code and print statements  
 * Outline controller layout  
-* Triggers slow down robot even with no target in sight  
 * Juke CW and CCW  
-* Triggers turn on camera  
 * Setting "Critical Angles" to ABXY  
 * Build autonomous selector/chooser  
 * Generate trajectories before autonomous starts  
+
+## Needs Tested
+---
+* Robot drives with refactored code
+* Modified rotation lock when moving faster  
+* Strafe lock when rotation locked 
+* Triggers slow down with or without target  
+* Left trigger turns on camera  
 
 ## Resources
 ---
