@@ -210,9 +210,10 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
     }
 
     private void configTalon(TalonFX talon) {
-        talon.configPeakOutputForward(0.5, 30);
-        talon.configPeakOutputReverse(-0.5, 30);
+        talon.configPeakOutputForward(0.7, 30);
+        talon.configPeakOutputReverse(-0.7, 30);
         talon.configOpenloopRamp(0.75);
+        talon.configNeutralDeadband(0.2);
     }
 
     private void updateOdometry(double dt) {

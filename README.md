@@ -24,21 +24,17 @@
 
 ## To-do's
 ---
-* Tested "Needs Tested"  
 * Clean out dead code and print statements  
 * Outline controller layout  
+* Setting "Critical Angles" to ABXY   
 * Juke CW and CCW  
-* Setting "Critical Angles" to ABXY  
+* Strafe lock  
 * Build autonomous selector/chooser  
 * Generate trajectories before autonomous starts  
 
 ## Needs Tested
----
-* Robot drives with refactored code
-* Modified rotation lock when moving faster  
-* Strafe lock when rotation locked 
-* Triggers slow down with or without target  
-* Left trigger turns on camera  
+--- 
+* critical angles in progress  
 
 ## Resources
 ---

@@ -6,21 +6,21 @@ import org.frcteam2910.mk3.subsystems.*;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Axis;
 import org.frcteam2910.common.robot.input.XboxController;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import org.frcteam2910.mk3.state.DrivetrainState;
+import org.frcteam2910.mk3.state.RobotState;
 
 public class RobotContainer {
     private final XboxController primaryController = new XboxController(Constants.PRIMARY_CONTROLLER_PORT);
-
     private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
-    public static NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+
+    public RobotState robotState = new RobotState();
 
     public RobotContainer() {
         primaryController.getLeftXAxis().setInverted(true);
         primaryController.getRightXAxis().setInverted(true);
+        robotState.drivetrainState = new DrivetrainState(getLeftTriggerAxis(), getRightTriggerAxis());
 
-        // CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis(), getLeftTriggerAxis()));
-        CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis(), getIsFieldOriented()));
+        CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis(), this.robotState));
 
         configureButtonBindings();
     }
@@ -32,94 +32,30 @@ public class RobotContainer {
         primaryController.getStartButton().whenPressed(
                 drivetrainSubsystem::resetWheelAngles
         );
+        primaryController.getYButton().whenPressed(() -> robotState.drivetrainState.setTargetTurningAngle(0.0));
+        primaryController.getBButton().whenPressed(() -> robotState.drivetrainState.setTargetTurningAngle(90.0));
+        primaryController.getAButton().whenPressed(() -> robotState.drivetrainState.setTargetTurningAngle(180.0));
+        primaryController.getXButton().whenPressed(() -> robotState.drivetrainState.setTargetTurningAngle(270.0));
     }
 
-    // private Axis getDriveForwardAxis() {
-    //     return primaryController.getLeftYAxis();
-    // }
-
-    // private Axis getDriveStrafeAxis() {
-    //     return primaryController.getLeftXAxis();
-    // }
-
-    // private Axis getDriveRotationAxis() {
-    //     return primaryController.getRightXAxis();
-    // }
-
-    // private Axis getLeftTriggerAxis() {
-    //     return primaryController.getLeftTriggerAxis();
-    // }
-
-    private double getDriveForwardAxis() {
-        double leftTriggerAxis = primaryController.getLeftTriggerAxis().get(true);
-        double rightTriggerAxis = primaryController.getRightTriggerAxis().get(true);
-        double leftYAxis = primaryController.getLeftYAxis().get(true);
-        double driveForward;
-
-        if (leftTriggerAxis > 0.5 || rightTriggerAxis > 0.5) {
-            driveForward = Math.abs(leftYAxis) > 0.5 ? 0.5 : leftYAxis;
-        }
-        else {
-            driveForward =  leftXAxis;
-        }
-        return driveForward;
+    private Axis getDriveForwardAxis() {
+        return primaryController.getLeftYAxis();
     }
 
-    private double getDriveStrafeAxis() {
-        double leftTriggerAxis = primaryController.getLeftTriggerAxis().get(true);
-        double rightTriggerAxis = primaryController.getRightTriggerAxis().get(true);
-        double rightXAxis = primaryController.getRightXAxis().get(true);
-        double leftXAxis = primaryController.getLeftXAxis().get(true);
-        double limelightSkewOffset = limelightTable.getEntry("ts").getDouble(0);
-        boolean limelightHasTarget = limelightTable.getEntry("tv").getDouble(0) == 1;
-        double strafe;
-
-        if (limelightHasTarget && leftTriggerAxis > 0.5 && rightTriggerAxis > 0.5) {
-            double strafeConstant = .01;
-            double strafeVelocity = Math.abs(leftXAxis) * strafeRotationConstant;
-            strafe = strafeVelocity;
-        }
-        else if (leftTriggerAxis > 0.5 || rightTriggerAxis > 0.5) {
-            strafe = Math.abs(leftXAxis) > 0.5 ? 0.5 : leftXAxis;
-        }
-        else {
-            strafe =  leftXAxis;
-        }
-        return 0; //rotation;
+    private Axis getDriveStrafeAxis() {
+        return primaryController.getLeftXAxis();
     }
 
-    private double getDriveRotationAxis() {
-        double leftTriggerAxis = primaryController.getLeftTriggerAxis().get(true);
-        double rightTriggerAxis = primaryController.getRightTriggerAxis().get(true);
-        double rightXAxis = primaryController.getRightXAxis().get(true);
-        double leftXAxis = primaryController.getLeftXAxis().get(true);
-        double limelightXOffset = limelightTable.getEntry("tx").getDouble(0);
-        boolean limelightHasTarget = limelightTable.getEntry("tv").getDouble(0) == 1;
-        double rotation;
-        
-        limelightTable.getEntry("ledMode").setNumber(leftTriggerAxis > 0.5 ? 3 : 1);
-
-        if (limelightHasTarget && leftTriggerAxis > 0.5) {
-            double cameraRotationConstant = 0.035;
-            double strafeRotationConstant = 1;
-            double cameraRotation = -1 * limelightXOffset * pConstant;
-            double strafeRotation = Math.abs(leftXAxis) * strafeRotationConstant;
-            rotation = cameraRotation > strafeRotation ? cameraRotation : cameraRotation * strafeRotation;
-        }
-        else if (leftTriggerAxis > 0.5 || rightTriggerAxis > 0.5) {
-            rotation = Math.abs(rightXAxis) > 0.5 ? 0.5 : rightXAxis;
-        }
-        else {
-            rotation =  rightXAxis;
-        }
-        return 0; //rotation;
+    private Axis getDriveRotationAxis() {
+        return primaryController.getRightXAxis();
     }
 
-    private double getIsFieldOriented() {
-        double leftTriggerAxis = primaryController.getLeftTriggerAxis().get(true);
-        double rightTriggerAxis = primaryController.getRightTriggerAxis().get(true);
+    private Axis getLeftTriggerAxis() {
+        return primaryController.getLeftTriggerAxis();
+    }
 
-        return leftTriggerAxis > 0.5 && rightTriggerAxis > 0.5;
+    private Axis getRightTriggerAxis() {
+        return primaryController.getRightTriggerAxis();
     }
 
     public DrivetrainSubsystem getDrivetrainSubsystem() {
