@@ -27,7 +27,7 @@ public class RobotContainer {
 
     private void configureButtonBindings() {
         primaryController.getBackButton().whenPressed(
-                () -> drivetrainSubsystem.resetGyroAngle(Rotation2.ZERO)
+                () -> robotState.resetGyroAngle(Rotation2.ZERO)
         );
         primaryController.getStartButton().whenPressed(
                 drivetrainSubsystem::resetWheelAngles

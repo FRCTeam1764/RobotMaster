@@ -1,4 +1,9 @@
 package org.frcteam2910.mk3.state;
+
+import edu.wpi.first.wpilibj.SPI;
+import org.frcteam2910.common.drivers.Gyroscope;
+import org.frcteam2910.common.math.Rotation2;
+import org.frcteam2910.common.robot.drivers.NavX;
 import org.frcteam2910.common.robot.input.Axis;
 
 public class DrivetrainState  {
@@ -16,12 +21,21 @@ public class DrivetrainState  {
      * Angle used in the turning pid loop
      */
 	private double targetTurningAngle;
+
+    /**
+     * This should be the only instance of the drivetrain gyro
+     */
+	private final Object sensorLock = new Object();
+    @GuardedBy("sensorLock")
+    private Gyroscope gyro;
 	
 	public DrivetrainState(Axis leftTriggerAxis, Axis rightTriggerAxis) {
 		this.leftTriggerAxis = leftTriggerAxis;
 		this.rightTriggerAxis = rightTriggerAxis;
 
 		this.targetTurningAngle = 0;
+		this.gyro = new NavX(SPI.Port.kMXP);
+		this.gyro.setInverted(true);
 	}
 
 	public boolean isRotationLocked() {
@@ -32,11 +46,37 @@ public class DrivetrainState  {
 		return this.rightTriggerAxis.get(true) > 0.5;
 	};
 
-	public double getTargetTurningAngle() {
+	public Gyroscope getGyro() {
 		return targetTurningAngle;
 	};
 
-	public void setTargetTurningAngle(double angle) {
-		this.targetTurningAngle = angle;
-	};
+    public void resetGyroAngle(Rotation2 angle) {
+        synchronized (sensorLock) {
+            gyroscope.setAdjustmentAngle(
+                    gyroscope.getUnadjustedAngle().rotateBy(angle.inverse())
+            );
+        }
+	}
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// public double getTargetTurningAngle() {
+	// 	return targetTurningAngle;
+	// };
+
+	// public void setTargetTurningAngle(double angle) {
+	// 	this.targetTurningAngle = angle;
+	// };
 }

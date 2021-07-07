@@ -9,10 +9,7 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import org.frcteam2910.mk3.Constants;
-import org.frcteam2910.common.drivers.Gyroscope;
 import org.frcteam2910.common.kinematics.ChassisVelocity;
 import org.frcteam2910.common.kinematics.SwerveKinematics;
 import org.frcteam2910.common.kinematics.SwerveOdometry;
@@ -21,12 +18,13 @@ import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.UpdateManager;
 import org.frcteam2910.common.robot.drivers.Mk3SwerveModule;
-import org.frcteam2910.common.robot.drivers.NavX;
 import org.frcteam2910.common.util.HolonomicDriveSignal;
 import org.frcteam2910.common.util.HolonomicFeedforward;
 import org.frcteam2910.common.util.DrivetrainFeedforwardConstants;
 import org.frcteam2910.common.control.HolonomicMotionProfiledTrajectoryFollower;
 import org.frcteam2910.common.control.PidConstants;
+import org.frcteam2910.mk3.Constants;
+import org.frcteam2910.mk3.state.DrivetrainState;
 
 import java.util.Optional;
 
@@ -48,7 +46,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
 
     private final Object sensorLock = new Object();
     @GuardedBy("sensorLock")
-    private Gyroscope gyroscope = new NavX(SPI.Port.kMXP);
+    private DrivetrainState drivetrainstate;
 
     private final Object kinematicsLock = new Object();
     @GuardedBy("kinematicsLock")
@@ -79,10 +77,8 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
 
     private final NetworkTableEntry[] moduleAngleEntries;
 
-    public DrivetrainSubsystem() {
-        synchronized (sensorLock) {
-            gyroscope.setInverted(true);
-        }
+    public DrivetrainSubsystem(DrivetrainState drivetrainState) {
+        this.drivetrainState = drivetrainState;
 
         TalonFX frontLeftSteeringMotor = new TalonFX(Constants.DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR);
         TalonFX backLeftSteeringMotor = new TalonFX(Constants.DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR);
@@ -195,14 +191,6 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         }
     }
 
-    public void resetGyroAngle(Rotation2 angle) {
-        synchronized (sensorLock) {
-            gyroscope.setAdjustmentAngle(
-                    gyroscope.getUnadjustedAngle().rotateBy(angle.inverse())
-            );
-        }
-    }
-
     public void resetWheelAngles() {
         for (Mk3SwerveModule module : modules) {
             module.resetAngleOffsetWithAbsoluteEncoder();
@@ -227,7 +215,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
 
         Rotation2 angle;
         synchronized (sensorLock) {
-            angle = gyroscope.getAngle();
+            angle = drivetrainState.getGyro().getAngle();
         }
 
         synchronized (kinematicsLock) {
@@ -266,7 +254,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
 
         double rotationalVelocity;
         synchronized (sensorLock) {
-            rotationalVelocity = gyroscope.getRate();
+            rotationalVelocity = drivetrainState.getGyro().getRate();
         }
 
         Optional<HolonomicDriveSignal> optSignal = follower.update(getPose(), getPose().translation,

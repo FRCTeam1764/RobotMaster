@@ -4,8 +4,8 @@ public class RobotState  {
     /**
      * State of the robot drivetrain
      */
-    public DrivetrainState drivetrainState;
+    public DrivetrainState drivetrain;
 	
 	public RobotState() {
-	}
+    }
 }

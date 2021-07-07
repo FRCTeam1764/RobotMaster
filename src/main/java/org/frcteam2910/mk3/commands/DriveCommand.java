@@ -2,7 +2,8 @@ package org.frcteam2910.mk3.commands;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import org.frcteam2910.mk3.state.RobotState;
+
+import org.frcteam2910.mk3.state.DrivetrainState;
 import org.frcteam2910.mk3.subsystems.DrivetrainSubsystem;
 import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.input.Axis;
@@ -16,14 +17,14 @@ public class DriveCommand extends CommandBase {
     private Axis forward;
     private Axis strafe;
     private Axis rotation;
-    private RobotState robotState;
+    private DrivetrainState drivetrainState;
     public static NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
 
-    public DriveCommand(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, Axis rotation, RobotState robotState) {
+    public DriveCommand(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, Axis rotation, DrivetrainState drivetrainState) {
         this.forward = forward;
         this.strafe = strafe;
         this.rotation = rotation;
-        this.robotState = robotState;
+        this.drivetrainState = drivetrainState;
 
         drivetrainSubsystem = drivetrain;
 
@@ -36,7 +37,7 @@ public class DriveCommand extends CommandBase {
     }
 
     private double getForward() {
-        boolean robotIsLocked = robotState.drivetrainState.isRotationLocked() || robotState.drivetrainState.isStrafeLocked();
+        boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
         if (robotIsLocked) {
             return forward.get(true)/3;
         }
@@ -46,7 +47,7 @@ public class DriveCommand extends CommandBase {
     }
 
     private double getStrafe() {
-        boolean robotIsLocked = robotState.drivetrainState.isRotationLocked() || robotState.drivetrainState.isStrafeLocked();
+        boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
         if (robotIsLocked) {
             return strafe.get(true)/3;
         }
@@ -58,7 +59,7 @@ public class DriveCommand extends CommandBase {
     private double getRotation() {
         double limelightXOffset = limelightTable.getEntry("tx").getDouble(0);
         double limelightHasTarget = limelightTable.getEntry("tv").getDouble(0);
-        boolean robotIsLocked = robotState.drivetrainState.isRotationLocked() || robotState.drivetrainState.isStrafeLocked();
+        boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
         // limelightTable.getEntry("ledMode").setNumber(robotIsLocked ? 3 : 1);
         limelightTable.getEntry("ledMode").setNumber(1);
     
@@ -66,15 +67,15 @@ public class DriveCommand extends CommandBase {
             double cameraRotationConstant = -0.035;
             return limelightXOffset * cameraRotationConstant;
         }*/
-        if(robotState.drivetrainState.getTargetTurningAngle() != 0){
+        if(drivetrainState.getTargetTurningAngle() != 0){
             double p = 0.005;
             double unadjustedAngle = gyroscope.getAngle().toDegrees(); // current anlge
-            double rotationAngle = unadjustedAngle - robotState.drivetrainState.getTargetTurningAngle();
+            double rotationAngle = unadjustedAngle - drivetrainState.getTargetTurningAngle();
             double adjustedAngle = rotationAngle > 0 ? rotationAngle : 360 + rotationAngle; // target angle
             boolean turningClockwise = rotationAngle < 0;
             double angleDiff = turningClockwise ? adjustedAngle - unadjustedAngle : unadjustedAngle - adjustedAngle;
             if(angleDiff < 2.0){
-                robotState.drivetrainState.setTargetTurningAngle(0.0);
+                drivetrainState.setTargetTurningAngle(0.0);
                 return rotation.get(true)/2;
             }
             else{
