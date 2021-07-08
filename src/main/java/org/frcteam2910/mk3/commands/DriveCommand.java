@@ -57,8 +57,8 @@ public class DriveCommand extends CommandBase {
     }
 
     private double getRotation() {
-        double limelightXOffset = limelightTable.getEntry("tx").getDouble(0);
-        double limelightHasTarget = limelightTable.getEntry("tv").getDouble(0);
+        // double limelightXOffset = limelightTable.getEntry("tx").getDouble(0);
+        // double limelightHasTarget = limelightTable.getEntry("tv").getDouble(0);
         boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
         // limelightTable.getEntry("ledMode").setNumber(robotIsLocked ? 3 : 1);
         limelightTable.getEntry("ledMode").setNumber(1);
@@ -67,22 +67,22 @@ public class DriveCommand extends CommandBase {
             double cameraRotationConstant = -0.035;
             return limelightXOffset * cameraRotationConstant;
         }*/
-        if(drivetrainState.getTargetTurningAngle() != 0){
-            double p = 0.005;
-            double unadjustedAngle = gyroscope.getAngle().toDegrees(); // current anlge
-            double rotationAngle = unadjustedAngle - drivetrainState.getTargetTurningAngle();
-            double adjustedAngle = rotationAngle > 0 ? rotationAngle : 360 + rotationAngle; // target angle
-            boolean turningClockwise = rotationAngle < 0;
-            double angleDiff = turningClockwise ? adjustedAngle - unadjustedAngle : unadjustedAngle - adjustedAngle;
-            if(angleDiff < 2.0){
-                drivetrainState.setTargetTurningAngle(0.0);
-                return rotation.get(true)/2;
-            }
-            else{
-                return (turningClockwise ? angleDiff : angleDiff * -1) * p;
-            }
-        }
-        else if (robotIsLocked) {
+        // if(drivetrainState.getTargetTurningAngle() != 0){
+        //     double p = 0.005;
+        //     double unadjustedAngle = gyroscope.getAngle().toDegrees(); // current anlge
+        //     double rotationAngle = unadjustedAngle - drivetrainState.getTargetTurningAngle();
+        //     double adjustedAngle = rotationAngle > 0 ? rotationAngle : 360 + rotationAngle; // target angle
+        //     boolean turningClockwise = rotationAngle < 0;
+        //     double angleDiff = turningClockwise ? adjustedAngle - unadjustedAngle : unadjustedAngle - adjustedAngle;
+        //     if(angleDiff < 2.0){
+        //         drivetrainState.setTargetTurningAngle(0.0);
+        //         return rotation.get(true)/2;
+        //     }
+        //     else{
+        //         return (turningClockwise ? angleDiff : angleDiff * -1) * p;
+        //     }
+        // }
+        /*else*/ if (robotIsLocked) {
             return rotation.get(true)/2;
         }
         else {

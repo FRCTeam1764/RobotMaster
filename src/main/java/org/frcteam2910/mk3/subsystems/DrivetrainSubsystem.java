@@ -46,7 +46,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
 
     private final Object sensorLock = new Object();
     @GuardedBy("sensorLock")
-    private DrivetrainState drivetrainstate;
+    private DrivetrainState drivetrainState;
 
     private final Object kinematicsLock = new Object();
     @GuardedBy("kinematicsLock")

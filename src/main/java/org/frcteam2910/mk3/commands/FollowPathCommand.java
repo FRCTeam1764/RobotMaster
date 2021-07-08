@@ -42,7 +42,6 @@ public class FollowPathCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    drivetrainSubsystem.resetGyroAngle(Rotation2.ZERO);
     drivetrainSubsystem.resetWheelAngles();
 
       // Specify some constraints for our trajectory.

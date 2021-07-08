@@ -11,31 +11,32 @@ import org.frcteam2910.mk3.state.RobotState;
 
 public class RobotContainer {
     private final XboxController primaryController = new XboxController(Constants.PRIMARY_CONTROLLER_PORT);
-    private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
+    private final DrivetrainSubsystem drivetrainSubsystem;
 
     public RobotState robotState = new RobotState();
 
     public RobotContainer() {
         primaryController.getLeftXAxis().setInverted(true);
         primaryController.getRightXAxis().setInverted(true);
-        robotState.drivetrainState = new DrivetrainState(getLeftTriggerAxis(), getRightTriggerAxis());
+        robotState.drivetrain = new DrivetrainState(getLeftTriggerAxis(), getRightTriggerAxis());
+        drivetrainSubsystem = new DrivetrainSubsystem(robotState.drivetrain);
 
-        CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis(), this.robotState));
+        CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis(), this.robotState.drivetrain));
 
         configureButtonBindings();
     }
 
     private void configureButtonBindings() {
         primaryController.getBackButton().whenPressed(
-                () -> robotState.resetGyroAngle(Rotation2.ZERO)
+                () -> robotState.drivetrain.resetGyroAngle(Rotation2.ZERO)
         );
         primaryController.getStartButton().whenPressed(
                 drivetrainSubsystem::resetWheelAngles
         );
-        primaryController.getYButton().whenPressed(() -> robotState.drivetrainState.setTargetTurningAngle(0.0));
-        primaryController.getBButton().whenPressed(() -> robotState.drivetrainState.setTargetTurningAngle(90.0));
-        primaryController.getAButton().whenPressed(() -> robotState.drivetrainState.setTargetTurningAngle(180.0));
-        primaryController.getXButton().whenPressed(() -> robotState.drivetrainState.setTargetTurningAngle(270.0));
+        // primaryController.getYButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(0.0));
+        // primaryController.getBButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(90.0));
+        // primaryController.getAButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(180.0));
+        // primaryController.getXButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(270.0));
     }
 
     private Axis getDriveForwardAxis() {
