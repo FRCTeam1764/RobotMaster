@@ -21,22 +21,25 @@ public class DrivetrainState  {
     /**
      * Angle used in the turning pid loop
      */
-	// private double targetTurningAngle;
+	private double targetTurningAngle;
 
     /**
      * This should be the only instance of the drivetrain gyro
      */
-	private final Object gyroLock = new Object();
-    @GuardedBy("gyroLock")
     private Gyroscope gyro;
+
+    /**
+     * Different Maneuvers
+     */
+    private String maneuver;
 	
 	public DrivetrainState(Axis leftTriggerAxis, Axis rightTriggerAxis) {
 		this.leftTriggerAxis = leftTriggerAxis;
 		this.rightTriggerAxis = rightTriggerAxis;
-
-		// this.targetTurningAngle = 0;
+		this.targetTurningAngle = 0.0;
 		this.gyro = new NavX(SPI.Port.kMXP);
 		this.gyro.setInverted(true);
+		this.maneuver = "";
 	}
 
 	public boolean isRotationLocked() {
@@ -48,38 +51,42 @@ public class DrivetrainState  {
 	};
 
 	public Gyroscope getGyro() {
-        synchronized (gyroLock) {
-			return gyro;
-        }
+		return gyro;
 	};
 
     public void resetGyroAngle(Rotation2 angle) {
-        synchronized (gyroLock) {
-            gyro.setAdjustmentAngle(
-                    gyro.getUnadjustedAngle().rotateBy(angle.inverse())
-            );
-        }
+		gyro.setAdjustmentAngle(
+				gyro.getUnadjustedAngle().rotateBy(angle.inverse())
+		);
 	}
-	
 
+	public double getTargetTurningAngle() {
+		return targetTurningAngle;
+	};
 
+	public void setTargetTurningAngle(double angle) {
+		targetTurningAngle = angle;
+	};
 
+	public String getManeuver() {
+		return maneuver;
+	};
 
-
-
-
-
-
-
-
-
-
-
-	// public double getTargetTurningAngle() {
-	// 	return targetTurningAngle;
-	// };
-
-	// public void setTargetTurningAngle(double angle) {
-	// 	this.targetTurningAngle = angle;
-	// };
+	public void setManeuver(String maneuver) {
+		double currentAngle = gyro.getAngle().toDegrees();
+		if (maneuver == "reversebarrelroll") {
+			double newAngle = currentAngle - 5.0;
+			setTargetTurningAngle(newAngle < 0 ? newAngle + 360 : newAngle);
+			this.maneuver = maneuver;
+		}
+		else if (maneuver == "barrelroll") {
+			double newAngle = currentAngle + 5.0;
+			setTargetTurningAngle(newAngle > 360 ? newAngle - 360 : newAngle);
+			this.maneuver = maneuver;
+		}
+		else if (maneuver == "spin") {
+			double newAngle = currentAngle + 180.0;
+			setTargetTurningAngle(newAngle > 360 ? newAngle - 360 : newAngle);
+		}
+	};
 }

@@ -33,10 +33,13 @@ public class RobotContainer {
         primaryController.getStartButton().whenPressed(
                 drivetrainSubsystem::resetWheelAngles
         );
-        // primaryController.getYButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(0.0));
-        // primaryController.getBButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(90.0));
-        // primaryController.getAButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(180.0));
-        // primaryController.getXButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(270.0));
+        primaryController.getXButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(90.0));
+        primaryController.getAButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(180.0));
+        primaryController.getBButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(270.0));
+        primaryController.getYButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(360.0));
+        primaryController.getLeftBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("barrelroll"));
+        primaryController.getRightBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("reversebarrelroll"));
+        primaryController.getRightJoystickButton().whenPressed(() -> robotState.drivetrain.setManeuver("spin"));
     }
 
     private Axis getDriveForwardAxis() {
