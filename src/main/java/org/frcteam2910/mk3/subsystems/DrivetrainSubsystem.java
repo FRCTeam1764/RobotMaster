@@ -264,7 +264,6 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         if (optSignal.isPresent()) {
             synchronized (stateLock) {
                 newDriveSignal = optSignal.get();
-               // System.out.println(newDriveSignal.getTranslation().length);
                 driveSignal = newDriveSignal;
             }
         } else {
