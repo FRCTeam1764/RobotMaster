@@ -1,0 +1,14 @@
+pluginManagement {
+    plugins {
+        id 'com.github.johnrengelman.shadow' version '5.2.0'
+        id 'edu.wpi.first.GradleRIO' version '2020.1.2'
+        id 'net.ltgt.errorprone' version '1.1.1'
+    }
+}
+
+rootProject.name = 'common'
+
+include 'robot'
+// Example projects
+include 'examples:swerve-robot'
+include 'examples:trajectory-generation'

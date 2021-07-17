@@ -94,7 +94,14 @@ public final class Limelight {
      * @returns The target's skew from -90 to 0 in degrees.
      */
     public double getTargetSkew() {
+        
         return ts.getDouble(0);
+    }
+    /**
+     * Gets the target's x offset.
+     */
+    public double getTargetXOffset() {
+        return tx.getDouble(0);
     }
 
     /**
