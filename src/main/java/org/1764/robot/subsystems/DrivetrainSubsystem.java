@@ -23,7 +23,7 @@ import org.frcteam2910.common.util.HolonomicFeedforward;
 import org.frcteam2910.common.util.DrivetrainFeedforwardConstants;
 import org.frcteam2910.common.control.HolonomicMotionProfiledTrajectoryFollower;
 import org.frcteam2910.common.control.PidConstants;
-import org.frcteam1764.robot.Constants;
+import org.frcteam1764.robot.constants.DrivetrainConstants;
 import org.frcteam1764.robot.state.DrivetrainState;
 
 import java.util.Optional;
@@ -80,13 +80,13 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
     public DrivetrainSubsystem(DrivetrainState drivetrainState) {
         this.drivetrainState = drivetrainState;
 
-        TalonFX frontLeftSteeringMotor = new TalonFX(Constants.DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR);
-        TalonFX backLeftSteeringMotor = new TalonFX(Constants.DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR);
+        TalonFX frontLeftSteeringMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR);
+        TalonFX backLeftSteeringMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR);
 
-        TalonFX frontLeftDriveMotor = new TalonFX(Constants.DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR);
-        TalonFX frontRightDriveMotor = new TalonFX(Constants.DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR);
-        TalonFX backLeftDriveMotor = new TalonFX(Constants.DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR);
-        TalonFX backRightDriveMotor = new TalonFX(Constants.DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR);
+        TalonFX frontLeftDriveMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR);
+        TalonFX frontRightDriveMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR);
+        TalonFX backLeftDriveMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR);
+        TalonFX backRightDriveMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR);
         frontRightDriveMotor.setInverted(true);
         backRightDriveMotor.setInverted(true);
 
@@ -97,36 +97,36 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
         configTalon(backRightDriveMotor);
 
         Mk3SwerveModule frontLeftModule = new Mk3SwerveModule(new Vector2(TRACKWIDTH / 2.0, WHEELBASE / 2.0),
-                Constants.DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET,
+                DrivetrainConstants.DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET,
                 STEER_GEAR_RATIO,
                 DRIVE_GEAR_RATIO,
                 frontLeftSteeringMotor,
                 frontLeftDriveMotor,
-                new CANCoder(Constants.DRIVETRAIN_FRONT_LEFT_ENCODER_PORT));
+                new CANCoder(DrivetrainConstants.DRIVETRAIN_FRONT_LEFT_ENCODER_PORT));
 
         Mk3SwerveModule frontRightModule = new Mk3SwerveModule(new Vector2(TRACKWIDTH / 2.0, -WHEELBASE / 2.0),
-                Constants.DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET,
+                DrivetrainConstants.DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET,
                 STEER_GEAR_RATIO,
                 DRIVE_GEAR_RATIO,
-                new TalonFX(Constants.DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR),
+                new TalonFX(DrivetrainConstants.DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR),
                 frontRightDriveMotor,
-                new CANCoder(Constants.DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT));
+                new CANCoder(DrivetrainConstants.DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT));
 
         Mk3SwerveModule backLeftModule = new Mk3SwerveModule(new Vector2(-TRACKWIDTH / 2.0, WHEELBASE / 2.0),
-                Constants.DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET,
+                DrivetrainConstants.DRIVETRAIN_BACK_LEFT_ENCODER_OFFSET,
                 STEER_GEAR_RATIO,
                 DRIVE_GEAR_RATIO,
                 backLeftSteeringMotor,
                 backLeftDriveMotor,
-                new CANCoder(Constants.DRIVETRAIN_BACK_LEFT_ENCODER_PORT));
+                new CANCoder(DrivetrainConstants.DRIVETRAIN_BACK_LEFT_ENCODER_PORT));
 
         Mk3SwerveModule backRightModule = new Mk3SwerveModule(new Vector2(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0),
-                Constants.DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET,
+                DrivetrainConstants.DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET,
                 STEER_GEAR_RATIO,
                 DRIVE_GEAR_RATIO,
-                new TalonFX(Constants.DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR),
+                new TalonFX(DrivetrainConstants.DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR),
                 backRightDriveMotor,
-                new CANCoder(Constants.DRIVETRAIN_BACK_RIGHT_ENCODER_PORT));
+                new CANCoder(DrivetrainConstants.DRIVETRAIN_BACK_RIGHT_ENCODER_PORT));
 
         modules = new Mk3SwerveModule[] {frontLeftModule, frontRightModule, backLeftModule, backRightModule};
 

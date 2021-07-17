@@ -1,6 +1,6 @@
-package org.frcteam1764.robot;
+package org.frcteam1764.robot.constants;
 
-public class Constants {
+public class DrivetrainConstants {
     public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 22;
     public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 27;
     public static final int DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR = 32;
