@@ -3,8 +3,11 @@ package org.frcteam1764.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import org.frcteam1764.robot.state.DrivetrainState;
+import org.frcteam1764.robot.state.RobotState;
 import org.frcteam1764.robot.subsystems.DrivetrainSubsystem;
 import org.frcteam2910.common.math.Vector2;
+import org.frcteam2910.common.robot.drivers.Limelight;
+import org.frcteam2910.common.robot.drivers.Limelight.LedMode;
 import org.frcteam2910.common.robot.input.Axis;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -15,13 +18,14 @@ public class DriveCommand extends CommandBase {
     private Axis strafe;
     private Axis rotation;
     private DrivetrainState drivetrainState;
-    public static NetworkTable limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+    private Limelight limelight;
 
-    public DriveCommand(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, Axis rotation, DrivetrainState drivetrainState) {
+    public DriveCommand(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, Axis rotation, RobotState robotState) {
         this.forward = forward;
         this.strafe = strafe;
         this.rotation = rotation;
-        this.drivetrainState = drivetrainState;
+        this.drivetrainState = robotState.drivetrain;
+        this.limelight = robotState.limelight;
 
         drivetrainSubsystem = drivetrain;
 
@@ -54,13 +58,13 @@ public class DriveCommand extends CommandBase {
     }
 
     private double getRotation() {
-        double limelightXOffset = limelightTable.getEntry("tx").getDouble(0);
-        double limelightHasTarget = limelightTable.getEntry("tv").getDouble(0);
+        double limelightXOffset = limelight.getTargetXOffset();
+        boolean limelightHasTarget = limelight.hasTarget();
         boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
-        limelightTable.getEntry("ledMode").setNumber(robotIsLocked ? 3 : 1);
+        limelight.setLedMode(robotIsLocked ? LedMode.ON : LedMode.OFF);
         double targetAngle = drivetrainState.getTargetTurningAngle();
 
-        if (limelightHasTarget == 1.0 && robotIsLocked) {
+        if (limelightHasTarget && robotIsLocked) {
             double cameraRotationConstant = -0.035;
             return limelightXOffset * cameraRotationConstant;
         }

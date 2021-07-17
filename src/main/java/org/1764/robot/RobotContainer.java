@@ -21,7 +21,7 @@ public class RobotContainer {
         robotState.drivetrain = new DrivetrainState(getLeftTriggerAxis(), getRightTriggerAxis());
         drivetrainSubsystem = new DrivetrainSubsystem(robotState.drivetrain);
 
-        CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis(), this.robotState.drivetrain));
+        CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis(), this.robotState));
 
         configureButtonBindings();
     }
