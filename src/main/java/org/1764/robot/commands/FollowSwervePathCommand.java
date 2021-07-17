@@ -2,7 +2,7 @@ package org.frcteam1764.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import org.frcteam1764.robot.subsystems.DrivetrainSubsystem;
+import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
 import org.frcteam2910.common.control.MaxVelocityConstraint;
 import org.frcteam2910.common.control.MaxAccelerationConstraint;
 import org.frcteam2910.common.control.Path;
@@ -26,12 +26,12 @@ import java.io.*;
 // lineTo() and hermite() can be chained for additional segments
 // vectors for some reason read (y, x) instead of (x, y)
 
-public class FollowPathCommand extends CommandBase {
-  private DrivetrainSubsystem drivetrainSubsystem;
+public class FollowSwervePathCommand extends CommandBase {
+  private SwerveDrivetrain drivetrainSubsystem;
   private Trajectory trajectory;
   private Path path;
   
-  public FollowPathCommand(DrivetrainSubsystem drivetrain, Path newPath) {
+  public FollowSwervePathCommand(SwerveDrivetrain drivetrain, Path newPath) {
     drivetrainSubsystem = drivetrain;
     path = newPath;
 

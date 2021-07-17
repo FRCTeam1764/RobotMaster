@@ -1,42 +1,44 @@
 package org.frcteam1764.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
-import org.frcteam1764.robot.commands.DriveCommand;
-import org.frcteam1764.robot.subsystems.*;
+import org.frcteam1764.robot.commands.SwerveDriveCommand;
+import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Axis;
 import org.frcteam2910.common.robot.input.XboxController;
+import org.frcteam1764.robot.constants.ControllerConstants;
 import org.frcteam1764.robot.state.DrivetrainState;
 import org.frcteam1764.robot.state.RobotState;
 
-public class RobotContainer {
+public class SwerveRobotContainer {
     private final XboxController primaryController = new XboxController(Constants.PRIMARY_CONTROLLER_PORT);
-    private final DrivetrainSubsystem drivetrainSubsystem;
+    private final SwerveDrivetrain drivetrainSubsystem;
 
     public RobotState robotState = new RobotState();
 
-    public RobotContainer() {
+    public SwerveRobotContainer() {
         primaryController.getLeftXAxis().setInverted(true);
         primaryController.getRightXAxis().setInverted(true);
         robotState.drivetrain = new DrivetrainState(getLeftTriggerAxis(), getRightTriggerAxis());
-        drivetrainSubsystem = new DrivetrainSubsystem(robotState.drivetrain);
+        drivetrainSubsystem = new SwerveDrivetrain(robotState.drivetrain);
 
-        CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis(), this.robotState));
+        CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new SwerveDriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis(), this.robotState));
 
-        configureButtonBindings();
+        configurePilotButtonBindings();
+        configureCoPilotButtonBindings();
     }
 
-    private void configureButtonBindings() {
+    private void configurePilotButtonBindings() {
         primaryController.getBackButton().whenPressed(
                 () -> robotState.drivetrain.resetGyroAngle(Rotation2.ZERO)
         );
         primaryController.getStartButton().whenPressed(
                 drivetrainSubsystem::resetWheelAngles
         );
-        primaryController.getXButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(90.0));
-        primaryController.getAButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(180.0));
-        primaryController.getBButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(270.0));
-        primaryController.getYButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(360.0));
+        primaryController.getAButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_A));
+        primaryController.getBButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_B));
+        primaryController.getXButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_X));
+        primaryController.getYButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_Y));
         primaryController.getLeftBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("barrelroll"));
         primaryController.getRightBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("reversebarrelroll"));
         primaryController.getRightJoystickButton().whenPressed(() -> robotState.drivetrain.setManeuver("spin"));
@@ -62,7 +64,14 @@ public class RobotContainer {
         return primaryController.getRightTriggerAxis();
     }
 
-    public DrivetrainSubsystem getDrivetrainSubsystem() {
+    private void configureCoPilotButtonBindings() {
+    }
+
+    /**
+     * Get copilot axis inputs here
+     */
+
+    public SwerveDrivetrain getDrivetrainSubsystem() {
         return drivetrainSubsystem;
     }
 

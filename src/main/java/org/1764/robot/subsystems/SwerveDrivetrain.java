@@ -29,7 +29,7 @@ import org.frcteam1764.robot.state.DrivetrainState;
 import java.util.Optional;
 
 
-public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
+public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
     public static final double TRACKWIDTH = 1.0;
     public static final double WHEELBASE = 1.0;
     public static final double STEER_GEAR_RATIO = 12.8;
@@ -77,7 +77,7 @@ public class DrivetrainSubsystem implements Subsystem, UpdateManager.Updatable {
 
     private final NetworkTableEntry[] moduleAngleEntries;
 
-    public DrivetrainSubsystem(DrivetrainState drivetrainState) {
+    public SwerveDrivetrain(DrivetrainState drivetrainState) {
         this.drivetrainState = drivetrainState;
 
         TalonFX frontLeftSteeringMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR);

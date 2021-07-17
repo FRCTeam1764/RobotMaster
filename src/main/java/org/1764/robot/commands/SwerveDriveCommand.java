@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import org.frcteam1764.robot.state.DrivetrainState;
 import org.frcteam1764.robot.state.RobotState;
-import org.frcteam1764.robot.subsystems.DrivetrainSubsystem;
+import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
 import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.drivers.Limelight;
 import org.frcteam2910.common.robot.drivers.Limelight.LedMode;
@@ -12,15 +12,15 @@ import org.frcteam2910.common.robot.input.Axis;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class DriveCommand extends CommandBase {
-    private DrivetrainSubsystem drivetrainSubsystem;
+public class SwerveDriveCommand extends CommandBase {
+    private SwerveDrivetrain drivetrainSubsystem;
     private Axis forward;
     private Axis strafe;
     private Axis rotation;
     private DrivetrainState drivetrainState;
     private Limelight limelight;
 
-    public DriveCommand(DrivetrainSubsystem drivetrain, Axis forward, Axis strafe, Axis rotation, RobotState robotState) {
+    public SwerveDriveCommand(SwerveDrivetrain drivetrain, Axis forward, Axis strafe, Axis rotation, RobotState robotState) {
         this.forward = forward;
         this.strafe = strafe;
         this.rotation = rotation;
@@ -37,10 +37,14 @@ public class DriveCommand extends CommandBase {
         drivetrainSubsystem.drive(new Vector2(applyDeadzone(getForward(), 0.1), applyDeadzone(getStrafe(), 0.1)), applyDeadzone(getRotation(), 0.1), true);
     }
 
+    private  double applyDeadzone(double input, double deadzone) {
+        return Math.abs(input) > deadzone ? input : 0;
+    }
+
     private double getForward() {
         boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
         if (robotIsLocked) {
-            return forward.get(true)/3;
+            return forward.get(true)/2;
         }
         else {
             return forward.get(true);
@@ -50,7 +54,7 @@ public class DriveCommand extends CommandBase {
     private double getStrafe() {
         boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
         if (robotIsLocked) {
-            return strafe.get(true)/3;
+            return strafe.get(true)/2;
         }
         else {
             return strafe.get(true);
@@ -112,9 +116,5 @@ public class DriveCommand extends CommandBase {
         else {
             return rotation.get(true);
         }
-    }
-
-    private  double applyDeadzone(double input, double deadzone) {
-        return Math.abs(input) > deadzone ? input : 0;
     }
 }

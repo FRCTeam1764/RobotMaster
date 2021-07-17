@@ -5,12 +5,12 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.frcteam2910.common.robot.UpdateManager;
 
 public class Robot extends TimedRobot {
-    private RobotContainer robotContainer;
+    private SwerveRobotContainer robotContainer;
     private UpdateManager updateManager;
 
     @Override
     public void robotInit() {
-        robotContainer = new RobotContainer();
+        robotContainer = new SwerveRobotContainer();
         updateManager = new UpdateManager(
                 robotContainer.getDrivetrainSubsystem()
         );
