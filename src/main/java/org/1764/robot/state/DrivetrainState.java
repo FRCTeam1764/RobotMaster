@@ -74,17 +74,17 @@ public class DrivetrainState  {
 
 	public void setManeuver(String maneuver) {
 		double currentAngle = gyro.getAngle().toDegrees();
-		if (maneuver == "reversebarrelroll") {
+		if (maneuver.equals("reversebarrelroll")) {
 			double newAngle = currentAngle - 5.0;
 			setTargetTurningAngle(newAngle < 0 ? newAngle + 360 : newAngle);
 			this.maneuver = maneuver;
 		}
-		else if (maneuver == "barrelroll") {
+		else if (maneuver.equals("barrelroll")) {
 			double newAngle = currentAngle + 5.0;
 			setTargetTurningAngle(newAngle > 360 ? newAngle - 360 : newAngle);
 			this.maneuver = maneuver;
 		}
-		else if (maneuver == "spin") {
+		else if (maneuver.equals("spin")) {
 			double newAngle = currentAngle + 180.0;
 			setTargetTurningAngle(newAngle > 360 ? newAngle - 360 : newAngle);
 		}

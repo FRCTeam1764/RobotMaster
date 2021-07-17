@@ -72,15 +72,15 @@ public class DriveCommand extends CommandBase {
             drivetrainState.setTargetTurningAngle(0.0);
             return rotation.get(true);
         }
-        else if (targetAngle > 0.0 && drivetrainState.getManeuver() != "") {
+        else if (targetAngle > 0.0 && !drivetrainState.getManeuver().equals("")) {
             double currentAngle = drivetrainState.getGyro().getAngle().toDegrees();
             double angleDiff = targetAngle - currentAngle;
             String maneuver = drivetrainState.getManeuver();
 
-            if ((maneuver == "barrelroll") && Math.abs(angleDiff) > 4.0) {
+            if (maneuver.equals("barrelroll") && Math.abs(angleDiff) > 4.0) {
                 return 1;
             }
-            else if (maneuver == "reversebarrelroll" && Math.abs(angleDiff) > 4.0) {
+            else if (maneuver.equals("reversebarrelroll") && Math.abs(angleDiff) > 4.0) {
                 return -1;
             }
             else {
