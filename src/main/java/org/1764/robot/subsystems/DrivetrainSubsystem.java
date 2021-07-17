@@ -1,4 +1,4 @@
-package org.frcteam2910.mk3.subsystems;
+package org.frcteam1764.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -23,8 +23,8 @@ import org.frcteam2910.common.util.HolonomicFeedforward;
 import org.frcteam2910.common.util.DrivetrainFeedforwardConstants;
 import org.frcteam2910.common.control.HolonomicMotionProfiledTrajectoryFollower;
 import org.frcteam2910.common.control.PidConstants;
-import org.frcteam2910.mk3.Constants;
-import org.frcteam2910.mk3.state.DrivetrainState;
+import org.frcteam1764.robot.Constants;
+import org.frcteam1764.robot.state.DrivetrainState;
 
 import java.util.Optional;
 

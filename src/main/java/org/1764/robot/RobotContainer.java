@@ -1,13 +1,13 @@
-package org.frcteam2910.mk3;
+package org.frcteam1764.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
-import org.frcteam2910.mk3.commands.DriveCommand;
-import org.frcteam2910.mk3.subsystems.*;
+import org.frcteam1764.robot.commands.DriveCommand;
+import org.frcteam1764.robot.subsystems.*;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Axis;
 import org.frcteam2910.common.robot.input.XboxController;
-import org.frcteam2910.mk3.state.DrivetrainState;
-import org.frcteam2910.mk3.state.RobotState;
+import org.frcteam1764.robot.state.DrivetrainState;
+import org.frcteam1764.robot.state.RobotState;
 
 public class RobotContainer {
     private final XboxController primaryController = new XboxController(Constants.PRIMARY_CONTROLLER_PORT);

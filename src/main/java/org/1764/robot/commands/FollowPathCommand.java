@@ -1,8 +1,8 @@
-package org.frcteam2910.mk3.commands;
+package org.frcteam1764.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import org.frcteam2910.mk3.subsystems.DrivetrainSubsystem;
+import org.frcteam1764.robot.subsystems.DrivetrainSubsystem;
 import org.frcteam2910.common.control.MaxVelocityConstraint;
 import org.frcteam2910.common.control.MaxAccelerationConstraint;
 import org.frcteam2910.common.control.Path;

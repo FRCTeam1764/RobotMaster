@@ -9,7 +9,7 @@ sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 application {
-    mainClassName "org.frcteam2910.mk3.Main"
+    mainClassName "org.frcteam1764.robot.Main"
 }
 
 wpi {
@@ -23,7 +23,7 @@ wpi {
 deploy {
     targets {
         roboRIO("roborio") {
-            team frc.getTeamOrDefault(2910)
+            team frc.getTeamOrDefault(1764)
         }
     }
     artifacts {
