@@ -1,0 +1,40 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'edu.wpi.first.GradleRIO'
+    id 'net.ltgt.errorprone'
+}
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+wpi {
+    maven {
+        useLocal false
+    }
+}
+
+dependencies {
+    compileOnly group: 'com.google.errorprone', name: 'error_prone_annotations', version: '2.3.4'
+
+    api wpi.deps.wpilib()
+    nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
+
+    api wpi.deps.vendor.java()
+    nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+
+    // Depend on the common library
+    api project.parent
+
+    errorprone group: 'com.google.errorprone', name: 'error_prone_core', version: '2.3.4'
+}
+
+publishing {
+    publications {
+        robot(MavenPublication) {
+            from components.java
+        }
+    }
+}
