@@ -16,8 +16,20 @@
 
 ## How To's
 ---
-#### Calibrating Wheels
-#### Generating Paths Using Pathviewer
+#### Calibrating Wheels  
+Module 0s can be set in DrivetrainConstants
+More steps to be added later...  
+
+#### Generating Paths Using Pathviewer  
+To run Pathviewer, follow the following steps:  
+1. Clone the [Pathviewer repo](https://github.com/FRCTeam2910/PathViewer)  
+2. Open up cmd and cd to Pathviewer root directory  
+3. Run **git submodule init**  
+4. Run **git submodule update**
+5. Run **gradlew build**  
+6. Run **gradlew run**  
+7. Put generated path in **src/main/java/org/1764**  
+
 #### Generating Paths with SimplePathBuilder and SplinePathBuilder
 
 ## Resources
