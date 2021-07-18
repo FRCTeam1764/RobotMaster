@@ -3,9 +3,11 @@ package org.frcteam1764.robot;
 import edu.wpi.first.wpilibj2.command.*;
 import org.frcteam1764.robot.commands.SwerveDriveCommand;
 import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
+import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Axis;
 import org.frcteam2910.common.robot.input.XboxController;
+import org.frcteam1764.robot.common.Utilities;
 import org.frcteam1764.robot.constants.ControllerConstants;
 import org.frcteam1764.robot.state.DrivetrainState;
 import org.frcteam1764.robot.state.RobotState;
@@ -26,6 +28,14 @@ public class SwerveRobotContainer {
 
         configurePilotButtonBindings();
         configureCoPilotButtonBindings();
+        getTrajectories();
+    }
+
+    private void getTrajectories() {
+        Trajectory sampleTrajectory = Utilities.convertPathToTrajectory(Utilities.getPath("TestPath.path"), 30.0, 60.0);
+        robotState.trajectories = new Trajectory[]{
+            sampleTrajectory
+        };
     }
 
     private void configurePilotButtonBindings() {

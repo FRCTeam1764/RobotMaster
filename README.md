@@ -10,9 +10,9 @@
 ## Whats in the Base Code
 ---
 * Swervedrive Subsystem  
-* Path following command  
+* Path following  
 * Camera tracking with rotation lock  
-* Controller layout  
+* Controller config  
 
 ## How To's
 ---
