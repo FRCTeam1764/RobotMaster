@@ -32,7 +32,7 @@ public class Utilities {
 		TrajectoryConstraint[] constraints = {
 				// Both of these constraints are in seemingly arbitrary units
 				new MaxAccelerationConstraint(maxAcceleration), // 30 seems to be a good starting point
-				new MaxVelocityConstraint(maxVelocity) // 30 seems to be a good starting point
+				new MaxVelocityConstraint(maxVelocity) // 60 seems to be a good starting point
 		};
 		if(!path.equals(null)) {
 			return new Trajectory(path, constraints, 1e-2);

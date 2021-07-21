@@ -30,8 +30,6 @@ To run Pathviewer, follow the following steps:
 6. Run **gradlew run**  
 7. Put generated path in **src/main/java/org/1764**  
 
-#### Generating Paths with SimplePathBuilder and SplinePathBuilder
-
 ## Resources
 ---
 

@@ -44,7 +44,7 @@ public class SwerveDriveCommand extends CommandBase {
     private double getForward() {
         boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
         if (robotIsLocked) {
-            return forward.get(true)/2;
+            return forward.get(true)/2; //intent to go slower when Lt or RT is held down
         }
         else {
             return forward.get(true);
@@ -54,7 +54,7 @@ public class SwerveDriveCommand extends CommandBase {
     private double getStrafe() {
         boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
         if (robotIsLocked) {
-            return strafe.get(true)/2;
+            return strafe.get(true)/2; //intent to go slower when Lt or RT is held down
         }
         else {
             return strafe.get(true);
@@ -70,13 +70,13 @@ public class SwerveDriveCommand extends CommandBase {
 
         if (limelightHasTarget && robotIsLocked) {
             double cameraRotationConstant = -0.035;
-            return limelightXOffset * cameraRotationConstant;
+            return limelightXOffset * cameraRotationConstant; // could use smoothing/tuning
         }
-        else if (Math.abs(rotation.get(true)) > 0.05) {
+        else if (Math.abs(rotation.get(true)) > 0.05) { // override of critical angles
             drivetrainState.setTargetTurningAngle(0.0);
             return rotation.get(true);
         }
-        else if (targetAngle > 0.0 && !drivetrainState.getManeuver().equals("")) {
+        else if (targetAngle > 0.0 && !drivetrainState.getManeuver().equals("")) { // barrel roll code
             double currentAngle = drivetrainState.getGyro().getAngle().toDegrees();
             double angleDiff = targetAngle - currentAngle;
             String maneuver = drivetrainState.getManeuver();
@@ -111,7 +111,7 @@ public class SwerveDriveCommand extends CommandBase {
             }
         }
         else if (robotIsLocked) {
-            return rotation.get(true)/2;
+            return rotation.get(true)/2; //intent to go slower when Lt or RT is held down
         }
         else {
             return rotation.get(true);

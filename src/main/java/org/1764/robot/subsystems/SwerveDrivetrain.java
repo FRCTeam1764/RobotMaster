@@ -201,7 +201,6 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
         talon.configPeakOutputForward(0.7, 30);
         talon.configPeakOutputReverse(-0.7, 30);
         talon.configOpenloopRamp(0.75);
-        talon.configNeutralDeadband(0.2);
     }
 
     private void updateOdometry(double dt) {

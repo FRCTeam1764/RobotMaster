@@ -16,7 +16,7 @@ public class SwerveRobotContainer {
     private final XboxController primaryController = new XboxController(Constants.PRIMARY_CONTROLLER_PORT);
     private final SwerveDrivetrain drivetrainSubsystem;
 
-    public RobotState robotState = new RobotState();
+    private RobotState robotState = new RobotState();
 
     public SwerveRobotContainer() {
         primaryController.getLeftXAxis().setInverted(true);
@@ -87,5 +87,9 @@ public class SwerveRobotContainer {
 
     public XboxController getPrimaryController() {
         return primaryController;
+    }
+
+    public RobotState getRobotState() {
+        return robotState;
     }
 }
