@@ -44,7 +44,11 @@ public class SwerveDriveCommand extends CommandBase {
     private double getForward() {
         boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
         if (robotIsLocked) {
+<<<<<<< Updated upstream:src/main/java/org/1764/robot/commands/SwerveDriveCommand.java
             return forward.get(true)/2; //intent to go slower when Lt or RT is held down
+=======
+            return forward.get(true)/2;
+>>>>>>> Stashed changes:src/main/java/org/frcteam2910/mk3/commands/DriveCommand.java
         }
         else {
             return forward.get(true);
@@ -54,7 +58,11 @@ public class SwerveDriveCommand extends CommandBase {
     private double getStrafe() {
         boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
         if (robotIsLocked) {
+<<<<<<< Updated upstream:src/main/java/org/1764/robot/commands/SwerveDriveCommand.java
             return strafe.get(true)/2; //intent to go slower when Lt or RT is held down
+=======
+            return strafe.get(true)/2;
+>>>>>>> Stashed changes:src/main/java/org/frcteam2910/mk3/commands/DriveCommand.java
         }
         else {
             return strafe.get(true);
@@ -69,9 +77,7 @@ public class SwerveDriveCommand extends CommandBase {
         double targetAngle = drivetrainState.getTargetTurningAngle();
 
         if (limelightHasTarget && robotIsLocked) {
-            drivetrainState.setManeuver("");
-            drivetrainState.setTargetTurningAngle(0.0);
-            double cameraRotationConstant = -0.28;
+            double cameraRotationConstant = -0.035;
             return limelightXOffset * cameraRotationConstant; // could use smoothing/tuning
         }
         else if (Math.abs(rotation.get(true)) > 0.05) { // override of critical angles
@@ -83,11 +89,19 @@ public class SwerveDriveCommand extends CommandBase {
             double angleDiff = targetAngle - currentAngle;
             String maneuver = drivetrainState.getManeuver();
 
+<<<<<<< Updated upstream:src/main/java/org/1764/robot/commands/SwerveDriveCommand.java
             if (maneuver.equals("barrelroll") && Math.abs(angleDiff) > 4.0) {
                 return 1;
             }
             else if (maneuver.equals("reversebarrelroll") && Math.abs(angleDiff) > 4.0) {
                 return -1;
+=======
+            if ((maneuver == "barrelroll") && Math.abs(angleDiff) > 4.0) {
+                return -1;
+            }
+            else if (maneuver == "reversebarrelroll" && Math.abs(angleDiff) > 4.0) {
+                return 1;
+>>>>>>> Stashed changes:src/main/java/org/frcteam2910/mk3/commands/DriveCommand.java
             }
             else {
                 drivetrainState.setManeuver("");

@@ -14,8 +14,8 @@ import java.io.IOException;
 
 // It is probably preferred that paths are generated using Pathviewer
 // Formula for creating a path in code is as follows:
-// -new SimplePathBuilder().lineTo().build() or
-// -new SplinePathBuilder().hemite().build()
+// -new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO).lineTo().build() or
+// -new SplinePathBuilder(Vector2.ZERO, Rotation2.ZERO, Rotation2.ZERO).hermite().build()
 // lineTo() and hermite() can be chained for additional segments
 // vectors for some reason read (y, x) instead of (x, y)
 

@@ -1,11 +1,16 @@
 package org.frcteam1764.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
+import org.frcteam1764.robot.commands.SampleFollowPathCommand;
 import org.frcteam1764.robot.commands.SwerveDriveCommand;
 import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
+import org.frcteam2910.common.control.Path;
+import org.frcteam2910.common.control.SplinePathBuilder;
 import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.math.Rotation2;
+import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.input.Axis;
+import org.frcteam2910.common.robot.input.DPadButton;
 import org.frcteam2910.common.robot.input.XboxController;
 import org.frcteam1764.robot.common.Utilities;
 import org.frcteam1764.robot.constants.ControllerConstants;
@@ -13,7 +18,7 @@ import org.frcteam1764.robot.state.DrivetrainState;
 import org.frcteam1764.robot.state.RobotState;
 
 public class SwerveRobotContainer {
-    private final XboxController primaryController = new XboxController(Constants.PRIMARY_CONTROLLER_PORT);
+    private final XboxController primaryController = new XboxController(ControllerConstants.PRIMARY_CONTROLLER_PORT);
     private final SwerveDrivetrain drivetrainSubsystem;
 
     private RobotState robotState = new RobotState();
@@ -32,7 +37,9 @@ public class SwerveRobotContainer {
     }
 
     private void getTrajectories() {
-        Trajectory sampleTrajectory = Utilities.convertPathToTrajectory(Utilities.getPath("TestPath.path"), 30.0, 60.0);
+        // Trajectory sampleTrajectory = Utilities.convertPathToTrajectory(Utilities.getPath("TestPath.path"), 30.0, 60.0); need to figure out how to push files to the rio
+        Path samplePath = new SplinePathBuilder(Vector2.ZERO, Rotation2.ZERO, Rotation2.ZERO).hermite(new Vector2(100.0, 100.0), Rotation2.fromDegrees(90.0), Rotation2.ZERO).build();
+        Trajectory sampleTrajectory = Utilities.convertPathToTrajectory(samplePath, 30.0, 60.0);
         robotState.trajectories = new Trajectory[]{
             sampleTrajectory
         };
@@ -45,13 +52,14 @@ public class SwerveRobotContainer {
         primaryController.getStartButton().whenPressed(
                 drivetrainSubsystem::resetWheelAngles
         );
-        primaryController.getAButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_A));
+        //primaryController.getAButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_A));
         primaryController.getBButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_B));
         primaryController.getXButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_X));
         primaryController.getYButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_Y));
         primaryController.getLeftBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("barrelroll"));
         primaryController.getRightBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("reversebarrelroll"));
         primaryController.getRightJoystickButton().whenPressed(() -> robotState.drivetrain.setManeuver("spin"));
+        primaryController.getAButton().whenPressed(() -> new SampleFollowPathCommand(drivetrainSubsystem, robotState.trajectories[0]));
     }
 
     private Axis getDriveForwardAxis() {
