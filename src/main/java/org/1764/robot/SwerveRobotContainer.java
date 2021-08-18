@@ -33,16 +33,16 @@ public class SwerveRobotContainer {
 
         configurePilotButtonBindings();
         configureCoPilotButtonBindings();
-        getTrajectories();
+        //getTrajectories();
     }
 
     private void getTrajectories() {
         // Trajectory sampleTrajectory = Utilities.convertPathToTrajectory(Utilities.getPath("TestPath.path"), 30.0, 60.0); need to figure out how to push files to the rio
-        Path samplePath = new SplinePathBuilder(Vector2.ZERO, Rotation2.ZERO, Rotation2.ZERO).hermite(new Vector2(100.0, 100.0), Rotation2.fromDegrees(90.0), Rotation2.ZERO).build();
-        Trajectory sampleTrajectory = Utilities.convertPathToTrajectory(samplePath, 30.0, 60.0);
-        robotState.trajectories = new Trajectory[]{
-            sampleTrajectory
-        };
+        // Path samplePath = new SplinePathBuilder(Vector2.ZERO, Rotation2.ZERO, Rotation2.ZERO).hermite(new Vector2(100.0, 100.0), Rotation2.fromDegrees(90.0), Rotation2.ZERO).build();
+        // Trajectory sampleTrajectory = Utilities.convertPathToTrajectory(samplePath, 30.0, 60.0);
+        // robotState.trajectories = new Trajectory[]{
+        //     sampleTrajectory
+        // };
     }
 
     private void configurePilotButtonBindings() {
@@ -52,14 +52,14 @@ public class SwerveRobotContainer {
         primaryController.getStartButton().whenPressed(
                 drivetrainSubsystem::resetWheelAngles
         );
-        //primaryController.getAButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_A));
+        primaryController.getAButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_A));
         primaryController.getBButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_B));
         primaryController.getXButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_X));
         primaryController.getYButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_Y));
         primaryController.getLeftBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("barrelroll"));
         primaryController.getRightBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("reversebarrelroll"));
         primaryController.getRightJoystickButton().whenPressed(() -> robotState.drivetrain.setManeuver("spin"));
-        primaryController.getAButton().whenPressed(() -> new SampleFollowPathCommand(drivetrainSubsystem, robotState.trajectories[0]));
+        //primaryController.getAButton().whenPressed(() -> new SampleFollowPathCommand(drivetrainSubsystem, robotState.trajectories[0]));
     }
 
     private Axis getDriveForwardAxis() {
