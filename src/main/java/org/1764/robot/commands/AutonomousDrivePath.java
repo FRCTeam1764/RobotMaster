@@ -46,10 +46,10 @@ public class AutonomousDrivePath extends CommandBase {
       Path path = new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
                 // When using hermite splines we must specify a position and a heading. We can also optionally specify
                 // a rotation.
-                .lineTo(new Vector2(200.0, 0.0), Rotation2.fromRadians(90))
-                .lineTo(new Vector2(200.0, -200.0), Rotation2.fromRadians(180))
-                .lineTo(new Vector2(0.0, -200.0), Rotation2.fromRadians(-90))
-                .lineTo(Vector2.ZERO, Rotation2.ZERO)
+                .lineTo(new Vector2(200.0, 0.0))
+                .lineTo(new Vector2(200.0, -200.0))
+                .lineTo(new Vector2(0.0, -200.0))
+                .lineTo(Vector2.ZERO)
                 // Once we've added all the splines we can then build the path.
                 .build();
 
