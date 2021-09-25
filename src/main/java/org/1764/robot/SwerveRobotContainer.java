@@ -1,11 +1,11 @@
 package org.frcteam1764.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
-import org.frcteam1764.robot.commands.AutonomousDrivePath;
+import org.frcteam1764.robot.commands.SampleFollowPathCommand;
 import org.frcteam1764.robot.commands.SwerveDriveCommand;
 import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
 import org.frcteam2910.common.control.Path;
-import org.frcteam2910.common.control.SplinePathBuilder;
+import org.frcteam2910.common.control.SimplePathBuilder;
 import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.math.Vector2;
@@ -31,18 +31,21 @@ public class SwerveRobotContainer {
 
         CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new SwerveDriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis(), this.robotState));
 
+        getTrajectories();
         configurePilotButtonBindings();
         configureCoPilotButtonBindings();
-        //getTrajectories();
     }
 
     private void getTrajectories() {
-        // Trajectory sampleTrajectory = Utilities.convertPathToTrajectory(Utilities.getPath("TestPath.path"), 30.0, 60.0); need to figure out how to push files to the rio
-        // Path samplePath = new SplinePathBuilder(Vector2.ZERO, Rotation2.ZERO, Rotation2.ZERO).hermite(new Vector2(100.0, 100.0), Rotation2.fromDegrees(90.0), Rotation2.ZERO).build();
-        // Trajectory sampleTrajectory = Utilities.convertPathToTrajectory(samplePath, 30.0, 60.0);
-        // robotState.trajectories = new Trajectory[]{
-        //     sampleTrajectory
-        // };
+        Path samplePath = new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
+            .lineTo(new Vector2(100.0, 0.0))
+            .lineTo(new Vector2(100.0, -100.0))
+            .lineTo(new Vector2(0.0, -100.0))
+            .lineTo(Vector2.ZERO)
+            .build();
+        robotState.trajectories = new Trajectory[]{
+            Utilities.convertPathToTrajectory(samplePath, 30.0, 60.0)
+        };
     }
 
     private void configurePilotButtonBindings() {
@@ -59,10 +62,7 @@ public class SwerveRobotContainer {
         primaryController.getLeftBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("barrelroll"));
         primaryController.getRightBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("reversebarrelroll"));
         primaryController.getRightJoystickButton().whenPressed(() -> robotState.drivetrain.setManeuver("spin"));
-        //primaryController.getAButton().whenPressed(() -> new SampleFollowPathCommand(drivetrainSubsystem, robotState.trajectories[0]));
-        primaryController.getXButton().whenPressed(
-            new AutonomousDrivePath(drivetrainSubsystem, robotState.drivetrain)
-        );
+        primaryController.getXButton().whenPressed(new SampleFollowPathCommand(drivetrainSubsystem, robotState.trajectories[0]));
     }
 
     private Axis getDriveForwardAxis() {

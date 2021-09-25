@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
 import org.frcteam2910.common.control.Trajectory;
+import org.frcteam2910.common.math.RigidTransform2;
 import org.frcteam2910.common.math.Vector2;
 
 /**
@@ -31,6 +32,7 @@ public class SampleFollowPathCommand extends CommandBase {
     /**
      * can start and stop subsystems here
      */
+    drivetrain.resetPose(RigidTransform2.ZERO);
     drivetrain.resetWheelAngles();
     if (trajectory != null) {
       drivetrain.getFollower().follow(trajectory);
