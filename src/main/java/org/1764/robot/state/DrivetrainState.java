@@ -55,12 +55,14 @@ public class DrivetrainState  {
 	};
 
 	public Gyroscope getGyro() {
-		return gyro;
+        synchronized (this.sensorLock) {
+			return gyro;
+		}
 	};
 
 	public Rotation2 getGyroAngle () {
 		Rotation2 angle;
-        synchronized (sensorLock) {
+        synchronized (this.sensorLock) {
             angle = gyro.getAngle();
 		}
 		return angle;
@@ -68,7 +70,7 @@ public class DrivetrainState  {
 
 	public double getGyroRate () {
         double rotationalVelocity;
-        synchronized (sensorLock) {
+        synchronized (this.sensorLock) {
             rotationalVelocity = gyro.getRate();
 		}
 		return rotationalVelocity;
@@ -95,7 +97,10 @@ public class DrivetrainState  {
 	};
 
 	public void setManeuver(String maneuver) {
-		double currentAngle = gyro.getAngle().toDegrees();
+		double currentAngle;
+        synchronized (this.sensorLock) {
+            currentAngle = gyro.getAngle().toDegrees();
+		}
 		if (maneuver.equals("reversebarrelroll")) {
 			double newAngle = currentAngle - 5.0;
 			setTargetTurningAngle(newAngle < 0 ? newAngle + 360 : newAngle);
