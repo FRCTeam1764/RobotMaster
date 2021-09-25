@@ -26,6 +26,8 @@ public class DrivetrainState  {
     /**
      * This should be the only instance of the drivetrain gyro
      */
+	private final Object sensorLock = new Object();
+    @GuardedBy("sensorLock")
     private Gyroscope gyro;
 
     /**
@@ -38,7 +40,9 @@ public class DrivetrainState  {
 		this.rightTriggerAxis = rightTriggerAxis;
 		this.targetTurningAngle = 0.0;
 		this.gyro = new NavX(SPI.Port.kMXP);
-		this.gyro.setInverted(true);
+        synchronized (sensorLock) {
+            gyro.setInverted(true);
+        }
 		this.maneuver = "";
 	}
 
@@ -54,10 +58,28 @@ public class DrivetrainState  {
 		return gyro;
 	};
 
+	public Rotation2 getGyroAngle () {
+		Rotation2 angle;
+        synchronized (sensorLock) {
+            angle = gyro.getAngle();
+		}
+		return angle;
+	}
+
+	public double getGyroRate () {
+        double rotationalVelocity;
+        synchronized (sensorLock) {
+            rotationalVelocity = gyro.getRate();
+		}
+		return rotationalVelocity;
+	}
+
     public void resetGyroAngle(Rotation2 angle) {
-		gyro.setAdjustmentAngle(
+        synchronized (sensorLock) {
+			gyro.setAdjustmentAngle(
 				gyro.getUnadjustedAngle().rotateBy(angle.inverse())
-		);
+			);
+		}
 	}
 
 	public double getTargetTurningAngle() {

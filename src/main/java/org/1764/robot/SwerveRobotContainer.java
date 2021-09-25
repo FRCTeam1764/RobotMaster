@@ -1,7 +1,7 @@
 package org.frcteam1764.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
-import org.frcteam1764.robot.commands.SampleFollowPathCommand;
+import org.frcteam1764.robot.commands.AutonomousDrivePath;
 import org.frcteam1764.robot.commands.SwerveDriveCommand;
 import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
 import org.frcteam2910.common.control.Path;
@@ -54,12 +54,15 @@ public class SwerveRobotContainer {
         );
         primaryController.getAButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_A));
         primaryController.getBButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_B));
-        primaryController.getXButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_X));
+        // primaryController.getXButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_X));
         primaryController.getYButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_Y));
         primaryController.getLeftBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("barrelroll"));
         primaryController.getRightBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("reversebarrelroll"));
         primaryController.getRightJoystickButton().whenPressed(() -> robotState.drivetrain.setManeuver("spin"));
         //primaryController.getAButton().whenPressed(() -> new SampleFollowPathCommand(drivetrainSubsystem, robotState.trajectories[0]));
+        primaryController.getXButton().whenPressed(
+            new AutonomousDrivePath(drivetrainSubsystem, robotState.drivetrain)
+        );
     }
 
     private Axis getDriveForwardAxis() {

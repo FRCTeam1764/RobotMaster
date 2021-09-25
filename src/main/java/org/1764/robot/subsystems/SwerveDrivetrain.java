@@ -43,9 +43,7 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
             new Vector2(-TRACKWIDTH / 2.0, WHEELBASE / 2.0),        // Back left
             new Vector2(-TRACKWIDTH / 2.0, -WHEELBASE / 2.0)        // Back right
     );
-
-    private final Object sensorLock = new Object();
-    @GuardedBy("sensorLock")
+    
     private DrivetrainState drivetrainState;
 
     private final Object kinematicsLock = new Object();
@@ -212,10 +210,7 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
             moduleVelocities[i] = Vector2.fromAngle(Rotation2.fromRadians(module.getCurrentAngle())).scale(module.getCurrentVelocity());
         }
 
-        Rotation2 angle;
-        synchronized (sensorLock) {
-            angle = drivetrainState.getGyro().getAngle();
-        }
+        Rotation2 angle = drivetrainState.getGyroAngle();
 
         synchronized (kinematicsLock) {
             this.pose = swerveOdometry.update(angle, dt, moduleVelocities);
@@ -251,10 +246,7 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
     public void update(double time, double dt) {
         updateOdometry(dt);
 
-        double rotationalVelocity;
-        synchronized (sensorLock) {
-            rotationalVelocity = drivetrainState.getGyro().getRate();
-        }
+        double rotationalVelocity = drivetrainState.getGyroRate();
 
         Optional<HolonomicDriveSignal> optSignal = follower.update(getPose(), getPose().translation,
             rotationalVelocity, time, dt);
