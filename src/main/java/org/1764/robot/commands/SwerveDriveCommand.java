@@ -70,7 +70,6 @@ public class SwerveDriveCommand extends CommandBase {
 
         if (limelightHasTarget && robotIsLocked) {
             drivetrainState.setManeuver("");
-            drivetrainState.setTargetTurningAngle(0.0);
             double cameraRotationConstant = -0.005;
             return limelightXOffset * cameraRotationConstant; // could use smoothing/tuning
         }
@@ -84,15 +83,15 @@ public class SwerveDriveCommand extends CommandBase {
             double angleDiff = targetAngle - currentAngle;
             String maneuver = drivetrainState.getManeuver();
 
-            if (maneuver.equals("barrelroll") && Math.abs(angleDiff) > 10.0) {
+            if (maneuver.equals("barrelroll") && Math.abs(angleDiff) > 4.0) {
                 return -1;
             }
-            else if (maneuver.equals("reversebarrelroll") && Math.abs(angleDiff) > 10.0) {
+            else if (maneuver.equals("reversebarrelroll") && Math.abs(angleDiff) > 4.0) {
                 return 1;
             }
             else {
+                System.out.println(maneuver);
                 drivetrainState.setManeuver("");
-                drivetrainState.setTargetTurningAngle(0.0);
                 return rotation.get(true);
             }
             
@@ -111,18 +110,15 @@ public class SwerveDriveCommand extends CommandBase {
             }
             else{
                 drivetrainState.setManeuver("");
-                drivetrainState.setTargetTurningAngle(0.0);
                 return rotation.get(true);
             }
         }
         else if (robotIsLocked) {
             drivetrainState.setManeuver("");
-            drivetrainState.setTargetTurningAngle(0.0);
             return rotation.get(true)/2; //intent to go slower when Lt or RT is held down
         }
         else {
             drivetrainState.setManeuver("");
-            drivetrainState.setTargetTurningAngle(0.0);
             return rotation.get(true);
         }
     }

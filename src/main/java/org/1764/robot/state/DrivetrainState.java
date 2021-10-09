@@ -61,27 +61,21 @@ public class DrivetrainState  {
 	};
 
 	public Rotation2 getGyroAngle () {
-		Rotation2 angle;
-        synchronized (this.sensorLock) {
-            angle = gyro.getAngle();
-		}
-		return angle;
+		return getGyro().getAngle();
+	}
+
+	public double getGyroAngleDegrees () {
+    	return getGyro().getAngle().toDegrees();
 	}
 
 	public double getGyroRate () {
-        double rotationalVelocity;
-        synchronized (this.sensorLock) {
-            rotationalVelocity = gyro.getRate();
-		}
-		return rotationalVelocity;
+		return getGyro().getRate();
 	}
 
     public void resetGyroAngle(Rotation2 angle) {
-        synchronized (sensorLock) {
-			gyro.setAdjustmentAngle(
-				gyro.getUnadjustedAngle().rotateBy(angle.inverse())
-			);
-		}
+		getGyro().setAdjustmentAngle(
+			getGyro().getUnadjustedAngle().rotateBy(angle.inverse())
+		);
 	}
 
 	public double getTargetTurningAngle() {
@@ -97,10 +91,7 @@ public class DrivetrainState  {
 	};
 
 	public void setManeuver(String maneuver) {
-		double currentAngle;
-        synchronized (this.sensorLock) {
-            currentAngle = gyro.getAngle().toDegrees();
-		}
+		double currentAngle = getGyroAngleDegrees();
 		if (maneuver.equals("reversebarrelroll")) {
 			double newAngle = currentAngle - 5.0;
 			setTargetTurningAngle(newAngle < 0 ? newAngle + 360 : newAngle);
@@ -114,6 +105,10 @@ public class DrivetrainState  {
 		else if (maneuver.equals("spin")) {
 			double newAngle = currentAngle + 180.0;
 			setTargetTurningAngle(newAngle > 360 ? newAngle - 360 : newAngle);
+		}
+		else if (maneuver.equals("")) {
+			setTargetTurningAngle(0.0);
+			this.maneuver = "";
 		}
 	};
 }
