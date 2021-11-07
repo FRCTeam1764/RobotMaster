@@ -16,11 +16,13 @@ public class Robot extends TimedRobot {
                 robotContainer.getRobotSubsystems().drivetrain
         );
         updateManager.startLoop(5.0e-3);
+        Dashboard.configSmartDashboard(robotContainer.getRobotState());
     }
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        Dashboard.updateSmartDashboard(robotContainer.getRobotState());
     }
 
     @Override
