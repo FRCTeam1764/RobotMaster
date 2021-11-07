@@ -14,11 +14,11 @@ import org.frcteam2910.common.math.Vector2;
  * 
  */
 
-public class SampleFollowPathCommand extends CommandBase {
+public class FollowPathCommand extends CommandBase {
   private SwerveDrivetrain drivetrain;
   private Trajectory trajectory;
   
-  public SampleFollowPathCommand(SwerveDrivetrain drivetrain, Trajectory trajectory) {
+  public FollowPathCommand(SwerveDrivetrain drivetrain, Trajectory trajectory) {
     this.drivetrain = drivetrain;
     this.trajectory = trajectory;
 

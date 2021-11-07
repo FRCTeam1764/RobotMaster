@@ -3,6 +3,7 @@ package org.frcteam1764.robot;
 import edu.wpi.first.wpilibj2.command.*;
 import org.frcteam1764.robot.commands.SampleFollowPathCommand;
 import org.frcteam1764.robot.commands.SwerveDriveCommand;
+import org.frcteam1764.robot.subsystems.RobotSubsystems;
 import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
 import org.frcteam2910.common.control.Path;
 import org.frcteam2910.common.control.SimplePathBuilder;
@@ -20,9 +21,8 @@ import org.frcteam1764.robot.state.RobotState;
 public class SwerveRobotContainer {
     private final XboxController primaryController = new XboxController(ControllerConstants.PRIMARY_CONTROLLER_PORT);
     private final XboxController secondaryController = new XboxController(ControllerConstants.SECONDARY_CONTROLLER_PORT);
-    private RobotSubsystems robotSubsystems = new RobotSubsystems();
-
     private RobotState robotState = new RobotState();
+    private RobotSubsystems robotSubsystems = new RobotSubsystems();
 
     public SwerveRobotContainer() {
         initRobotState();
@@ -66,7 +66,7 @@ public class SwerveRobotContainer {
                 () -> robotState.drivetrain.resetGyroAngle(Rotation2.ZERO)
         );
         primaryController.getStartButton().whenPressed(
-                drivetrainSubsystem::resetWheelAngles
+                robotSubsystems.drivetrain::resetWheelAngles
         );
         primaryController.getAButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_A));
         primaryController.getBButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_B));
@@ -75,7 +75,6 @@ public class SwerveRobotContainer {
         primaryController.getLeftBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("barrelroll"));
         primaryController.getRightBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("reversebarrelroll"));
         primaryController.getRightJoystickButton().whenPressed(() -> robotState.drivetrain.setManeuver("spin"));
-        // primaryController.getXButton().whenPressed(new SampleFollowPathCommand(drivetrainSubsystem, robotState.trajectories[0]));
     }
 
     private void configureCoPilotButtonBindings() {
