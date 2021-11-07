@@ -19,21 +19,32 @@ import org.frcteam1764.robot.state.RobotState;
 
 public class SwerveRobotContainer {
     private final XboxController primaryController = new XboxController(ControllerConstants.PRIMARY_CONTROLLER_PORT);
-    private final SwerveDrivetrain drivetrainSubsystem;
+    private final XboxController secondaryController = new XboxController(ControllerConstants.SECONDARY_CONTROLLER_PORT);
+    private RobotSubsystems robotSubsystems = new RobotSubsystems();
 
     private RobotState robotState = new RobotState();
 
     public SwerveRobotContainer() {
-        primaryController.getLeftXAxis().setInverted(true);
-        primaryController.getRightXAxis().setInverted(true);
-        robotState.drivetrain = new DrivetrainState(getLeftTriggerAxis(), getRightTriggerAxis());
-        drivetrainSubsystem = new SwerveDrivetrain(robotState.drivetrain);
-
-        CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new SwerveDriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis(), this.robotState));
-
+        initRobotState();
+        initRobotSubsystems();
+        configureSmartDashboard();
         getTrajectories();
         configurePilotButtonBindings();
         configureCoPilotButtonBindings();
+
+        CommandScheduler.getInstance().setDefaultCommand(robotSubsystems.drivetrain, new SwerveDriveCommand(robotSubsystems.drivetrain, getPilotDriveForwardAxis(), getPilotDriveStrafeAxis(), getPilotDriveRotationAxis(), this.robotState));
+    }
+
+    private void initRobotState() {
+        robotState.drivetrain = new DrivetrainState(getPilotLeftTriggerAxis(), getPilotRightTriggerAxis());
+    }
+    private void initRobotSubsystems() {
+        robotSubsystems.drivetrain = new SwerveDrivetrain(robotState.drivetrain);
+
+    }
+
+    private void configureSmartDashboard() {
+
     }
 
     private void getTrajectories() {
@@ -49,6 +60,8 @@ public class SwerveRobotContainer {
     }
 
     private void configurePilotButtonBindings() {
+        primaryController.getLeftXAxis().setInverted(true);
+        primaryController.getRightXAxis().setInverted(true);
         primaryController.getBackButton().whenPressed(
                 () -> robotState.drivetrain.resetGyroAngle(Rotation2.ZERO)
         );
@@ -65,42 +78,42 @@ public class SwerveRobotContainer {
         // primaryController.getXButton().whenPressed(new SampleFollowPathCommand(drivetrainSubsystem, robotState.trajectories[0]));
     }
 
-    private Axis getDriveForwardAxis() {
-        return primaryController.getLeftYAxis();
-    }
-
-    private Axis getDriveStrafeAxis() {
-        return primaryController.getLeftXAxis();
-    }
-
-    private Axis getDriveRotationAxis() {
-        return primaryController.getRightXAxis();
-    }
-
-    private Axis getLeftTriggerAxis() {
-        return primaryController.getLeftTriggerAxis();
-    }
-
-    private Axis getRightTriggerAxis() {
-        return primaryController.getRightTriggerAxis();
-    }
-
     private void configureCoPilotButtonBindings() {
     }
 
-    /**
-     * Get copilot axis inputs here
-     */
+    private Axis getPilotDriveForwardAxis() {
+        return primaryController.getLeftYAxis();
+    }
 
-    public SwerveDrivetrain getDrivetrainSubsystem() {
-        return drivetrainSubsystem;
+    private Axis getPilotDriveStrafeAxis() {
+        return primaryController.getLeftXAxis();
+    }
+
+    private Axis getPilotDriveRotationAxis() {
+        return primaryController.getRightXAxis();
+    }
+
+    private Axis getPilotLeftTriggerAxis() {
+        return primaryController.getLeftTriggerAxis();
+    }
+
+    private Axis getPilotRightTriggerAxis() {
+        return primaryController.getRightTriggerAxis();
     }
 
     public XboxController getPrimaryController() {
         return primaryController;
     }
 
+    public XboxController getSecondaryController() {
+        return secondaryController;
+    }
+
     public RobotState getRobotState() {
         return robotState;
+    }
+
+    public RobotSubsystems getRobotSubsystems() {
+        return robotSubsystems;
     }
 }
