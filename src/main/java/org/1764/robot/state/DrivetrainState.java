@@ -34,6 +34,11 @@ public class DrivetrainState  {
      * Different Maneuvers
      */
     private String maneuver;
+
+    /**
+     * Drive speed defaulting to normal
+     */
+    private boolean driveSpeedFast;
 	
 	public DrivetrainState(Axis leftTriggerAxis, Axis rightTriggerAxis) {
 		this.leftTriggerAxis = leftTriggerAxis;
@@ -44,6 +49,7 @@ public class DrivetrainState  {
             gyro.setInverted(true);
         }
 		this.maneuver = "";
+		this.driveSpeedFast = false;
 	}
 
 	public boolean isRotationLocked() {
@@ -111,4 +117,12 @@ public class DrivetrainState  {
 			this.maneuver = "";
 		}
 	};
+
+	public void toggleDriveSpeed() {
+		driveSpeedFast = !driveSpeedFast;
+	}
+
+	public double getDriveSpeed() {
+		return driveSpeedFast ? 1.0 : 0.75;
+	}
 }

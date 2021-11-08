@@ -209,9 +209,8 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
     }
 
     private void configTalon(TalonFX talon) {
-        talon.configPeakOutputForward(0.5, 30);
-        talon.configPeakOutputReverse(-0.5, 30);
-        talon.configOpenloopRamp(0.75);
+        setTalonMaxOutput(talon, 0.75);
+        talon.configOpenloopRamp(0.5);
     }
 
     private void updateOdometry(double dt) {
@@ -305,5 +304,17 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
         frontRightDriveMotor.setNeutralMode(mode);
         backLeftDriveMotor.setNeutralMode(mode);
         backRightDriveMotor.setNeutralMode(mode);
+    }
+
+    private void setTalonMaxOutput(TalonFX talon, double maxOutput) {
+        talon.configPeakOutputForward(maxOutput, 30);
+        talon.configPeakOutputReverse(-maxOutput, 30);
+    }
+
+    public void setDrivetrainMaxOutput(double maxOutput) {
+        setTalonMaxOutput(frontLeftDriveMotor, maxOutput);
+        setTalonMaxOutput(frontRightDriveMotor, maxOutput);
+        setTalonMaxOutput(backLeftDriveMotor, maxOutput);
+        setTalonMaxOutput(backRightDriveMotor, maxOutput);
     }
 }

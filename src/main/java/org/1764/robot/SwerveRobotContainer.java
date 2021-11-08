@@ -49,10 +49,13 @@ public class SwerveRobotContainer {
         primaryController.getLeftXAxis().setInverted(true);
         primaryController.getRightXAxis().setInverted(true);
         primaryController.getBackButton().whenPressed(
-                () -> robotState.drivetrain.resetGyroAngle(Rotation2.ZERO)
+            () -> robotState.drivetrain.resetGyroAngle(Rotation2.ZERO)
         );
         primaryController.getStartButton().whenPressed(
-                robotSubsystems.drivetrain::resetWheelAngles
+            () -> {
+                robotState.drivetrain.toggleDriveSpeed();
+                robotSubsystems.drivetrain.setDrivetrainMaxOutput(robotState.drivetrain.getDriveSpeed());
+            }
         );
         primaryController.getAButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_A));
         primaryController.getBButton().whenPressed(() -> robotState.drivetrain.setTargetTurningAngle(ControllerConstants.CRITICAL_ANGLE_B));
