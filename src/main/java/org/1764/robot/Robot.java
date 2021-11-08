@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.frcteam1764.robot.commands.AutoGroupCommand;
+import org.frcteam2910.common.robot.drivers.Limelight.LedMode;
 import org.frcteam2910.common.robot.UpdateManager;
 
 public class Robot extends TimedRobot {
@@ -18,6 +19,7 @@ public class Robot extends TimedRobot {
         );
         updateManager.startLoop(5.0e-3);
         Dashboard.configSmartDashboard(robotContainer.getRobotState());
+        robotContainer.getRobotState().limelight.setLedMode(LedMode.OFF);
     }
 
     @Override

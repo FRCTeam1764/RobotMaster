@@ -7,6 +7,7 @@ import org.frcteam1764.robot.state.RobotState;
 import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
 import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.drivers.Limelight;
+import org.frcteam2910.common.robot.drivers.Limelight.CamMode;
 import org.frcteam2910.common.robot.drivers.Limelight.LedMode;
 import org.frcteam2910.common.robot.input.Axis;
 import edu.wpi.first.networktables.NetworkTable;
@@ -66,6 +67,7 @@ public class SwerveDriveCommand extends CommandBase {
         boolean limelightHasTarget = limelight.hasTarget();
         boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
         limelight.setLedMode(robotIsLocked ? LedMode.ON : LedMode.OFF);
+        limelight.setCamMode(robotIsLocked ? CamMode.VISION : CamMode.DRIVER);
         double targetAngle = drivetrainState.getTargetTurningAngle();
 
         if (limelightHasTarget && robotIsLocked) {
