@@ -34,7 +34,7 @@ public class SwerveDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drivetrainSubsystem.drive(new Vector2(applyDeadzone(getForward(), 0.1), applyDeadzone(getStrafe(), 0.1)), applyDeadzone(getRotation(), 0.1), true);
+        drivetrainSubsystem.drive(new Vector2(applyDeadzone(getForward(), 0.1), applyDeadzone(getStrafe(), 0.1)), applyDeadzone(getRotation(), 0.1), drivetrainState.getIsFieldOriented());
     }
 
     private  double applyDeadzone(double input, double deadzone) {

@@ -6,7 +6,7 @@ import org.frcteam1764.robot.subsystems.RobotSubsystems;
 import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Axis;
-import org.frcteam2910.common.robot.input.DPadButton;
+import org.frcteam2910.common.robot.input.DPadButton.Direction;
 import org.frcteam2910.common.robot.input.XboxController;
 import org.frcteam1764.robot.constants.ControllerConstants;
 import org.frcteam1764.robot.state.DrivetrainState;
@@ -64,6 +64,7 @@ public class SwerveRobotContainer {
         primaryController.getLeftBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("barrelroll"));
         primaryController.getRightBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("reversebarrelroll"));
         primaryController.getRightJoystickButton().whenPressed(() -> robotState.drivetrain.setManeuver("spin"));
+        primaryController.getDPadButton(Direction.DOWN).whenPressed(() -> robotState.drivetrain.toggleIsFieldOriented());
     }
 
     private void configureCoPilotButtonBindings() {

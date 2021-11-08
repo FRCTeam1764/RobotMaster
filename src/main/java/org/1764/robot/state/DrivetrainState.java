@@ -38,7 +38,12 @@ public class DrivetrainState  {
     /**
      * Drive speed defaulting to normal
      */
-    private boolean driveSpeedFast;
+	private boolean driveSpeedFast;
+
+    /**
+     * Drive speed defaulting to normal
+     */
+	private boolean isFieldOriented;
 	
 	public DrivetrainState(Axis leftTriggerAxis, Axis rightTriggerAxis) {
 		this.leftTriggerAxis = leftTriggerAxis;
@@ -50,6 +55,7 @@ public class DrivetrainState  {
         }
 		this.maneuver = "";
 		this.driveSpeedFast = false;
+		this.isFieldOriented = true;
 	}
 
 	public boolean isRotationLocked() {
@@ -124,5 +130,13 @@ public class DrivetrainState  {
 
 	public double getDriveSpeed() {
 		return driveSpeedFast ? 1.0 : 0.75;
+	}
+
+	public void toggleIsFieldOriented() {
+		isFieldOriented = !isFieldOriented;
+	}
+
+	public boolean getIsFieldOriented() {
+		return isFieldOriented;
 	}
 }
