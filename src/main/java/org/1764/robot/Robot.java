@@ -1,5 +1,6 @@
 package org.frcteam1764.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.frcteam1764.robot.commands.AutoGroupCommand;
@@ -27,6 +28,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        robotContainer.getRobotSubsystems().setMotorModes(NeutralMode.Brake);
         new AutoGroupCommand(robotContainer.getRobotState(), robotContainer.getRobotSubsystems());
     }
 
@@ -44,5 +46,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
+        robotContainer.getRobotSubsystems().setMotorModes(NeutralMode.Brake);
+    }
+
+    @Override
+    public void disabledInit() {
+        robotContainer.getRobotSubsystems().setMotorModes(NeutralMode.Coast);
     }
 }

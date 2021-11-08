@@ -1,6 +1,7 @@
 package org.frcteam1764.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.google.errorprone.annotations.concurrent.GuardedBy;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -36,6 +37,16 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
     public static final double DRIVE_GEAR_RATIO = 6.86;
 
     private final Mk3SwerveModule[] modules;
+
+    private TalonFX frontLeftSteeringMotor;
+    private TalonFX frontRightSteeringMotor;
+    private TalonFX backLeftSteeringMotor;
+    private TalonFX backRightSteeringMotor;
+    
+    private TalonFX frontLeftDriveMotor;
+    private TalonFX frontRightDriveMotor;
+    private TalonFX backLeftDriveMotor;
+    private TalonFX backRightDriveMotor;
 
     private final SwerveKinematics swerveKinematics = new SwerveKinematics(
             new Vector2(TRACKWIDTH / 2.0, WHEELBASE / 2.0),         // Front left
@@ -78,13 +89,15 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
     public SwerveDrivetrain(DrivetrainState drivetrainState) {
         this.drivetrainState = drivetrainState;
 
-        TalonFX frontLeftSteeringMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR);
-        TalonFX backLeftSteeringMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR);
+        frontLeftSteeringMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_FRONT_LEFT_ANGLE_MOTOR);
+        frontRightSteeringMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR);
+        backLeftSteeringMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_BACK_LEFT_ANGLE_MOTOR);
+        backRightSteeringMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR);
 
-        TalonFX frontLeftDriveMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR);
-        TalonFX frontRightDriveMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR);
-        TalonFX backLeftDriveMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR);
-        TalonFX backRightDriveMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR);
+        frontLeftDriveMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR);
+        frontRightDriveMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR);
+        backLeftDriveMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR);
+        backRightDriveMotor = new TalonFX(DrivetrainConstants.DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR);
         frontRightDriveMotor.setInverted(true);
         backRightDriveMotor.setInverted(true);
 
@@ -106,7 +119,7 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
                 DrivetrainConstants.DRIVETRAIN_FRONT_RIGHT_ENCODER_OFFSET,
                 STEER_GEAR_RATIO,
                 DRIVE_GEAR_RATIO,
-                new TalonFX(DrivetrainConstants.DRIVETRAIN_FRONT_RIGHT_ANGLE_MOTOR),
+                frontRightSteeringMotor,
                 frontRightDriveMotor,
                 new CANCoder(DrivetrainConstants.DRIVETRAIN_FRONT_RIGHT_ENCODER_PORT));
 
@@ -122,7 +135,7 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
                 DrivetrainConstants.DRIVETRAIN_BACK_RIGHT_ENCODER_OFFSET,
                 STEER_GEAR_RATIO,
                 DRIVE_GEAR_RATIO,
-                new TalonFX(DrivetrainConstants.DRIVETRAIN_BACK_RIGHT_ANGLE_MOTOR),
+                backRightSteeringMotor,
                 backRightDriveMotor,
                 new CANCoder(DrivetrainConstants.DRIVETRAIN_BACK_RIGHT_ENCODER_PORT));
 
@@ -280,5 +293,17 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
 
     public HolonomicMotionProfiledTrajectoryFollower getFollower() {
         return follower;
+    }
+
+    public void setMotorNeutralModes(NeutralMode mode) {
+        frontLeftSteeringMotor.setNeutralMode(mode);
+        frontRightSteeringMotor.setNeutralMode(mode);
+        backLeftSteeringMotor.setNeutralMode(mode);
+        backRightSteeringMotor.setNeutralMode(mode);
+
+        frontLeftDriveMotor.setNeutralMode(mode);
+        frontRightDriveMotor.setNeutralMode(mode);
+        backLeftDriveMotor.setNeutralMode(mode);
+        backRightDriveMotor.setNeutralMode(mode);
     }
 }
