@@ -1,19 +1,13 @@
 package org.frcteam1764.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
-import org.frcteam1764.robot.commands.SampleFollowPathCommand;
 import org.frcteam1764.robot.commands.SwerveDriveCommand;
 import org.frcteam1764.robot.subsystems.RobotSubsystems;
 import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
-import org.frcteam2910.common.control.Path;
-import org.frcteam2910.common.control.SimplePathBuilder;
-import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.math.Rotation2;
-import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.input.Axis;
 import org.frcteam2910.common.robot.input.DPadButton;
 import org.frcteam2910.common.robot.input.XboxController;
-import org.frcteam1764.robot.common.Utilities;
 import org.frcteam1764.robot.constants.ControllerConstants;
 import org.frcteam1764.robot.state.DrivetrainState;
 import org.frcteam1764.robot.state.RobotState;
@@ -48,15 +42,7 @@ public class SwerveRobotContainer {
     }
 
     private void getTrajectories() {
-        Path samplePath = new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
-            .lineTo(new Vector2(100.0, 0.0))
-            .lineTo(new Vector2(100.0, -100.0))
-            .lineTo(new Vector2(0.0, -100.0))
-            .lineTo(Vector2.ZERO)
-            .build();
-        robotState.trajectories = new Trajectory[]{
-            Utilities.convertPathToTrajectory(samplePath, 30.0, 60.0)
-        };
+        robotState.trajectories = Trajectories.getTrajectories();
     }
 
     private void configurePilotButtonBindings() {
