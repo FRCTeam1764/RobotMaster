@@ -37,10 +37,6 @@ public class SwerveRobotContainer {
 
     }
 
-    private void configureSmartDashboard() {
-
-    }
-
     private void getTrajectories() {
         robotState.trajectories = Trajectories.getTrajectories();
     }
