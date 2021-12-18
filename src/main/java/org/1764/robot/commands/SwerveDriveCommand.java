@@ -130,6 +130,7 @@ public class SwerveDriveCommand extends CommandBase {
             return rotation.get(true)/2; //intent to go slower when Lt or RT is held down
         }
         else {
+            double p = 0.009;
             double currentAngle = drivetrainState.getGyro().getAngle().toDegrees();
             double angleDiff = drivetrainState.getCurrentAngle() - currentAngle;
 
