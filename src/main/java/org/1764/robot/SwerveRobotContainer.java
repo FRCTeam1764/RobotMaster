@@ -11,6 +11,7 @@ import org.frcteam2910.common.robot.input.XboxController;
 import org.frcteam1764.robot.constants.ControllerConstants;
 import org.frcteam1764.robot.state.DrivetrainState;
 import org.frcteam1764.robot.state.RobotState;
+import org.frcteam1764.robot.Trajectories;
 
 public class SwerveRobotContainer {
     private final XboxController primaryController = new XboxController(ControllerConstants.PRIMARY_CONTROLLER_PORT);

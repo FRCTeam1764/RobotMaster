@@ -29,7 +29,6 @@ public class AutoGroupCommand extends SequentialCommandGroup {
   private void runDefaultAuto() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    System.out.println("running auto");
     addCommands(
       new FollowPathCommand(robotSubsystems.drivetrain, robotState.trajectories[0])
     );

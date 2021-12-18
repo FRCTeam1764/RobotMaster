@@ -31,7 +31,8 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         robotContainer.getRobotSubsystems().setMotorModes(NeutralMode.Brake);
-        new AutoGroupCommand(robotContainer.getRobotState(), robotContainer.getRobotSubsystems());
+        CommandScheduler.getInstance().schedule(new AutoGroupCommand(robotContainer.getRobotState(), robotContainer.getRobotSubsystems()));
+        
     }
 
     @Override
