@@ -14,7 +14,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class SwerveDriveCommand extends CommandBase {
-    private SwerveDrivetrain drivetrainSubsystem;
+    private SwerveDrivetrain drivetrain;
     private Axis forward;
     private Axis strafe;
     private Axis rotation;
@@ -27,15 +27,14 @@ public class SwerveDriveCommand extends CommandBase {
         this.rotation = rotation;
         this.drivetrainState = robotState.drivetrain;
         this.limelight = robotState.limelight;
-
-        drivetrainSubsystem = drivetrain;
+        this.drivetrain = drivetrain;
 
         addRequirements(drivetrain);
     }
 
     @Override
     public void execute() {
-        drivetrainSubsystem.drive(new Vector2(applyDeadzone(getForward(), 0.15), applyDeadzone(getStrafe(), 0.15)), applyDeadzone(getRotation(), 0.15), drivetrainState.getIsFieldOriented());
+        drivetrain.drive(new Vector2(applyDeadzone(getForward(), 0.15), applyDeadzone(getStrafe(), 0.15)), applyDeadzone(getRotation(), 0.15), drivetrainState.getIsFieldOriented());
     }
 
     private  double applyDeadzone(double input, double deadzone) {
@@ -63,67 +62,77 @@ public class SwerveDriveCommand extends CommandBase {
     }
 
     private double getRotation() {
-        double limelightXOffset = limelight.getTargetXOffset();
-        boolean limelightHasTarget = limelight.hasTarget();
-        boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
-        limelight.setLedMode(robotIsLocked ? LedMode.ON : LedMode.OFF);
-        limelight.setCamMode(robotIsLocked ? CamMode.VISION : CamMode.DRIVER);
         double targetAngle = drivetrainState.getTargetTurningAngle();
+        boolean limelightHasTarget = limelight.hasTarget();
+        boolean robotIsRotationLocked = drivetrainState.isRotationLocked();
+        boolean robotIsCameraTracking = limelightHasTarget && robotIsRotationLocked;
+        boolean controllerTurnSignalPresent = Math.abs(rotation.get(true)) > 0.15;
+        boolean maneuverIsSet = targetAngle > 0.0 && !drivetrainState.getManeuver().equals("");
+        boolean robotHasTargetTurningAngle = targetAngle > 0.0;
+        limelight.setLedMode(robotIsRotationLocked ? LedMode.ON : LedMode.OFF);
+        limelight.setCamMode(robotIsRotationLocked ? CamMode.VISION : CamMode.DRIVER);
 
-        if (limelightHasTarget && robotIsLocked) {
-            drivetrainState.setManeuver("");
-            drivetrainState.setTargetTurningAngle(0.0);
-            double cameraRotationConstant = -0.025;
-            double minRotationSignal = limelightXOffset * cameraRotationConstant > 0 ? 0.4 : -0.4;
-            return minRotationSignal;
+        if (robotIsCameraTracking) {
+            getCameraTrackingTurn();
         }
-        else if (Math.abs(rotation.get(true)) > 0.05) { // override of critical angles
+        else if (controllerTurnSignalPresent) { // override of critical angles
             drivetrainState.setManeuver("");
             drivetrainState.setTargetTurningAngle(0.0);
             return rotation.get(true);
         }
-        else if (targetAngle > 0.0 && !drivetrainState.getManeuver().equals("")) { // barrel roll code
-            double currentAngle = drivetrainState.getGyro().getAngle().toDegrees();
-            double angleDiff = targetAngle - currentAngle;
-            String maneuver = drivetrainState.getManeuver();
-
-            if (maneuver.equals("barrelroll") && Math.abs(angleDiff) > 4.0) {
-                return -1;
-            }
-            else if (maneuver.equals("reversebarrelroll") && Math.abs(angleDiff) > 4.0) {
-                return 1;
-            }
-            else {
-                System.out.println(maneuver);
-                drivetrainState.setManeuver("");
-                drivetrainState.setTargetTurningAngle(0.0);
-                return rotation.get(true);
-            }
-            
+        else if (maneuverIsSet) {
+            doABarrelRoll(targetAngle);
         }
-        else if (targetAngle > 0.0){
-            double p = 0.009;
-            double currentAngle = drivetrainState.getGyro().getAngle().toDegrees();
-            double angleDiff = targetAngle - currentAngle;
-
-            angleDiff += angleDiff > 180.0 ? -360.0 : angleDiff < -180.0 ? 360 : 0 ;
-
-            if (Math.abs(angleDiff) > 5.0) {
-                double rotationSignal = angleDiff * p;
-                double minRotationSignal = rotationSignal > 0 ? 0.4 : -0.4;
-                return Math.abs(rotationSignal) > Math.abs(minRotationSignal) ? rotationSignal : minRotationSignal;
-            }
-            else{
-                drivetrainState.setManeuver("");
-                return rotation.get(true);
-            }
+        else if (robotHasTargetTurningAngle){
+            getSetAngleTurn(targetAngle);
         }
-        else if (robotIsLocked) {
+        else if (robotIsRotationLocked) {
             drivetrainState.setManeuver("");
             drivetrainState.setTargetTurningAngle(0.0);
             return rotation.get(true)/2; //intent to go slower when Lt or RT is held down
         }
-        
+        return 0.0;
+    }
+
+    private double getCameraTrackingTurn() {
+        double limelightXOffset = limelight.getTargetXOffset();
+        double cameraRotationConstant = -0.025;
+        double minRotationSignal = limelightXOffset * cameraRotationConstant > 0.0 ? 0.4 : -0.4;
+        drivetrainState.setManeuver("");
+        drivetrainState.setTargetTurningAngle(0.0);
+        return minRotationSignal;
+    }
+
+    private double doABarrelRoll(double targetAngle) {
+        double currentAngle = drivetrainState.getGyro().getAngle().toDegrees();
+        double angleDiff = targetAngle - currentAngle;
+        String maneuver = drivetrainState.getManeuver();
+
+        if (maneuver.equals("barrelroll") && Math.abs(angleDiff) > 4.0) {
+            return -1.0;
+        }
+        else if (maneuver.equals("reversebarrelroll") && Math.abs(angleDiff) > 4.0) {
+            return 1.0;
+        }
+
+        drivetrainState.setManeuver("");
+        drivetrainState.setTargetTurningAngle(0.0);
+        return 0.0;
+    }
+
+    private double getSetAngleTurn(double targetAngle) {
+        double p = 0.009;
+        double currentAngle = drivetrainState.getGyro().getAngle().toDegrees();
+        double angleDiff = targetAngle - currentAngle;
+        drivetrainState.setManeuver("");
+
+        angleDiff += angleDiff > 180.0 ? -360.0 : angleDiff < -180.0 ? 360 : 0.0 ;
+
+        if (Math.abs(angleDiff) > 5.0) {
+            double rotationSignal = angleDiff * p;
+            double minRotationSignal = rotationSignal > 0 ? 0.4 : -0.4;
+            return Math.abs(rotationSignal) > Math.abs(minRotationSignal) ? rotationSignal : minRotationSignal;
+        }
         return 0.0;
     }
 }
