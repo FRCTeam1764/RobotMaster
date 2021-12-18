@@ -16,25 +16,15 @@ import org.frcteam1764.robot.Trajectories;
 public class SwerveRobotContainer {
     private final XboxController primaryController = new XboxController(ControllerConstants.PRIMARY_CONTROLLER_PORT);
     private final XboxController secondaryController = new XboxController(ControllerConstants.SECONDARY_CONTROLLER_PORT);
-    private RobotState robotState = new RobotState();
-    private RobotSubsystems robotSubsystems = new RobotSubsystems();
+    private RobotState robotState = new RobotState(getPilotLeftTriggerAxis(), getPilotRightTriggerAxis());
+    private RobotSubsystems robotSubsystems = new RobotSubsystems(robotState);
 
     public SwerveRobotContainer() {
-        initRobotState();
-        initRobotSubsystems();
         getTrajectories();
         configurePilotButtonBindings();
         configureCoPilotButtonBindings();
 
         CommandScheduler.getInstance().setDefaultCommand(robotSubsystems.drivetrain, new SwerveDriveCommand(robotSubsystems.drivetrain, getPilotDriveForwardAxis(), getPilotDriveStrafeAxis(), getPilotDriveRotationAxis(), this.robotState));
-    }
-
-    private void initRobotState() {
-        robotState.drivetrain = new DrivetrainState(getPilotLeftTriggerAxis(), getPilotRightTriggerAxis());
-    }
-    private void initRobotSubsystems() {
-        robotSubsystems.drivetrain = new SwerveDrivetrain(robotState.drivetrain);
-
     }
 
     private void getTrajectories() {

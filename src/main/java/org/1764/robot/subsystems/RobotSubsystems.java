@@ -1,6 +1,7 @@
 package org.frcteam1764.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import org.frcteam1764.robot.state.RobotState;
 import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
 
 public class RobotSubsystems  {
@@ -10,7 +11,9 @@ public class RobotSubsystems  {
      */
     public SwerveDrivetrain drivetrain; 
 	
-    public RobotSubsystems() {}
+    public RobotSubsystems(RobotState robotState) {
+        this.drivetrain = new SwerveDrivetrain(robotState.drivetrain);
+    }
     
     public void setMotorModes(NeutralMode mode){
         drivetrain.setMotorNeutralModes(mode);
