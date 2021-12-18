@@ -19,8 +19,8 @@ public class Dashboard {
 	}
 
 	private static void initUsbCamera() {
-		CameraServer.getInstance().startAutomaticCapture();
-		CvSink cvSink = CameraServer.getInstance().getVideo();
-		CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
+		// CameraServer.getInstance().startAutomaticCapture();
+		// CvSink cvSink = CameraServer.getInstance().getVideo();
+		// CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
 	}
 }

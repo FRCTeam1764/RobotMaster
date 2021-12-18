@@ -21,7 +21,6 @@ public class SwerveRobotContainer {
     public SwerveRobotContainer() {
         initRobotState();
         initRobotSubsystems();
-        configureSmartDashboard();
         getTrajectories();
         configurePilotButtonBindings();
         configureCoPilotButtonBindings();
