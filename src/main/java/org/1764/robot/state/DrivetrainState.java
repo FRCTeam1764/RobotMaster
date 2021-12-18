@@ -24,6 +24,11 @@ public class DrivetrainState  {
 	private double targetTurningAngle;
 
     /**
+     * Angle used in the turning pid loop
+     */
+	private double currentAngle;
+
+    /**
      * This should be the only instance of the drivetrain gyro
      */
 	private final Object sensorLock = new Object();
@@ -98,6 +103,14 @@ public class DrivetrainState  {
 		targetTurningAngle = angle;
 	};
 
+	public double getCurrentAngle() {
+		return currentAngle;
+	};
+
+	public void setCurrentAngle(double angle) {
+		currentAngle = angle;
+	};
+
 	public String getManeuver() {
 		return maneuver;
 	};
@@ -119,7 +132,6 @@ public class DrivetrainState  {
 			setTargetTurningAngle(newAngle > 360 ? newAngle - 360 : newAngle);
 		}
 		else if (maneuver.equals("")) {
-			setTargetTurningAngle(0.0);
 			this.maneuver = "";
 		}
 	};

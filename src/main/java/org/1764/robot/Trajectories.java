@@ -16,15 +16,16 @@ import org.frcteam2910.common.math.Vector2;
 
 public class Trajectories {
 	private static Path samplePath = new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
-		.lineTo(new Vector2(100.0, 0.0))
-		.lineTo(new Vector2(100.0, -100.0))
-		.lineTo(new Vector2(0.0, -100.0))
-		.lineTo(Vector2.ZERO)
+		.lineTo(new Vector2(20.0, 0.0))
+		// .lineTo(new Vector2(100.0, -100.0))
+		// .lineTo(new Vector2(0.0, -100.0))
+		// .lineTo(Vector2.ZERO)
 		.build();
 	
 	public static Trajectory[] getTrajectories() {
-		return new Trajectory[]{
+		Trajectory[] trajectories =  new Trajectory[]{
 			Utilities.convertPathToTrajectory(samplePath, 30.0, 60.0)
 		};
+		return trajectories;
 	}
 }

@@ -35,7 +35,7 @@ public class SwerveDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drivetrainSubsystem.drive(new Vector2(applyDeadzone(getForward(), 0.1), applyDeadzone(getStrafe(), 0.1)), applyDeadzone(getRotation(), 0.1), drivetrainState.getIsFieldOriented());
+        drivetrainSubsystem.drive(new Vector2(applyDeadzone(getForward(), 0.15), applyDeadzone(getStrafe(), 0.15)), applyDeadzone(getRotation(), 0.15), drivetrainState.getIsFieldOriented());
     }
 
     private  double applyDeadzone(double input, double deadzone) {
@@ -71,11 +71,17 @@ public class SwerveDriveCommand extends CommandBase {
         double targetAngle = drivetrainState.getTargetTurningAngle();
 
         if (limelightHasTarget && robotIsLocked) {
+            double currentAngle = drivetrainState.getGyro().getAngle().toDegrees();
+            drivetrainState.setCurrentAngle(currentAngle);
             drivetrainState.setManeuver("");
+            drivetrainState.setTargetTurningAngle(0.0);
             double cameraRotationConstant = -0.005;
-            return limelightXOffset * cameraRotationConstant; // could use smoothing/tuning
+            double minRotationSignal = limelightXOffset * cameraRotationConstant > 0 ? 0.4 : -0.4;
+            return minRotationSignal;
         }
         else if (Math.abs(rotation.get(true)) > 0.05) { // override of critical angles
+            double currentAngle = drivetrainState.getGyro().getAngle().toDegrees();
+            drivetrainState.setCurrentAngle(currentAngle);
             drivetrainState.setManeuver("");
             drivetrainState.setTargetTurningAngle(0.0);
             return rotation.get(true);
@@ -94,6 +100,7 @@ public class SwerveDriveCommand extends CommandBase {
             else {
                 System.out.println(maneuver);
                 drivetrainState.setManeuver("");
+                drivetrainState.setTargetTurningAngle(0.0);
                 return rotation.get(true);
             }
             
@@ -116,12 +123,24 @@ public class SwerveDriveCommand extends CommandBase {
             }
         }
         else if (robotIsLocked) {
+            double currentAngle = drivetrainState.getGyro().getAngle().toDegrees();
+            drivetrainState.setCurrentAngle(currentAngle);
             drivetrainState.setManeuver("");
+            drivetrainState.setTargetTurningAngle(0.0);
             return rotation.get(true)/2; //intent to go slower when Lt or RT is held down
         }
         else {
-            drivetrainState.setManeuver("");
-            return rotation.get(true);
+            double currentAngle = drivetrainState.getGyro().getAngle().toDegrees();
+            double angleDiff = drivetrainState.getCurrentAngle() - currentAngle;
+
+            if (Math.abs(angleDiff) > 5.0) {
+                double rotationSignal = angleDiff * p;
+                double minRotationSignal = rotationSignal > 0 ? 0.4 : -0.4;
+                return Math.abs(rotationSignal) > Math.abs(minRotationSignal) ? rotationSignal : minRotationSignal;
+            }
+            else{
+                return 0.0;
+            }
         }
     }
 }
