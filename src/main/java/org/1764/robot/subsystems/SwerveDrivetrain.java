@@ -102,10 +102,15 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
         backRightDriveMotor.setInverted(true);
 
         // Limit speed (testing only)
-        configTalon(frontLeftDriveMotor);
-        configTalon(frontRightDriveMotor);
-        configTalon(backLeftDriveMotor);
-        configTalon(backRightDriveMotor);
+        configDriveTalon(frontLeftDriveMotor);
+        configDriveTalon(frontRightDriveMotor);
+        configDriveTalon(backLeftDriveMotor);
+        configDriveTalon(backRightDriveMotor);
+        
+        configTalon(frontLeftSteeringMotor);
+        configTalon(frontRightSteeringMotor);
+        configTalon(backLeftSteeringMotor);
+        configTalon(backRightSteeringMotor);
 
         Mk3SwerveModule frontLeftModule = new Mk3SwerveModule(new Vector2(TRACKWIDTH / 2.0, WHEELBASE / 2.0),
                 DrivetrainConstants.DRIVETRAIN_FRONT_LEFT_ENCODER_OFFSET,
@@ -208,9 +213,14 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
         }
     }
 
-    private void configTalon(TalonFX talon) {
+    private void configDriveTalon(TalonFX talon) {
+        configTalon(talon);
         setTalonMaxOutput(talon, 0.75);
         talon.configOpenloopRamp(0.5);
+    }
+
+    private void configTalon(TalonFX talon) {
+        talon.configNeutralDeadband(0.1);
     }
 
     private void updateOdometry(double dt) {
