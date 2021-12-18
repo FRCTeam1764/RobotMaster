@@ -24,11 +24,6 @@ public class DrivetrainState  {
 	private double targetTurningAngle;
 
     /**
-     * Angle used in the turning pid loop
-     */
-	private double currentAngle;
-
-    /**
      * This should be the only instance of the drivetrain gyro
      */
 	private final Object sensorLock = new Object();
@@ -101,14 +96,6 @@ public class DrivetrainState  {
 
 	public void setTargetTurningAngle(double angle) {
 		targetTurningAngle = angle;
-	};
-
-	public double getCurrentAngle() {
-		return currentAngle;
-	};
-
-	public void setCurrentAngle(double angle) {
-		currentAngle = angle;
 	};
 
 	public String getManeuver() {
