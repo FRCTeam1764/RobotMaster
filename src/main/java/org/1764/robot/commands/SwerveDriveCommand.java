@@ -73,7 +73,7 @@ public class SwerveDriveCommand extends CommandBase {
         if (limelightHasTarget && robotIsLocked) {
             drivetrainState.setManeuver("");
             drivetrainState.setTargetTurningAngle(0.0);
-            double cameraRotationConstant = -0.005;
+            double cameraRotationConstant = -0.025;
             double minRotationSignal = limelightXOffset * cameraRotationConstant > 0 ? 0.4 : -0.4;
             return minRotationSignal;
         }

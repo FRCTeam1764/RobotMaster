@@ -15,6 +15,7 @@ public class AutoGroupCommand extends SequentialCommandGroup {
   public AutoGroupCommand(RobotState robotState, RobotSubsystems robotSubsystems) {
     this.robotState = robotState;
     this.robotSubsystems = robotSubsystems;
+    robotState.drivetrain.resetGyroAngle(Rotation2.ZERO);
     getAutoCommand();
   }
 
@@ -27,8 +28,9 @@ public class AutoGroupCommand extends SequentialCommandGroup {
   private void runDefaultAuto() {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    System.out.println("running auto");
     addCommands(
-      new FollowPathCommand(this.robotSubsystems.drivetrain, robotState.trajectories[0])
+      new FollowPathCommand(robotSubsystems.drivetrain, robotState.trajectories[0])
     );
   }
 }
