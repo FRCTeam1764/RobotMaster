@@ -11,6 +11,7 @@ public class ControllerConstants {
     public static final double CRITICAL_ANGLE_Y = 360.0;
 
     /**
-     * Pilot Controller
+     * Copilot Controller
      */
+    public static final int SECONDARY_CONTROLLER_PORT = 1;
 }
