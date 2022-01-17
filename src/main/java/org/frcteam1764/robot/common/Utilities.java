@@ -12,13 +12,6 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.io.IOException;
 
-// It is probably preferred that paths are generated using Pathviewer
-// Formula for creating a path in code is as follows:
-// -new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO).lineTo().build() or
-// -new SplinePathBuilder(Vector2.ZERO, Rotation2.ZERO, Rotation2.ZERO).hermite().build()
-// lineTo() and hermite() can be chained for additional segments
-// vectors for some reason read (y, x) instead of (x, y)
-
 public class Utilities {
 	public static Trajectory convertPathToTrajectory(Path path, double maxAcceleration, double maxVelocity) {
 		// With a path and our constraints we can create a trajectory.

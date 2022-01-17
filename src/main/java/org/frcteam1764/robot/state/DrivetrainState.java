@@ -34,6 +34,16 @@ public class DrivetrainState  {
      * Different Maneuvers
      */
     private String maneuver;
+
+    /**
+     * Drive speed defaulting to normal
+     */
+	private boolean driveSpeedFast;
+
+    /**
+     * Drive speed defaulting to normal
+     */
+	private boolean isFieldOriented;
 	
 	public DrivetrainState(Axis leftTriggerAxis, Axis rightTriggerAxis) {
 		this.leftTriggerAxis = leftTriggerAxis;
@@ -44,6 +54,8 @@ public class DrivetrainState  {
             gyro.setInverted(true);
         }
 		this.maneuver = "";
+		this.driveSpeedFast = false;
+		this.isFieldOriented = true;
 	}
 
 	public boolean isRotationLocked() {
@@ -107,8 +119,23 @@ public class DrivetrainState  {
 			setTargetTurningAngle(newAngle > 360 ? newAngle - 360 : newAngle);
 		}
 		else if (maneuver.equals("")) {
-			setTargetTurningAngle(0.0);
 			this.maneuver = "";
 		}
 	};
+
+	public void toggleDriveSpeed() {
+		driveSpeedFast = !driveSpeedFast;
+	}
+
+	public double getDriveSpeed() {
+		return driveSpeedFast ? 1.0 : 0.75;
+	}
+
+	public void toggleIsFieldOriented() {
+		isFieldOriented = !isFieldOriented;
+	}
+
+	public boolean getIsFieldOriented() {
+		return isFieldOriented;
+	}
 }

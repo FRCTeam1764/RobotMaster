@@ -2,6 +2,7 @@ package org.frcteam1764.robot.state;
 
 import org.frcteam2910.common.control.Trajectory;
 import org.frcteam2910.common.robot.drivers.Limelight;
+import org.frcteam2910.common.robot.input.Axis;
 
 public class RobotState  {
     /**
@@ -19,7 +20,8 @@ public class RobotState  {
      */
     public Trajectory[] trajectories;
 	
-	public RobotState() {
+	public RobotState(Axis leftTriggerAxis, Axis rightTriggerAxis) {
         this.limelight = new Limelight();
+        this.drivetrain = new DrivetrainState(leftTriggerAxis, rightTriggerAxis);
     }
 }
