@@ -5,6 +5,8 @@
 package org.frcteam1764.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 /** Add your docs here. I wont*/
@@ -22,6 +24,12 @@ public class Conveyor extends Subsystem {
   }
   public void conveyerOff() {
     CVmotor.set(ControlMode.PercentOutput, 0);
+  }
+
+  @Override
+  protected void initDefaultCommand() {
+    // TODO Auto-generated method stub
+
   }
   
 }
