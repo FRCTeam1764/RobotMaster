@@ -15,7 +15,7 @@ public class ConveyorCommand extends CommandBase {
   public ConveyorCommand(double conveyorSpeed) {
     conveyor = new Conveyor(conveyorSpeed);
 
-    addRequirements(conveyor);
+    //addRequirements(conveyor);
   }
 
   // Called when the command is initially scheduled.
