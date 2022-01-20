@@ -13,7 +13,7 @@ public class ShooterCommand extends CommandBase {
   public ShooterCommand(double shooterMotorSpeed){
     shooter = new Shooter(shooterMotorSpeed);
 
-    addRequirements(shooter);
+    //addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.

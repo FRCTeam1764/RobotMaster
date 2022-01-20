@@ -6,12 +6,14 @@ package org.frcteam1764.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
+import org.frcteam1764.robot.constants.RobotConstants;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /** Add your docs here. */
 public class Shooter extends Subsystem {
-  public WPI_TalonFX shooterMaster;
-  WPI_TalonFX shooterFollower;
+  public WPI_TalonFX shooterMaster = new WPI_TalonFX(RobotConstants.SHOOTER_MASTER_MOTOR);
+  WPI_TalonFX shooterFollower = new WPI_TalonFX(RobotConstants.SHOOTER_FOLLOWER_MOTOR);
 
   double shooterVelocity;
   double shooter;
