@@ -4,18 +4,18 @@
 
 package org.frcteam1764.robot.commands;
 
-import org.frcteam1764.robot.subsystems.Conveyor;
+import org.frcteam1764.robot.subsystems.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ConveyorCommand extends CommandBase {
+public class IntakeCommand extends CommandBase {
   /** Creates a new ConveyorCommand. */
- private Conveyor conveyor;
- private double conveyorSpeed;
+ private Intake intake;
+ private double intakeSpeed;
 
-  public ConveyorCommand(Conveyor conveyor, double conveyorSpeed) {
-    this.conveyor = conveyor;
-    this.conveyorSpeed = conveyorSpeed;
+  public IntakeCommand(Intake intake, double intakeSpeed) {
+    this.intake = intake;
+    this.intakeSpeed = intakeSpeed;
   }
 
   // Called when the command is initially scheduled.
@@ -25,13 +25,13 @@ public class ConveyorCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    conveyor.conveyorOn(conveyorSpeed);
+    intake.intakeOn(intakeSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    conveyor.conveyerOff();
+    intake.intakeOff();
   }
 
   // Returns true when the command should end.

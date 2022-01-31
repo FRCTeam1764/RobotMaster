@@ -11,10 +11,12 @@ public class RobotSubsystems  {
      */
     public SwerveDrivetrain drivetrain; 
     public Conveyor conveyor;
+    public Intake intake;
 	
     public RobotSubsystems(RobotState robotState) {
         this.drivetrain = new SwerveDrivetrain(robotState.drivetrain);
         this.conveyor = new Conveyor();
+        this.intake = new Intake();
     }
     
     public void setMotorModes(NeutralMode mode){
