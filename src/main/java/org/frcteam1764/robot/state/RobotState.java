@@ -11,6 +11,11 @@ public class RobotState  {
     public DrivetrainState drivetrain;
 
     /**
+     * State of the robot intake
+     */
+    public IntakeState intake;
+
+    /**
      * Limelight used for vision tracking
      */
     public Limelight limelight;

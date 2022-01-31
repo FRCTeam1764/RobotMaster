@@ -17,8 +17,8 @@ public class RobotSubsystems  {
     public RobotSubsystems(RobotState robotState) {
         this.drivetrain = new SwerveDrivetrain(robotState.drivetrain);
         this.conveyor = new Conveyor();
-        this.intake = new Intake();
         this.elevator = new Elevator();
+        this.intake = new Intake(robotState.intake);
     }
     
     public void setMotorModes(NeutralMode mode){
