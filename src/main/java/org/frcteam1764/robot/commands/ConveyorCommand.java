@@ -10,10 +10,12 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ConveyorCommand extends CommandBase {
   /** Creates a new ConveyorCommand. */
- Conveyor conveyor;
+ private Conveyor conveyor;
+ private double conveyorSpeed;
 
-  public ConveyorCommand(double conveyorSpeed) {
-    conveyor = new Conveyor(conveyorSpeed);
+  public ConveyorCommand(Conveyor conveyor, double conveyorSpeed) {
+    this.conveyor = conveyor;
+    this.conveyorSpeed = conveyorSpeed;
 
     //addRequirements(conveyor);
   }
@@ -25,7 +27,7 @@ public class ConveyorCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    conveyor.conveyorOn();
+    conveyor.conveyorOn(conveyorSpeed);
   }
 
   // Called once the command ends or is interrupted.
