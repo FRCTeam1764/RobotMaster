@@ -10,9 +10,11 @@ public class RobotSubsystems  {
      * in the case that swerve is not viable it will need to be changed
      */
     public SwerveDrivetrain drivetrain; 
+    public Conveyor conveyor;
 	
     public RobotSubsystems(RobotState robotState) {
         this.drivetrain = new SwerveDrivetrain(robotState.drivetrain);
+        this.conveyor = new Conveyor();
     }
     
     public void setMotorModes(NeutralMode mode){
