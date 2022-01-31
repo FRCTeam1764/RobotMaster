@@ -11,12 +11,20 @@ public class RobotSubsystems  {
      */
     public SwerveDrivetrain drivetrain; 
     public Conveyor conveyor;
+<<<<<<< Updated upstream
     public Intake intake;
+=======
+    public Elevator elevator;
+>>>>>>> Stashed changes
 	
     public RobotSubsystems(RobotState robotState) {
         this.drivetrain = new SwerveDrivetrain(robotState.drivetrain);
         this.conveyor = new Conveyor();
+<<<<<<< Updated upstream
         this.intake = new Intake();
+=======
+        this.elevator = new Elevator();
+>>>>>>> Stashed changes
     }
     
     public void setMotorModes(NeutralMode mode){
