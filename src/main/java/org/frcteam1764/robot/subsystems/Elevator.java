@@ -13,17 +13,17 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Elevator extends Subsystem {
   /** Creates a new Elevator. */
-  private WPI_TalonFX ElevatorMotor = new WPI_TalonFX(RobotConstants.ELEVATOR_MOTOR);
+  private WPI_TalonFX elevatorMotor = new WPI_TalonFX(RobotConstants.ELEVATOR_MOTOR);
 
   public Elevator(){
     
   }
 
     public void elevatorOn(double elevatorSpeed) {
-      ElevatorMotor.set(ControlMode.PercentOutput, elevatorSpeed);
+      elevatorMotor.set(ControlMode.PercentOutput, elevatorSpeed);
     }
     public void elevatorOff() {
-      ElevatorMotor.set(ControlMode.PercentOutput, 0);
+      elevatorMotor.set(ControlMode.PercentOutput, 0);
     }
 
     @Override
