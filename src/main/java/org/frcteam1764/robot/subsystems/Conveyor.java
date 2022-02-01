@@ -11,10 +11,10 @@ import org.frcteam1764.robot.constants.RobotConstants;
 
 /** Add your docs here*/
 public class Conveyor extends Subsystem {
-  private WPI_TalonFX conveyorMotor = new WPI_TalonFX(RobotConstants.CONVEYOR_MOTOR);
+  private WPI_TalonFX conveyorMotor;
 
   public Conveyor(){
-    
+    this.conveyorMotor = new WPI_TalonFX(RobotConstants.CONVEYOR_MOTOR);
   }
 
     public void conveyorOn(double conveyorSpeed) {
