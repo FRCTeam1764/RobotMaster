@@ -17,6 +17,7 @@ public class Elevator extends Subsystem {
 
   public Elevator(){
     this.elevatorMotor = new WPI_TalonFX(RobotConstants.ELEVATOR_MOTOR);
+    this.elevatorMotor.setInverted(true);
   }
 
     public void elevatorOn(double elevatorSpeed) {

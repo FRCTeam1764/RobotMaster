@@ -33,8 +33,8 @@ public class Shooter extends SubsystemBase {
     this.shooterVelocity = shooterVelocity;
     this.controlMode = controlMode;
 
-    shooterMaster = configShooterMotors(RobotConstants.SHOOTER_MASTER_MOTOR, true, false);
-    shooterFollower = configShooterMotors(RobotConstants.SHOOTER_FOLLOWER_MOTOR, false, true);
+    shooterMaster = configShooterMotors(RobotConstants.SHOOTER_MASTER_MOTOR, true, true);
+    shooterFollower = configShooterMotors(RobotConstants.SHOOTER_FOLLOWER_MOTOR, false, false);
 
     shooterFollower.follow(shooterMaster);
   }

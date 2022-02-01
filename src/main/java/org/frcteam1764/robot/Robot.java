@@ -4,6 +4,10 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.frcteam1764.robot.commands.AutoGroupCommand;
+import org.frcteam1764.robot.commands.ConveyorCommand;
+import org.frcteam1764.robot.commands.ElevatorCommand;
+import org.frcteam1764.robot.commands.ShooterCommand;
+import org.frcteam1764.robot.commands.ShooterCommand.ShooterControlMode;
 import org.frcteam2910.common.robot.drivers.Limelight.LedMode;
 import org.frcteam2910.common.robot.UpdateManager;
 
@@ -26,6 +30,9 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         Dashboard.updateSmartDashboard(robotContainer.getRobotState());
+        new ShooterCommand(1500, ShooterControlMode.PID); // max rpm is 6380
+        new ElevatorCommand(robotContainer.getRobotSubsystems().elevator, 1);
+        new ConveyorCommand(robotContainer.getRobotSubsystems().conveyor, 1);
     }
 
     @Override
