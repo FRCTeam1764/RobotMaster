@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import org.frcteam1764.robot.ShuffleBoardInfo;
 import org.frcteam1764.robot.commands.ShooterCommand.ShooterControlMode;;
 
 public class Shooter extends SubsystemBase {
@@ -113,9 +115,9 @@ public class Shooter extends SubsystemBase {
       config.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor;
       talon.configAllSettings(config);
 
-      talon.config_kP(PIDConstants.kSlot_Shooter_Velocity, 0.0, PIDConstants.kTimeoutMs);
-      talon.config_kI(PIDConstants.kSlot_Shooter_Velocity, 0.0, PIDConstants.kTimeoutMs);
-      talon.config_kD(PIDConstants.kSlot_Shooter_Velocity, 0.0001, PIDConstants.kTimeoutMs);
+      talon.config_kP(PIDConstants.kSlot_Shooter_Velocity, ShuffleBoardInfo.getInstance().getPValueEntry().getDouble(0.0), PIDConstants.kTimeoutMs);
+      talon.config_kI(PIDConstants.kSlot_Shooter_Velocity, ShuffleBoardInfo.getInstance().getIValueEntry().getDouble(0.0), PIDConstants.kTimeoutMs);
+      talon.config_kD(PIDConstants.kSlot_Shooter_Velocity, ShuffleBoardInfo.getInstance().getDValueEntry().getDouble(0.0001), PIDConstants.kTimeoutMs);
       talon.config_kF(PIDConstants.kSlot_Shooter_Velocity, 0.049, PIDConstants.kTimeoutMs);
       talon.config_IntegralZone(PIDConstants.kSlot_Shooter_Velocity, (int)PIDConstants.kGains_Velocity_Shooter.kIzone, PIDConstants.kTimeoutMs);
       talon.configClosedLoopPeakOutput(PIDConstants.kSlot_Shooter_Velocity, PIDConstants.kGains_Velocity_Shooter.kPeakOutput, PIDConstants.kTimeoutMs);
