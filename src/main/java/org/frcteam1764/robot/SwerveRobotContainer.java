@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.*;
 
 import org.frcteam1764.robot.commands.ConveyorCommand;
 import org.frcteam1764.robot.commands.ElevatorCommand;
+import org.frcteam1764.robot.commands.IntakeCommand;
 import org.frcteam1764.robot.commands.ShooterCommand;
 import org.frcteam1764.robot.commands.SwerveDriveCommand;
 import org.frcteam1764.robot.commands.ShooterCommand.ShooterControlMode;
@@ -18,6 +19,7 @@ import org.frcteam2910.common.robot.input.DPadButton.Direction;
 import org.frcteam2910.common.robot.input.XboxController;
 import org.frcteam1764.robot.constants.ControllerConstants;
 import org.frcteam1764.robot.state.DrivetrainState;
+import org.frcteam1764.robot.state.IntakeState;
 import org.frcteam1764.robot.state.RobotState;
 import org.frcteam1764.robot.Trajectories;
 
@@ -28,7 +30,8 @@ public class SwerveRobotContainer {
     private RobotSubsystems robotSubsystems = new RobotSubsystems(robotState);
     private Elevator elevator = new Elevator();
     private Conveyor conveyor = new Conveyor();
-   // private Intake intake = new Intake();
+   // private IntakeState intakeState = new IntakeState();
+   // private Intake intake = new Intake(intakeState);
 
     public SwerveRobotContainer() {
         getTrajectories();
@@ -65,10 +68,11 @@ public class SwerveRobotContainer {
     }
 
     private void configureCoPilotButtonBindings() {
+
         secondaryController.getAButton().whenHeld(new ElevatorCommand(elevator, .4));
         secondaryController.getYButton().whenHeld(new ConveyorCommand(conveyor, .4));
         secondaryController.getBButton().whenHeld(new ShooterCommand(.5, ShooterControlMode.PID));
-      //  secondaryController.getBButton().whenHeld(new IntakeCommand(intake, .5));
+        secondaryController.getXButton().whenHeld(new IntakeCommand(intake, .5));
     }
 
     private Axis getPilotDriveForwardAxis() {
