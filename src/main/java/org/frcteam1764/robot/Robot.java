@@ -12,11 +12,13 @@ import org.frcteam1764.robot.commands.ShooterCommand;
 import org.frcteam1764.robot.commands.ShooterCommand.ShooterControlMode;
 import org.frcteam2910.common.robot.drivers.Limelight.LedMode;
 import org.frcteam2910.common.robot.UpdateManager;
+import org.frcteam1764.robot.subsystems.Shooter;
 
 public class Robot extends TimedRobot {
     private SwerveRobotContainer robotContainer;
     private UpdateManager updateManager;
     private ShuffleBoardInfo sbiInstance = ShuffleBoardInfo.getInstance();
+    private Shooter shooter;
 
     @Override
     public void robotInit() {
@@ -24,6 +26,7 @@ public class Robot extends TimedRobot {
         updateManager = new UpdateManager(
                 robotContainer.getRobotSubsystems().drivetrain
         );
+        shooter = new Shooter(1500, ShooterControlMode.PID);
         updateManager.startLoop(5.0e-3);
         Dashboard.configSmartDashboard(robotContainer.getRobotState());
         robotContainer.getRobotState().limelight.setLedMode(LedMode.OFF);
@@ -37,6 +40,9 @@ public class Robot extends TimedRobot {
         new ElevatorCommand(robotContainer.getRobotSubsystems().elevator, 1);
         new ConveyorCommand(robotContainer.getRobotSubsystems().conveyor, 1);
         new IntakeCommand(robotContainer.getRobotSubsystems().intake, 1);
+         // max rpm is 6380
+        robotContainer.getRobotSubsystems().elevator.elevatorOn(1);
+        robotContainer.getRobotSubsystems().conveyor.conveyorOn(1);
     }
 
     @Override
@@ -61,6 +67,10 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         robotContainer.getRobotSubsystems().setMotorModes(NeutralMode.Brake);
+        shooter.shoot();
+         // max rpm is 6380
+        robotContainer.getRobotSubsystems().elevator.elevatorOn(1);
+        robotContainer.getRobotSubsystems().conveyor.conveyorOn(1);
     }
 
     @Override
