@@ -10,15 +10,16 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 /** Add your docs here. */
 public class ShuffleBoardInfo {
-    private ShuffleboardTab tab;
+    
     private NetworkTableEntry PValue, DValue, IValue;
     private static ShuffleBoardInfo instance = null;
   
     public void ShuffleBoardTabs() {
-      tab = Shuffleboard.getTab("Shooter");
-      PValue = tab.add("P Value", 0).getEntry();
-      DValue = tab.add("D Value", 0).getEntry();
-      IValue = tab.add("I Value", 0).getEntry();
+      ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
+      Shuffleboard.selectTab("Shooter");
+      PValue = shooterTab.add("P Value", 0.066).withPosition(0, 0).withSize(1, 1).getEntry();
+      DValue = shooterTab.add("D Value", 0).withPosition(0, 1).withSize(1, 1).getEntry();
+      IValue = shooterTab.add("I Value", 0.0015).withPosition(0, 2).withSize(1, 1).getEntry();
     }
   
     public static ShuffleBoardInfo getInstance() {

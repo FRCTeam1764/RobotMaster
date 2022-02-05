@@ -30,8 +30,8 @@ public class SwerveRobotContainer {
     private RobotSubsystems robotSubsystems = new RobotSubsystems(robotState);
     private Elevator elevator = new Elevator();
     private Conveyor conveyor = new Conveyor();
-   // private IntakeState intakeState = new IntakeState();
-   // private Intake intake = new Intake(intakeState);
+    private IntakeState intakeState = new IntakeState();
+    private Intake intake = new Intake(intakeState);
 
     public SwerveRobotContainer() {
         getTrajectories();
