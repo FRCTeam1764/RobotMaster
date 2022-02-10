@@ -13,11 +13,13 @@ public class RobotSubsystems  {
     public Conveyor conveyor;
     public Intake intake;
     public Elevator elevator;
+    public Climber climber;
 	
     public RobotSubsystems(RobotState robotState) {
         this.drivetrain = new SwerveDrivetrain(robotState.drivetrain);
         this.conveyor = new Conveyor();
         this.elevator = new Elevator();
+        this.climber = new Climber();
         // this.intake = new Intake(robotState.intake);
     }
     
