@@ -11,17 +11,21 @@ import org.frcteam1764.robot.constants.RobotConstants;
 
 /** Add your docs here*/
 public class Climber extends Subsystem {
-  private WPI_TalonFX climberMotor;
+  private WPI_TalonFX climberMasterMotor;
+  private WPI_TalonFX climberFollowerMotor;
 
   public Climber(){
-    this.climberMotor = new WPI_TalonFX(RobotConstants.CLIMBER_MOTOR);
+    this.climberMasterMotor = new WPI_TalonFX(RobotConstants.CLIMBER_MASTER_MOTOR);
+    this.climberFollowerMotor = new WPI_TalonFX(RobotConstants.CLIMBER_FOLLOWER_MOTOR);
+    this.climberFollowerMotor.setInverted(true);
+    this.climberFollowerMotor.follow(climberMasterMotor);
   }
 
     public void climberOn(double climberSpeed) {
-      climberMotor.set(ControlMode.PercentOutput, climberSpeed);
+      climberMasterMotor.set(ControlMode.PercentOutput, climberSpeed);
     }
     public void climberOff() {
-      climberMotor.set(ControlMode.PercentOutput, 0);
+      climberMasterMotor.set(ControlMode.PercentOutput, 0);
     }
 
     @Override
