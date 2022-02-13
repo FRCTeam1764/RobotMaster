@@ -3,6 +3,8 @@ package org.frcteam1764.robot.constants;
 public class RobotConstants {
     
     public static final int INTAKE_MOTOR = 60;
+    public static final int INTAKE_SOLENOID_FORWARD = 0;
+    public static final int INTAKE_SOLENOID_REVERSE = 1;
 
     public static final int SHOOTER_MASTER_MOTOR = 32;
     public static final int SHOOTER_FOLLOWER_MOTOR = 31;
@@ -13,6 +15,8 @@ public class RobotConstants {
 
     public static final int CLIMBER_MASTER_MOTOR = 40;
     public static final int CLIMBER_FOLLOWER_MOTOR = 41;
+    public static final int CLIMBER_SOLENOID_FORWARD = 2;
+    public static final int CLIMBER_SOLENOID_REVERSE = 3;
 
     public static final int DRIVETRAIN_FRONT_LEFT_DRIVE_MOTOR = 6;
     public static final int DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR = 7;

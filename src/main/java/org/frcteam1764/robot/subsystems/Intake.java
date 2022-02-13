@@ -21,7 +21,7 @@ public class Intake extends Subsystem {
   public Intake(IntakeState intakeState){
       this.intakeState = intakeState;
       this.intakeMotor = new WPI_TalonFX(RobotConstants.INTAKE_MOTOR);
-      this.intakeSolenoid = new DoubleSolenoid(0,1);
+      this.intakeSolenoid = new DoubleSolenoid(RobotConstants.INTAKE_SOLENOID_FORWARD, RobotConstants.INTAKE_SOLENOID_REVERSE);
   }
 
   public void intakeOn(double intakeSpeed) {
