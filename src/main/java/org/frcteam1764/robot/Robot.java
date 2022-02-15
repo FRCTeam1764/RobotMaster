@@ -1,6 +1,8 @@
 package org.frcteam1764.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -30,19 +32,20 @@ public class Robot extends TimedRobot {
         updateManager.startLoop(5.0e-3);
         Dashboard.configSmartDashboard(robotContainer.getRobotState());
         robotContainer.getRobotState().limelight.setLedMode(LedMode.OFF);
+        new ShooterCommand(1500, ShooterControlMode.PID); // max rpm is 6380
+        new ElevatorCommand(robotContainer.getRobotSubsystems().elevator, 1);
+        new ConveyorCommand(robotContainer.getRobotSubsystems().conveyor, 1);
+        new IntakeCommand(robotContainer.getRobotSubsystems().intake, 1);
     }
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         Dashboard.updateSmartDashboard(robotContainer.getRobotState());
-        new ShooterCommand(1500, ShooterControlMode.PID); // max rpm is 6380
-        new ElevatorCommand(robotContainer.getRobotSubsystems().elevator, 1);
-        new ConveyorCommand(robotContainer.getRobotSubsystems().conveyor, 1);
-        new IntakeCommand(robotContainer.getRobotSubsystems().intake, 1);
+
          // max rpm is 6380
-        robotContainer.getRobotSubsystems().elevator.elevatorOn(1);
-        robotContainer.getRobotSubsystems().conveyor.conveyorOn(1);
+        //robotContainer.getRobotSubsystems().elevator.elevatorOn(1);
+        //robotContainer.getRobotSubsystems().conveyor.conveyorOn(1);
     }
 
     @Override
@@ -67,10 +70,10 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         robotContainer.getRobotSubsystems().setMotorModes(NeutralMode.Brake);
-        shooter.shoot();
+        //shooter.shoot();
          // max rpm is 6380
-        robotContainer.getRobotSubsystems().elevator.elevatorOn(1);
-        robotContainer.getRobotSubsystems().conveyor.conveyorOn(1);
+        //robotContainer.getRobotSubsystems().elevator.elevatorOn(1);
+        //robotContainer.getRobotSubsystems().conveyor.conveyorOn(1);
     }
 
     @Override
