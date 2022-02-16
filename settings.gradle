@@ -2,11 +2,8 @@ import org.gradle.internal.os.OperatingSystem
 
 pluginManagement {
     plugins {
-        id 'com.github.johnrengelman.shadow' version '5.2.0'
-        id "edu.wpi.first.GradleRIO" version "2022.3.1"
         id 'net.ltgt.errorprone' version '1.1.1'
     }
-
     repositories {
         mavenLocal()
         gradlePluginPortal()
@@ -31,6 +28,3 @@ pluginManagement {
         }
     }
 }
-
-include ":common"
-include ":common:robot"
