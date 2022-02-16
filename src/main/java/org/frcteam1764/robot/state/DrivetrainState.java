@@ -51,7 +51,7 @@ public class DrivetrainState  {
 		this.targetTurningAngle = 0.0;
 		this.gyro = new NavX(SPI.Port.kMXP);
         synchronized (sensorLock) {
-            gyro.setInverted(true);
+            gyro.setInverted(false);
         }
 		this.maneuver = "";
 		this.driveSpeedFast = false;
