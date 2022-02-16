@@ -2,11 +2,11 @@ package org.frcteam1764.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
-import edu.wpi.cscore.MjpegServer;
-import edu.wpi.cscore.UsbCamera;
-import edu.wpi.cscore.VideoMode.PixelFormat;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.MjpegServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoMode.PixelFormat;
 import org.frcteam1764.robot.state.RobotState;
 
 // https://docs.wpilib.org/en/stable/docs/software/driverstation/manually-setting-the-driver-station-to-start-custom-dashboard.html
@@ -19,8 +19,8 @@ public class Dashboard {
 	}
 
 	private static void initUsbCamera() {
-		// CameraServer.getInstance().startAutomaticCapture();
-		// CvSink cvSink = CameraServer.getInstance().getVideo();
-		// CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
+		// CameraServer.startAutomaticCapture();
+		// CvSink cvSink = CameraServer.getVideo();
+		// CvSource outputStream = CameraServer.putVideo("Blur", 640, 480);
 	}
 }
