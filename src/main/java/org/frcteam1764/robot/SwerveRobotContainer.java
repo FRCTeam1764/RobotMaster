@@ -27,8 +27,8 @@ import org.frcteam1764.robot.subsystems.Climber;
 public class SwerveRobotContainer {
     private final XboxController primaryController = new XboxController(ControllerConstants.PRIMARY_CONTROLLER_PORT);
     private final XboxController secondaryController = new XboxController(ControllerConstants.SECONDARY_CONTROLLER_PORT);
-    private final Trigger leftTrigger = new Trigger(() -> secondaryController.getLeftTriggerAxis()>.5);
-    private final Trigger rightTrigger = new Trigger(() -> secondaryController.getrightTriggerAxis()>.5);
+    private final Trigger leftTrigger = new Trigger(() -> secondaryController.getLeftTriggerAxis().get()>.5);
+    private final Trigger rightTrigger = new Trigger(() -> secondaryController.getrightTriggerAxis().get()>.5);
     private RobotState robotState = new RobotState(getPilotLeftTriggerAxis(), getPilotRightTriggerAxis());
     private RobotSubsystems robotSubsystems = new RobotSubsystems(robotState);
     private Elevator elevator = new Elevator();
