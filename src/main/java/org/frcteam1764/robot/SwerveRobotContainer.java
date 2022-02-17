@@ -22,7 +22,7 @@ import org.frcteam1764.robot.state.DrivetrainState;
 import org.frcteam1764.robot.state.IntakeState;
 import org.frcteam1764.robot.state.RobotState;
 import org.frcteam1764.robot.Trajectories;
-
+import org.frcteam1764.robot.subsystems.Climber;
 public class SwerveRobotContainer {
     private final XboxController primaryController = new XboxController(ControllerConstants.PRIMARY_CONTROLLER_PORT);
     private final XboxController secondaryController = new XboxController(ControllerConstants.SECONDARY_CONTROLLER_PORT);
@@ -32,6 +32,7 @@ public class SwerveRobotContainer {
     private Conveyor conveyor = new Conveyor();
     private IntakeState intakeState = new IntakeState();
     private Intake intake = new Intake(intakeState);
+    private Climber climber = new Climber();
 
     public SwerveRobotContainer() {
         getTrajectories();
@@ -73,6 +74,7 @@ public class SwerveRobotContainer {
         secondaryController.getYButton().whenHeld(new ConveyorCommand(conveyor, .4));
         secondaryController.getBButton().whenHeld(new ShooterCommand(.5, ShooterControlMode.PID));
         secondaryController.getXButton().whenHeld(new IntakeCommand(intake, .5));
+        secondaryController.getLeftBumperButton().whenHeld(new ClimberCommand(climber, .5));
     }
 
     private Axis getPilotDriveForwardAxis() {
