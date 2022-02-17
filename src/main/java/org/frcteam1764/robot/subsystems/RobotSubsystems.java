@@ -20,7 +20,7 @@ public class RobotSubsystems  {
         this.conveyor = new Conveyor();
         this.elevator = new Elevator();
         this.climber = new Climber();
-        // this.intake = new Intake(robotState.intake);
+        this.intake = new Intake(robotState.intake);
     }
     
     public void setMotorModes(NeutralMode mode){
