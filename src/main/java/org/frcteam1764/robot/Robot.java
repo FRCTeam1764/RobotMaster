@@ -20,7 +20,8 @@ public class Robot extends TimedRobot {
     private SwerveRobotContainer robotContainer;
     private UpdateManager updateManager;
     private ShuffleBoardInfo sbiInstance = ShuffleBoardInfo.getInstance();
-    private Shooter shooter;
+    // private Shooter shooter;
+   
 
     @Override
     public void robotInit() {
@@ -28,14 +29,14 @@ public class Robot extends TimedRobot {
         updateManager = new UpdateManager(
                 robotContainer.getRobotSubsystems().drivetrain
         );
-        shooter = new Shooter(1500, ShooterControlMode.PID);
+        // shooter = new Shooter(1500, ShooterControlMode.PID);
         updateManager.startLoop(5.0e-3);
         Dashboard.configSmartDashboard(robotContainer.getRobotState());
         robotContainer.getRobotState().limelight.setLedMode(LedMode.OFF);
-        new ShooterCommand(1500, ShooterControlMode.PID); // max rpm is 6380
-        new ElevatorCommand(robotContainer.getRobotSubsystems().elevator, 1);
-        new ConveyorCommand(robotContainer.getRobotSubsystems().conveyor, 1);
-        new IntakeCommand(robotContainer.getRobotSubsystems().intake, 1);
+        // new ShooterCommand(1500, ShooterControlMode.PID); // max rpm is 6380
+        // new ElevatorCommand(robotContainer.getRobotSubsystems().elevator, 1);
+        // new ConveyorCommand(robotContainer.getRobotSubsystems().conveyor, 1);
+        // new IntakeCommand(robotContainer.getRobotSubsystems().intake, 1);
     }
 
     @Override
