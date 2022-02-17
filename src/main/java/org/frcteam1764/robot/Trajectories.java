@@ -15,7 +15,7 @@ import org.frcteam2910.common.math.Vector2;
 // vectors for some reason read (y, x) instead of (x, y)
 
 public class Trajectories {
-	private static Path samplePath = new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
+	private static Path firstPath = new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
 	.lineTo(new Vector2(35.0, 0.0))
 	.lineTo(new Vector2(0.0, -50.0), Rotation2.fromDegrees(-55.0))
 	.lineTo(new Vector2(-15.0, -125.0), Rotation2.fromDegrees(-55.0))
@@ -25,7 +25,7 @@ public class Trajectories {
 	
 	public static Trajectory[] getTrajectories() {
 		Trajectory[] trajectories =  new Trajectory[]{
-			Utilities.convertPathToTrajectory(samplePath, 30.0, 60.0)
+			Utilities.convertPathToTrajectory(firstPath, 30.0, 60.0)
 		};
 		return trajectories;
 	}
