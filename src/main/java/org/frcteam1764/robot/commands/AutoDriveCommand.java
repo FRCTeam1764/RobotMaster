@@ -23,6 +23,7 @@ public class AutoDriveCommand extends ParallelRaceGroup {
   SwerveDrivetrain drivetrain, Trajectory trajectory) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new IntakeBallCommand(intake, intakeSpeed, conveyor, conveyorSpeed, elevator, elevatorSpeed),new FollowPathCommand(drivetrain, trajectory));
+    addCommands(new IntakeBallCommand(intake, intakeSpeed, conveyor, conveyorSpeed, elevator, elevatorSpeed),
+                new FollowPathCommand(drivetrain, trajectory));
   }
 }
