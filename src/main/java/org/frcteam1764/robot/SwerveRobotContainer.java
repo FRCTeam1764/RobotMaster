@@ -3,6 +3,7 @@ package org.frcteam1764.robot;
 import edu.wpi.first.wpilibj2.command.*;
 
 import org.frcteam1764.robot.commands.ClimberCommand;
+import org.frcteam1764.robot.commands.ClimberPneumaticsCommand;
 import org.frcteam1764.robot.commands.ConveyorCommand;
 import org.frcteam1764.robot.commands.ElevatorCommand;
 import org.frcteam1764.robot.commands.IntakeCommand;
@@ -89,7 +90,7 @@ public class SwerveRobotContainer {
         });
         secondaryController.getStartButton().whenReleased(() -> toggleStartButton());
         //secondaryController.getRightTriggerAxis().getButton(.5).whileHeld(new FeedCommand(robotSubsystems.conveyor, 1, robotSubsystems.elevator, 1));
-        //secondaryController.getXButton().toggleWhenPressed(new climberPneumaticsCommand());
+        secondaryController.getXButton().toggleWhenPressed(new ClimberPneumaticsCommand(robotSubsystems.climber));
         
 
     }

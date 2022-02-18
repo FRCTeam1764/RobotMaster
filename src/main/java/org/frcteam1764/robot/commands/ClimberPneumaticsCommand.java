@@ -8,15 +8,12 @@ import org.frcteam1764.robot.subsystems.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ClimberCommand extends CommandBase {
+public class ClimberPneumaticsCommand extends CommandBase {
   /** Creates a new ConveyorCommand. */
  private Climber climber;
- private double climberSpeed;
 
-  public ClimberCommand(Climber climber, double climberSpeed) {
+  public ClimberPneumaticsCommand(Climber climber) {
     this.climber = climber;
-    this.climberSpeed = climberSpeed;
-    
   }
 
   // Called when the command is initially scheduled.
@@ -26,13 +23,13 @@ public class ClimberCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.climberOn(climberSpeed);
+    climber.pneumaticsDeploy();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.climberOff();
+    climber.pneumaticsWithdraw();
   }
 
   // Returns true when the command should end.
