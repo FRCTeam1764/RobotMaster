@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import org.frcteam1764.robot.ShuffleBoardInfo;
-import org.frcteam1764.robot.commands.ShooterCommand.ShooterControlMode;;
 
 public class Shooter extends SubsystemBase {
   
@@ -25,13 +24,11 @@ public class Shooter extends SubsystemBase {
   WPI_TalonFX shooterFollower;
 
   double shooterVelocity;
-  ShooterControlMode controlMode;
   public double timeDuration = -1;
   double shooter;
 
-  public Shooter(double shooterVelocity, ShooterControlMode controlMode) {
+  public Shooter(double shooterVelocity) {
     this.shooterVelocity = shooterVelocity;
-    this.controlMode = controlMode;
 
     shooterMaster = configShooterMotors(RobotConstants.SHOOTER_MASTER_MOTOR, true, true);
     shooterFollower = configShooterMotors(RobotConstants.SHOOTER_FOLLOWER_MOTOR, false, false);
@@ -50,14 +47,9 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shoot() {
-    if(controlMode == ShooterControlMode.PID){
-      SimpleMotorFeedforward simpleMotorFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
-      double kF = simpleMotorFeedforward.calculate(shooterVelocity);
-      shooterMaster.set(ControlMode.Velocity, shooterVelocity/60*2048*0.1);
-    }
-    else{
-      shooterMaster.set(ControlMode.PercentOutput, shooterVelocity);
-    }
+    SimpleMotorFeedforward simpleMotorFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
+    double kF = simpleMotorFeedforward.calculate(shooterVelocity);
+    shooterMaster.set(ControlMode.Velocity, shooterVelocity/60*2048*0.1);
 
   }
 

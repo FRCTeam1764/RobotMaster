@@ -7,14 +7,8 @@ public class ShooterCommand extends CommandBase {
   
   Shooter shooter;
 
-  public enum ShooterControlMode{
-    PID,
-    STANDARD,
-    TIMED
-  }
-
-  public ShooterCommand(double shooterMotorSpeed, ShooterControlMode controlMode) {
-    shooter = new Shooter(shooterMotorSpeed, controlMode);
+  public ShooterCommand(double shooterMotorSpeed) {
+    shooter = new Shooter(shooterMotorSpeed);
 
     addRequirements(shooter);
   }

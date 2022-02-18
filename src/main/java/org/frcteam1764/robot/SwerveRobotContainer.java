@@ -2,32 +2,16 @@ package org.frcteam1764.robot;
 
 import edu.wpi.first.wpilibj2.command.*;
 
-import org.frcteam1764.robot.commands.ClimberCommand;
-<<<<<<< HEAD
-import org.frcteam1764.robot.commands.ClimberPneumaticsCommand;
-=======
->>>>>>> df875a3d4b1b79ab6ae94bb733d4f96abba9fe37
-import org.frcteam1764.robot.commands.ConveyorCommand;
-import org.frcteam1764.robot.commands.ElevatorCommand;
-import org.frcteam1764.robot.commands.IntakeCommand;
-import org.frcteam1764.robot.commands.ShooterCommand;
-import org.frcteam1764.robot.commands.SwerveDriveCommand;
-import org.frcteam1764.robot.commands.ShooterCommand.ShooterControlMode;
-import org.frcteam1764.robot.subsystems.Conveyor;
-import org.frcteam1764.robot.subsystems.Elevator;
-import org.frcteam1764.robot.subsystems.Intake;
-import org.frcteam1764.robot.subsystems.RobotSubsystems;
-import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
+import org.frcteam1764.robot.commands.*;
+import org.frcteam1764.robot.subsystems.*;
 import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.input.Axis;
 import org.frcteam2910.common.robot.input.DPadButton.Direction;
 import org.frcteam2910.common.robot.input.XboxController;
 import org.frcteam1764.robot.constants.ControllerConstants;
 import org.frcteam1764.robot.state.DrivetrainState;
-import org.frcteam1764.robot.state.IntakeState;
 import org.frcteam1764.robot.state.RobotState;
 import org.frcteam1764.robot.Trajectories;
-import org.frcteam1764.robot.subsystems.Climber;
 public class SwerveRobotContainer {
     private final XboxController primaryController = new XboxController(ControllerConstants.PRIMARY_CONTROLLER_PORT);
     private final XboxController secondaryController = new XboxController(ControllerConstants.SECONDARY_CONTROLLER_PORT);
@@ -71,7 +55,7 @@ public class SwerveRobotContainer {
     }
 
     private void configureCoPilotButtonBindings() {
-        secondaryController.getRightBumperButton().toggleWhenPressed(new ShooterCommand(3050, ShooterControlMode.PID));
+        secondaryController.getRightBumperButton().toggleWhenPressed(new ShooterCommand(3050));
         secondaryController.getLeftBumperButton().whileHeld(intakeSystemCommand(robotSubsystems.elevator, 1, robotSubsystems.conveyor, 1, robotSubsystems.intake, 1));
         secondaryController.getBButton().whenHeld(intakeSystemCommand(robotSubsystems.elevator, -1, robotSubsystems.conveyor, -1, robotSubsystems.intake, 0));
         //secondaryController.getLeftTriggerAxis().getButton(.5).whileHeld(new IntakeBall(robotSubsystems.intake, 1, robotSubsystems.conveyor, 1, robotSubsystems.elevator ,1));
