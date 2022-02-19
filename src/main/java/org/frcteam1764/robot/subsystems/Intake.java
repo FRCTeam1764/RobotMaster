@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import org.frcteam1764.robot.constants.RobotConstants;
@@ -22,6 +23,7 @@ public class Intake extends Subsystem {
   public Intake(IntakeState intakeState){
       this.intakeState = intakeState;
       this.intakeMotor = new WPI_TalonFX(RobotConstants.INTAKE_MOTOR);
+      this.intakeMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 100);
       this.intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RobotConstants.INTAKE_SOLENOID_FORWARD, RobotConstants.INTAKE_SOLENOID_REVERSE);
   }
 

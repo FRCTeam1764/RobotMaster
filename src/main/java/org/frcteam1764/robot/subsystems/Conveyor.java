@@ -7,6 +7,7 @@ package org.frcteam1764.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import org.frcteam1764.robot.constants.RobotConstants;
 
 /** Add your docs here*/
@@ -15,6 +16,7 @@ public class Conveyor extends Subsystem {
 
   public Conveyor(){
     this.conveyorMotor = new WPI_TalonFX(RobotConstants.CONVEYOR_MOTOR);
+    this.conveyorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 100);
   }
 
     public void conveyorOn(double conveyorSpeed) {
