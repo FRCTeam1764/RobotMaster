@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import org.frcteam1764.robot.constants.RobotConstants;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -24,6 +25,8 @@ public class Climber extends Subsystem {
     this.climberMasterMotor = new WPI_TalonFX(RobotConstants.CLIMBER_MASTER_MOTOR);
     this.climberFollowerMotor = new WPI_TalonFX(RobotConstants.CLIMBER_FOLLOWER_MOTOR);
     this.climberFollowerMotor.setInverted(true);
+    this.climberMasterMotor.setNeutralMode(NeutralMode.Brake);
+    this.climberFollowerMotor.setNeutralMode(NeutralMode.Brake);
     this.climberFollowerMotor.follow(climberMasterMotor);
     this.climberSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RobotConstants.CLIMBER_SOLENOID_FORWARD, RobotConstants.CLIMBER_SOLENOID_REVERSE);
     configLimitSwitches();

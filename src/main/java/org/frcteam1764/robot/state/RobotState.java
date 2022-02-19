@@ -16,9 +16,16 @@ public class RobotState  {
     public IntakeState intake;
 
     /**
+     * State of the robot intake
+     */
+    public ShooterState shooter;
+
+    /**
      * Limelight used for vision tracking
      */
     public Limelight limelight;
+
+    
 
     /**
      * Trajectories generated on robot init on robot container

@@ -1,6 +1,9 @@
 package org.frcteam1764.robot.constants;
 
 public class RobotConstants {
+    public static final int SHOOTER_BREAK_BEAM = 0;
+    public static final int ELEVATOR_BREAK_BEAM = 2;
+    public static final int CONVEYOR_BREAK_BEAM = 4;
     
     public static final int INTAKE_MOTOR = 60;
     public static final int INTAKE_SOLENOID_FORWARD = 0;

@@ -5,6 +5,7 @@
 package org.frcteam1764.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import org.frcteam1764.robot.constants.RobotConstants;
@@ -18,6 +19,7 @@ public class Elevator extends Subsystem {
   public Elevator(){
     this.elevatorMotor = new WPI_TalonFX(RobotConstants.ELEVATOR_MOTOR);
     this.elevatorMotor.setInverted(true);
+    this.elevatorMotor.setNeutralMode(NeutralMode.Brake);
   }
 
     public void elevatorOn(double elevatorSpeed) {
