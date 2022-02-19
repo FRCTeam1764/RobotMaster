@@ -11,25 +11,27 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import org.frcteam2910.common.robot.drivers.LazyTalonFX;
 import org.frcteam1764.robot.constants.RobotConstants;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 /** Add your docs here*/
 public class Climber extends Subsystem {
-  private WPI_TalonFX climberMasterMotor;
-  private WPI_TalonFX climberFollowerMotor;
+  private LazyTalonFX climberMasterMotor;
+  private LazyTalonFX climberFollowerMotor;
   private DoubleSolenoid climberSolenoid;
 
   public Climber(){
-    this.climberMasterMotor = new WPI_TalonFX(RobotConstants.CLIMBER_MASTER_MOTOR);
-    this.climberFollowerMotor = new WPI_TalonFX(RobotConstants.CLIMBER_FOLLOWER_MOTOR);
+    this.climberMasterMotor = new LazyTalonFX(RobotConstants.CLIMBER_MASTER_MOTOR);
+    this.climberFollowerMotor = new LazyTalonFX(RobotConstants.CLIMBER_FOLLOWER_MOTOR);
+		this.climberMasterMotor.configFactoryDefault();
+		this.climberFollowerMotor.configFactoryDefault();
     this.climberFollowerMotor.setInverted(true);
     this.climberMasterMotor.setNeutralMode(NeutralMode.Brake);
     this.climberFollowerMotor.setNeutralMode(NeutralMode.Brake);
     this.climberFollowerMotor.follow(climberMasterMotor);
     this.climberSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RobotConstants.CLIMBER_SOLENOID_FORWARD, RobotConstants.CLIMBER_SOLENOID_REVERSE);
-    configLimitSwitches();
+    // configLimitSwitches();
   }
 
   private void configLimitSwitches(){

@@ -6,7 +6,7 @@ package org.frcteam1764.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import org.frcteam2910.common.robot.drivers.LazyTalonFX;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
 import org.frcteam1764.robot.constants.RobotConstants;
@@ -15,13 +15,14 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Elevator extends Subsystem {
   /** Creates a new Elevator. */
-  private WPI_TalonFX elevatorMotor;
+  private LazyTalonFX elevatorMotor;
 
   public Elevator(){
-    this.elevatorMotor = new WPI_TalonFX(RobotConstants.ELEVATOR_MOTOR);
+    this.elevatorMotor = new LazyTalonFX(RobotConstants.ELEVATOR_MOTOR);
+		this.elevatorMotor.configFactoryDefault();
     this.elevatorMotor.setInverted(true);
     this.elevatorMotor.setNeutralMode(NeutralMode.Brake);
-    this.elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 100);
+    this.elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 200);
   }
 
     public void elevatorOn(double elevatorSpeed) {

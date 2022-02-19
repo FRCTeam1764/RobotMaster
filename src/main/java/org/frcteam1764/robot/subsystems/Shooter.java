@@ -4,7 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import org.frcteam2910.common.robot.drivers.LazyTalonFX;
 
 import org.frcteam1764.robot.constants.RobotConstants;
 import org.frcteam1764.robot.constants.PIDConstants;
@@ -20,12 +20,12 @@ import org.frcteam1764.robot.ShuffleBoardInfo;
 
 public class Shooter extends SubsystemBase {
   
-  public WPI_TalonFX shooterMaster;
-  WPI_TalonFX shooterFollower;
+  public LazyTalonFX shooterMaster;
+  public LazyTalonFX shooterFollower;
 
-  double shooterVelocity;
+  public double shooterVelocity;
   public double timeDuration = -1;
-  double shooter;
+  public double shooter;
 
   public Shooter(double shooterVelocity) {
     this.shooterVelocity = shooterVelocity;
@@ -70,8 +70,8 @@ public class Shooter extends SubsystemBase {
   
   }
 
-  public static WPI_TalonFX configTalons(int _canId, boolean isMaster, boolean isInverted){
-    WPI_TalonFX talon = new WPI_TalonFX(_canId);
+  public static LazyTalonFX configTalons(int _canId, boolean isMaster, boolean isInverted){
+    LazyTalonFX talon = new LazyTalonFX(_canId);
     talon.configFactoryDefault();
     talon.setInverted(isInverted);
     talon.enableVoltageCompensation(true);
@@ -84,8 +84,8 @@ public class Shooter extends SubsystemBase {
     return talon;
   }
 
-  public static WPI_TalonFX configShooterMotors(int portNum, boolean isMaster, boolean isInverted) {
-    WPI_TalonFX talon = configTalons(portNum, isMaster, isInverted);
+  public static LazyTalonFX configShooterMotors(int portNum, boolean isMaster, boolean isInverted) {
+    LazyTalonFX talon = configTalons(portNum, isMaster, isInverted);
     talon.setNeutralMode(NeutralMode.Coast);
 
     if(isMaster){
