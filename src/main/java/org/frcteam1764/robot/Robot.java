@@ -81,4 +81,12 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         robotContainer.getRobotSubsystems().setMotorModes(NeutralMode.Coast);
     }
+
+        @Override
+        public void teleopPeriodic() {
+            // TODO Auto-generated method stub
+            super.teleopPeriodic();
+            robotContainer.getRobotSubsystems().climber.climb();
+            SmartDashboard.putNumber("Climber position", robotContainer.getRobotSubsystems().climber.getMasterEncoder());
+        }
 }
