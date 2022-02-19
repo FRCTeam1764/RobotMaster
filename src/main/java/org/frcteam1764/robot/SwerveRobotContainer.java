@@ -61,9 +61,9 @@ public class SwerveRobotContainer {
 
     private void configureCoPilotButtonBindings() {
         secondaryController.getRightBumperButton().toggleWhenPressed(new ShooterCommand(3050));
-        // secondaryController.getLeftBumperButton().whileHeld(intakeOverrideCommand(robotSubsystems.elevator, 1, robotSubsystems.conveyor, 1, robotSubsystems.intake, 1));
-        // secondaryController.getBButton().whileHeld(intakeOverrideCommand(robotSubsystems.elevator, -1, robotSubsystems.conveyor, -1, robotSubsystems.intake, 0));
-        // secondaryController.getLeftTriggerAxis().getButton(.5).whileHeld(intakeSystemCommand(robotSubsystems.intake, 1, robotSubsystems.conveyor, 1, robotSubsystems.elevator ,1));
+        secondaryController.getLeftBumperButton().whileHeld(intakeOverrideCommand(robotSubsystems.elevator, 1, robotSubsystems.conveyor, 1, robotSubsystems.intake, 1));
+        secondaryController.getBButton().whileHeld(intakeOverrideCommand(robotSubsystems.elevator, -1, robotSubsystems.conveyor, -1, robotSubsystems.intake, 0));
+        secondaryController.getLeftTriggerAxis().getButton(.5).whileHeld(intakeSystemCommand(robotSubsystems.intake, 1, robotSubsystems.conveyor, 1, robotSubsystems.elevator ,1));
         secondaryController.getDPadButton(Direction.UP).whileHeld(new ClimberCommand(robotSubsystems.climber, .75));
         secondaryController.getDPadButton(Direction.DOWN).whileHeld(new ClimberCommand(robotSubsystems.climber, -.75));
         secondaryController.getBackButton().whenPressed(() -> {
@@ -145,39 +145,43 @@ public class SwerveRobotContainer {
     Elevator elevator, double elevatorSpeed, 
     Conveyor conveyor, double conveyorSpeed, 
     Intake intake, double intakeSpeed) {
-        new ParallelCommandGroup(
+        return new ParallelCommandGroup(
             new ConveyorCommand(conveyor, conveyorSpeed),
             new IntakeCommand(intake, intakeSpeed),
             new ElevatorCommand(elevator, elevatorSpeed)
         );
-    return null;
     }
+
     private Command intakeSystemCommand(
     Intake intake, double intakeSpeed, 
     Conveyor conveyor, double conveyorSpeed, 
     Elevator elevator, double elevatorSpeed){
         if(breakBeamElevator.get() && !breakBeamConveyor.get()) { //some break beam stuff
-            new ParallelCommandGroup(
-            new IntakeCommand(intake, intakeSpeed),
-            new ConveyorCommand(conveyor, conveyorSpeed)
-            );
             count=0;
+            return new ParallelCommandGroup(
+                new IntakeCommand(intake, intakeSpeed),
+                new ConveyorCommand(conveyor, conveyorSpeed)
+            );
         }
-        else if(breakBeamElevator.get() && breakBeamConveyor.get() && count<25){ //more break beam stuff
-        count++;
-        new ParallelCommandGroup(
-        new ConveyorCommand(conveyor, conveyorSpeed)
-        );
+        else if(breakBeamElevator.get() && breakBeamConveyor.get() && count < 25){ //more break beam stuff
+            count++;
+            return new ParallelCommandGroup(
+                new ConveyorCommand(conveyor, conveyorSpeed)
+            );
         }
         else if(!breakBeamElevator.get()){
-            new ParallelCommandGroup(
-            new IntakeCommand(intake, intakeSpeed),
-            new ConveyorCommand(conveyor, conveyorSpeed),
-            new ElevatorCommand(elevator, elevatorSpeed)
-            );
             count=0;
+            return new ParallelCommandGroup(
+                new IntakeCommand(intake, intakeSpeed),
+                new ConveyorCommand(conveyor, conveyorSpeed),
+                new ElevatorCommand(elevator, elevatorSpeed)
+            );
         }
-    return null;
+        else {
+            return new ParallelCommandGroup(
+                new IntakeCommand(intake, 0)
+            );
+        }
     }
 
 }
