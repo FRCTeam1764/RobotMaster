@@ -31,7 +31,7 @@ public class Climber extends Subsystem {
     this.climberFollowerMotor.setNeutralMode(NeutralMode.Brake);
     this.climberFollowerMotor.follow(climberMasterMotor);
     this.climberSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RobotConstants.CLIMBER_SOLENOID_FORWARD, RobotConstants.CLIMBER_SOLENOID_REVERSE);
-    // configLimitSwitches();
+    configLimitSwitches();
   }
 
   private void configLimitSwitches(){
