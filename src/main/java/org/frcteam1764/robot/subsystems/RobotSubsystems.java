@@ -1,8 +1,13 @@
 package org.frcteam1764.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+
+import org.frcteam1764.robot.constants.RobotConstants;
+import org.frcteam1764.robot.state.IntakeState;
 import org.frcteam1764.robot.state.RobotState;
 import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class RobotSubsystems  {
     /**
@@ -14,13 +19,17 @@ public class RobotSubsystems  {
     public Intake intake;
     public Elevator elevator;
     public Climber climber;
+    private DigitalInput conveyorBreakBeam;
+    private DigitalInput elevatorBreakBeam;
 	
     public RobotSubsystems(RobotState robotState) {
+        this.conveyorBreakBeam = new DigitalInput(RobotConstants.CONVEYOR_BREAK_BEAM);
+        this.elevatorBreakBeam = new DigitalInput(RobotConstants.ELEVATOR_BREAK_BEAM);
         this.drivetrain = new SwerveDrivetrain(robotState.drivetrain);
-        this.conveyor = new Conveyor();
-        this.elevator = new Elevator();
+        this.conveyor = new Conveyor(conveyorBreakBeam);
+        this.elevator = new Elevator(elevatorBreakBeam);
         this.climber = new Climber();
-        this.intake = new Intake(robotState.intake);
+        this.intake = new Intake(robotState.intake, conveyorBreakBeam, elevatorBreakBeam);
     }
     
     public void setMotorModes(NeutralMode mode){

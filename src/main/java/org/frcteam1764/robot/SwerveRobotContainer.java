@@ -12,8 +12,10 @@ import org.frcteam2910.common.robot.input.XboxController;
 import org.frcteam1764.robot.constants.ControllerConstants;
 import org.frcteam1764.robot.constants.RobotConstants;
 import org.frcteam1764.robot.state.DrivetrainState;
+import org.frcteam1764.robot.state.IntakeState;
 import org.frcteam1764.robot.state.RobotState;
 import org.frcteam1764.robot.Trajectories;
+
 public class SwerveRobotContainer {
     private final XboxController primaryController = new XboxController(ControllerConstants.PRIMARY_CONTROLLER_PORT);
     private final XboxController secondaryController = new XboxController(ControllerConstants.SECONDARY_CONTROLLER_PORT);
@@ -21,8 +23,9 @@ public class SwerveRobotContainer {
     private RobotSubsystems robotSubsystems = new RobotSubsystems(robotState);
     private boolean startHeld = false;
     private boolean backHeld = false;
-    DigitalInput breakBeamElevator = new DigitalInput(RobotConstants.ELEVATOR_BREAK_BEAM);
-    DigitalInput breakBeamConveyor = new DigitalInput(RobotConstants.CONVEYOR_BREAK_BEAM);
+    // public DigitalInput breakBeamElevator = new DigitalInput(RobotConstants.ELEVATOR_BREAK_BEAM);
+    // public DigitalInput breakBeamConveyor = new DigitalInput(RobotConstants.CONVEYOR_BREAK_BEAM);
+   
     private int count = 0;
 
     public SwerveRobotContainer() {
@@ -61,9 +64,9 @@ public class SwerveRobotContainer {
 
     private void configureCoPilotButtonBindings() {
         secondaryController.getRightBumperButton().toggleWhenPressed(new ShooterCommand(3050));
-        secondaryController.getLeftBumperButton().whileHeld(intakeOverrideCommand(robotSubsystems.elevator, 1, robotSubsystems.conveyor, 1, robotSubsystems.intake, 1));
-        secondaryController.getBButton().whileHeld(intakeOverrideCommand(robotSubsystems.elevator, -1, robotSubsystems.conveyor, -1, robotSubsystems.intake, 0));
-        secondaryController.getLeftTriggerAxis().getButton(.5).whileHeld(intakeSystemCommand(robotSubsystems.intake, 1, robotSubsystems.conveyor, 1, robotSubsystems.elevator ,1));
+        secondaryController.getLeftBumperButton().whileHeld(new IntakeBallCommand(robotSubsystems.intake, 1, robotSubsystems.conveyor, 1,robotSubsystems.elevator, 1, robotState.intake, true));//Intake Override
+        secondaryController.getBButton().whileHeld(new IntakeBallCommand(robotSubsystems.intake, 0, robotSubsystems.conveyor, -.25,robotSubsystems.elevator, -.25, robotState.intake, true));//unjam
+        secondaryController.getLeftTriggerAxis().getButton(.5).whileHeld(new IntakeBallCommand(robotSubsystems.intake, .9, robotSubsystems.conveyor, 1, robotSubsystems.elevator ,.81, robotState.intake, false));//intake
         secondaryController.getDPadButton(Direction.UP).whileHeld(new ClimberCommand(robotSubsystems.climber, .75));
         secondaryController.getDPadButton(Direction.DOWN).whileHeld(new ClimberCommand(robotSubsystems.climber, -.75));
         secondaryController.getBackButton().whenPressed(() -> {
@@ -83,7 +86,6 @@ public class SwerveRobotContainer {
         secondaryController.getStartButton().whenReleased(() -> toggleStartButton());
         //secondaryController.getRightTriggerAxis().getButton(.5).whileHeld(new FeedCommand(robotSubsystems.conveyor, 1, robotSubsystems.elevator, 1));
         secondaryController.getXButton().toggleWhenPressed(new ClimberPneumaticsCommand(robotSubsystems.climber));
-        
 
     }
 
@@ -138,49 +140,6 @@ public class SwerveRobotContainer {
         }
         else {
             backHeld = true;
-        }
-    }
-
-    private Command intakeOverrideCommand(
-    Elevator elevator, double elevatorSpeed, 
-    Conveyor conveyor, double conveyorSpeed, 
-    Intake intake, double intakeSpeed) {
-        return new ParallelCommandGroup(
-            new ConveyorCommand(conveyor, conveyorSpeed),
-            new IntakeCommand(intake, intakeSpeed),
-            new ElevatorCommand(elevator, elevatorSpeed)
-        );
-    }
-
-    private Command intakeSystemCommand(
-    Intake intake, double intakeSpeed, 
-    Conveyor conveyor, double conveyorSpeed, 
-    Elevator elevator, double elevatorSpeed){
-        if(breakBeamElevator.get() && !breakBeamConveyor.get()) { //some break beam stuff
-            count=0;
-            return new ParallelCommandGroup(
-                new IntakeCommand(intake, intakeSpeed),
-                new ConveyorCommand(conveyor, conveyorSpeed)
-            );
-        }
-        else if(breakBeamElevator.get() && breakBeamConveyor.get() && count < 25){ //more break beam stuff
-            count++;
-            return new ParallelCommandGroup(
-                new ConveyorCommand(conveyor, conveyorSpeed)
-            );
-        }
-        else if(!breakBeamElevator.get()){
-            count=0;
-            return new ParallelCommandGroup(
-                new IntakeCommand(intake, intakeSpeed),
-                new ConveyorCommand(conveyor, conveyorSpeed),
-                new ElevatorCommand(elevator, elevatorSpeed)
-            );
-        }
-        else {
-            return new ParallelCommandGroup(
-                new IntakeCommand(intake, 0)
-            );
         }
     }
 

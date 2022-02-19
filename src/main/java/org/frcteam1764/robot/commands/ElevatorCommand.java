@@ -11,11 +11,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class ElevatorCommand extends CommandBase {
   /** Creates a new ElevatorCommand. */
   private Elevator elevator;
- private double elevatorSpeed;
+  private double elevatorSpeed;
+  private boolean override;
 
-  public ElevatorCommand(Elevator elevator, double elevatorSpeed) {
+  public ElevatorCommand(Elevator elevator, double elevatorSpeed, boolean override) {
     this.elevator = elevator;
     this.elevatorSpeed = elevatorSpeed;
+    this.override = override;
 
     //addRequirements(conveyor);
   }
@@ -27,7 +29,7 @@ public class ElevatorCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevator.elevatorOn(elevatorSpeed);
+    elevator.elevatorOn(elevatorSpeed, override);
   }
 
   // Called once the command ends or is interrupted.

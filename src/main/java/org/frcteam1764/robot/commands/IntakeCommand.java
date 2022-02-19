@@ -12,10 +12,12 @@ public class IntakeCommand extends CommandBase {
   /** Creates a new ConveyorCommand. */
  private Intake intake;
  private double intakeSpeed;
+ private boolean override;
 
-  public IntakeCommand(Intake intake, double intakeSpeed) {
+  public IntakeCommand(Intake intake, double intakeSpeed, boolean override) {
     this.intake = intake;
     this.intakeSpeed = intakeSpeed;
+    this.override = override;
   }
 
   // Called when the command is initially scheduled.
@@ -25,7 +27,7 @@ public class IntakeCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.intakeOn(intakeSpeed);
+    intake.intakeOn(intakeSpeed, override);
   }
 
   // Called once the command ends or is interrupted.

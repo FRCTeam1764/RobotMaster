@@ -35,5 +35,6 @@ public class RobotState  {
 	public RobotState(Axis leftTriggerAxis, Axis rightTriggerAxis) {
         this.limelight = new Limelight();
         this.drivetrain = new DrivetrainState(leftTriggerAxis, rightTriggerAxis);
+        this.intake = new IntakeState();
     }
 }

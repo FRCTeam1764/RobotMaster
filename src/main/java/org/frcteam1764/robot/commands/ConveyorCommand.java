@@ -12,10 +12,12 @@ public class ConveyorCommand extends CommandBase {
   /** Creates a new ConveyorCommand. */
  private Conveyor conveyor;
  private double conveyorSpeed;
+ private boolean override;
 
-  public ConveyorCommand(Conveyor conveyor, double conveyorSpeed) {
+  public ConveyorCommand(Conveyor conveyor, double conveyorSpeed, boolean override) {
     this.conveyor = conveyor;
     this.conveyorSpeed = conveyorSpeed;
+    this.override = override;
   }
 
   // Called when the command is initially scheduled.
@@ -25,7 +27,7 @@ public class ConveyorCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    conveyor.conveyorOn(conveyorSpeed);
+    conveyor.conveyorOn(conveyorSpeed, override);
   }
 
   // Called once the command ends or is interrupted.

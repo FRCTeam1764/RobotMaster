@@ -4,6 +4,7 @@
 
 package org.frcteam1764.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -19,19 +20,35 @@ public class Intake extends Subsystem {
   private LazyTalonFX intakeMotor;
   private DoubleSolenoid intakeSolenoid;
   private IntakeState intakeState; 
+  private DigitalInput conveyorBreakBeam;
+  private DigitalInput elevatorBreakBeam;
 
-  public Intake(IntakeState intakeState){
+  public Intake(IntakeState intakeState, DigitalInput conveyorBreakBeam, DigitalInput elevatorBreakBeam){
       this.intakeState = intakeState;
+      this.conveyorBreakBeam = conveyorBreakBeam;
+      this.elevatorBreakBeam = elevatorBreakBeam;
       this.intakeMotor = new LazyTalonFX(RobotConstants.INTAKE_MOTOR);
       this.intakeMotor.configFactoryDefault();
       this.intakeMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 200);
       this.intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RobotConstants.INTAKE_SOLENOID_FORWARD, RobotConstants.INTAKE_SOLENOID_REVERSE);
   }
 
-  public void intakeOn(double intakeSpeed) {
-    intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
-    intakeSolenoid.set(Value.kForward);
-    intakeState.deployIntake();
+  public void intakeOn(double intakeSpeed, boolean override) {
+    if(override){
+      intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
+      intakeSolenoid.set(Value.kForward);
+      intakeState.deployIntake();
+    }
+    else if(!elevatorBreakBeam.get() && !conveyorBreakBeam.get()){
+      intakeMotor.set(ControlMode.PercentOutput, 0);
+      intakeSolenoid.set(Value.kReverse);
+      intakeState.withdrawIntake();
+    }
+    else{
+      intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
+      intakeSolenoid.set(Value.kForward);
+      intakeState.deployIntake();
+    }
   }
   public void intakeOff() {
     intakeMotor.set(ControlMode.PercentOutput, 0);
