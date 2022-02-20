@@ -63,7 +63,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopInit() {
-        robotContainer.getRobotSubsystems().setMotorModes(NeutralMode.Brake);
+        robotContainer.getRobotSubsystems().setMotorModes(NeutralMode.Coast);
     }
 
     @Override
