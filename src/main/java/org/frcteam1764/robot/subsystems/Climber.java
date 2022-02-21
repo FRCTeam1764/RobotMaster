@@ -4,6 +4,7 @@
 
 package org.frcteam1764.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -13,6 +14,8 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import org.frcteam1764.robot.constants.RobotConstants;
+import org.frcteam1764.robot.state.ClimberState;
+
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 /** Add your docs here*/
@@ -21,9 +24,11 @@ public class Climber extends Subsystem {
   private WPI_TalonFX climberFollowerMotor;
   private DoubleSolenoid climberSolenoid;
   private PIDController pidController; 
-  
+  private ClimberState climberState;
+  private DigitalInput rightLimitSwitch;
+  private DigitalInput leftLimitSwitch;
 
-  public Climber(){
+  public Climber(ClimberState climberState){
     this.climberMasterMotor = new WPI_TalonFX(RobotConstants.CLIMBER_MASTER_MOTOR);
     this.climberFollowerMotor = new WPI_TalonFX(RobotConstants.CLIMBER_FOLLOWER_MOTOR);
     this.climberFollowerMotor.setInverted(true);
@@ -31,6 +36,9 @@ public class Climber extends Subsystem {
     this.climberSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RobotConstants.CLIMBER_SOLENOID_FORWARD, RobotConstants.CLIMBER_SOLENOID_REVERSE);
     this.pidController = new PIDController(.0001, 0 , 0);
     configLimitSwitches();
+    this.climberState = climberState; 
+    this.rightLimitSwitch = new DigitalInput(RobotConstants.RIGHT_LIMIT_SWITCH);
+    this.leftLimitSwitch = new DigitalInput(RobotConstants.LEFT_LIMIT_SWITCH);
   }
 
   private void configLimitSwitches(){
@@ -62,13 +70,23 @@ public class Climber extends Subsystem {
       
   }
 
-  public double getMasterEncoder(){
-    double selSenPos = climberMasterMotor.getSelectedSensorPosition(0);
+  public int getMasterEncoder(){
+    int selSenPos = (int) climberMasterMotor.getSelectedSensorPosition(0);
     return selSenPos;
   }
 
   public void resetFalcon(){
-    this.climberMasterMotor = new WPI_TalonFX(RobotConstants.CLIMBER_MASTER_MOTOR);
+    climberState.setOffset(getMasterEncoder());
+  }
+
+  public boolean checkLimitSwitches(){
+    if(rightLimitSwitch.get() || leftLimitSwitch.get()){
+      return true;
+    }
+    else
+    {
+      return false;
+    }
   }
 
     @Override

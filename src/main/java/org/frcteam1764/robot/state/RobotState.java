@@ -16,6 +16,11 @@ public class RobotState  {
     public IntakeState intake;
 
     /**
+     * State of the robot climber
+     */
+    public ClimberState climber;
+
+    /**
      * Limelight used for vision tracking
      */
     public Limelight limelight;

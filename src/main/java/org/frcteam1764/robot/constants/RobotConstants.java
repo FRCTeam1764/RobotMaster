@@ -1,7 +1,9 @@
 package org.frcteam1764.robot.constants;
 
 public class RobotConstants {
-    
+    public static final int RIGHT_LIMIT_SWITCH = 6;
+    public static final int LEFT_LIMIT_SWITCH = 8;
+
     public static final int INTAKE_MOTOR = 60;
     public static final int INTAKE_SOLENOID_FORWARD = 0;
     public static final int INTAKE_SOLENOID_REVERSE = 1;

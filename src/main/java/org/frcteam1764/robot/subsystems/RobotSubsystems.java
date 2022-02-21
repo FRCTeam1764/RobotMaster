@@ -19,7 +19,7 @@ public class RobotSubsystems  {
         this.drivetrain = new SwerveDrivetrain(robotState.drivetrain);
         this.conveyor = new Conveyor();
         this.elevator = new Elevator();
-        this.climber = new Climber();
+        this.climber = new Climber(robotState.climber);
         this.intake = new Intake(robotState.intake);
     }
     
