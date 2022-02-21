@@ -7,11 +7,17 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import org.frcteam1764.robot.commands.AutoGroupCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
+import org.frcteam1764.robot.commands.*;
 import org.frcteam1764.robot.state.IntakeState;
+import org.frcteam1764.robot.state.RobotState;
 import org.frcteam1764.robot.subsystems.Intake;
 import org.frcteam1764.robot.subsystems.RobotSubsystems;
 import org.frcteam2910.common.robot.drivers.Limelight.LedMode;
+import org.frcteam2910.common.math.Rotation2;
 import org.frcteam2910.common.robot.UpdateManager;
 
 public class Robot extends TimedRobot {
@@ -44,8 +50,31 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        robotContainer.getRobotSubsystems().setMotorModes(NeutralMode.Brake);
-        CommandScheduler.getInstance().schedule(new AutoGroupCommand(robotContainer.getRobotState(), robotContainer.getRobotSubsystems()));
+        robotContainer.getRobotSubsystems().setMotorModes(NeutralMode.Coast);
+        RobotSubsystems subsystems = robotContainer.getRobotSubsystems();
+        RobotState state = robotContainer.getRobotState();
+        state.drivetrain.resetGyroAngle(Rotation2.ZERO);
+        // CommandScheduler.getInstance().schedule(new AutoGroupCommand(robotContainer.getRobotState(), robotContainer.getRobotSubsystems()));
+        CommandScheduler.getInstance().schedule(
+            new SequentialCommandGroup(
+                new ParallelRaceGroup(
+                    new FollowPathCommand(subsystems.drivetrain, state.trajectories[0]),
+                    new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 0, subsystems.elevator, 0, state.intake, false)
+                ),
+                new ParallelRaceGroup(
+                    new FollowPathCommand(subsystems.drivetrain, state.trajectories[1]),
+                    new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 0, subsystems.elevator, 0, state.intake, false)
+                ),
+                new ParallelRaceGroup(
+                    new FollowPathCommand(subsystems.drivetrain, state.trajectories[2]),
+                    new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 0, subsystems.elevator, 0, state.intake, false)
+                ),
+                new ParallelRaceGroup(
+                    new FollowPathCommand(subsystems.drivetrain, state.trajectories[3]),
+                    new IntakeBallCommand(subsystems.intake, 0, subsystems.conveyor, 0, subsystems.elevator, 0, state.intake, false)
+                )
+            )
+        );
         
     }
 

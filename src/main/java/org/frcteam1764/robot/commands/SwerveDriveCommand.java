@@ -64,7 +64,7 @@ public class SwerveDriveCommand extends CommandBase {
     private double getRotation() {
         double targetAngle = drivetrainState.getTargetTurningAngle();
         boolean limelightHasTarget = limelight.hasTarget();
-        boolean robotIsRotationLocked = drivetrainState.isRotationLocked();
+        boolean robotIsRotationLocked = drivetrainState.isStrafeLocked();
         boolean robotIsCameraTracking = limelightHasTarget && robotIsRotationLocked;
         boolean controllerTurnSignalPresent = Math.abs(rotation.get(true)) > 0.15;
         boolean maneuverIsSet = targetAngle > 0.0 && !drivetrainState.getManeuver().equals("");
@@ -73,7 +73,7 @@ public class SwerveDriveCommand extends CommandBase {
         limelight.setCamMode(robotIsRotationLocked ? CamMode.VISION : CamMode.DRIVER);
 
         if (robotIsCameraTracking) {
-            getCameraTrackingTurn();
+            return getCameraTrackingTurn();
         }
         else if (controllerTurnSignalPresent) { // override of critical angles
             drivetrainState.setManeuver("");
@@ -97,10 +97,12 @@ public class SwerveDriveCommand extends CommandBase {
     private double getCameraTrackingTurn() {
         double limelightXOffset = limelight.getTargetXOffset();
         double cameraRotationConstant = -0.025;
-        double minRotationSignal = limelightXOffset * cameraRotationConstant > 0.0 ? 0.4 : -0.4;
+        double minRotationSignal = limelightXOffset * cameraRotationConstant > 0.0 ? 0.3 : -0.3;
+        System.out.println(minRotationSignal);
+    
         drivetrainState.setManeuver("");
         drivetrainState.setTargetTurningAngle(0.0);
-        return minRotationSignal;
+        return Math.abs(limelightXOffset) > 0.5 ? minRotationSignal : 0;
     }
 
     private double doABarrelRoll(double targetAngle) {
