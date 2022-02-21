@@ -39,6 +39,6 @@ public class ShooterCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (robotState.getBallCount() == 0 || robotState.getTimer() > 200);
+    return (robotState.getBallCount() == 0 || robotState.getTimer() > 100);
   }
 }

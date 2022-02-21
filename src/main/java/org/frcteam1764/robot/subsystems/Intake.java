@@ -29,7 +29,7 @@ public class Intake extends Subsystem {
       this.elevatorBreakBeam = elevatorBreakBeam;
       this.intakeMotor = new LazyTalonFX(RobotConstants.INTAKE_MOTOR);
       this.intakeMotor.configFactoryDefault();
-      this.intakeMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 200);
+      this.intakeMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 52000);
       this.intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RobotConstants.INTAKE_SOLENOID_FORWARD, RobotConstants.INTAKE_SOLENOID_REVERSE);
   }
 

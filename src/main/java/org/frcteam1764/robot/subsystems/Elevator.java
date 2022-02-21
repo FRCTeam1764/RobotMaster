@@ -24,7 +24,7 @@ public class Elevator extends Subsystem {
 		this.elevatorMotor.configFactoryDefault();
     this.elevatorMotor.setInverted(true);
     this.elevatorMotor.setNeutralMode(NeutralMode.Brake);
-    this.elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 200);
+    this.elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 50000);
   }
 
     public void elevatorOn(double elevatorSpeed, boolean override) {

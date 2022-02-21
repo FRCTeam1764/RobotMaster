@@ -21,7 +21,7 @@ public class Conveyor extends Subsystem {
     count = 0;
     this.conveyorMotor = new LazyTalonFX(RobotConstants.CONVEYOR_MOTOR);
 		this.conveyorMotor.configFactoryDefault();
-    this.conveyorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 200);
+    this.conveyorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 51000);
   }
 
     public void conveyorOn(double conveyorSpeed, boolean override) {

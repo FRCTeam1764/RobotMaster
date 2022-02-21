@@ -26,8 +26,6 @@ public class ShooterState {
         timer = 0;
     }
 
-
-
     public int getBallCount(){
         return ballCount;
     }
