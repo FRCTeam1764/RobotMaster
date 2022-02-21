@@ -5,24 +5,37 @@
 package org.frcteam1764.robot.state;
 
 public class ShooterState {
-    private int countTimer; //Timer loops from 0 to 24, creating a half-second timer for a 50 Hz loop
-
+    private int timer;
+    private int ballCount;
     public ShooterState() {
-        this.countTimer = 0;
+        this.timer = 0;
     }
 
     public int getTimer(){
-        return countTimer;
+        return timer;
     }
 
     /*
     / Adds one count to the timer
     */
     public void addToTimer(){
-        countTimer++;
+        timer++;
+    }
 
-        if(countTimer>24){
-            countTimer=0;
-        }
+    public void clearTimer(){
+        timer = 0;
+    }
+
+
+
+    public int getBallCount(){
+        return ballCount;
+    }
+
+    public void subtractBallCount(){
+        ballCount --;
+    }
+    public void setBallCount(int ballCount){
+        this.ballCount = ballCount;
     }
 }

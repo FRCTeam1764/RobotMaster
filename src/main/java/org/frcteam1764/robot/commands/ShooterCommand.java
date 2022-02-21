@@ -1,15 +1,19 @@
 package org.frcteam1764.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+
+import org.frcteam1764.robot.state.RobotState;
+import org.frcteam1764.robot.state.ShooterState;
 import org.frcteam1764.robot.subsystems.Shooter;
 
 public class ShooterCommand extends CommandBase {
   
   Shooter shooter;
+  ShooterState robotState;
 
-  public ShooterCommand(double shooterMotorSpeed) {
+  public ShooterCommand(double shooterMotorSpeed, ShooterState robotState) {
     shooter = new Shooter(shooterMotorSpeed);
-
+    this.robotState = robotState;
     addRequirements(shooter);
   }
 
@@ -22,17 +26,19 @@ public class ShooterCommand extends CommandBase {
   @Override
   public void execute() {
       shooter.shoot();
+      robotState.addToTimer();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     shooter.stopShooter();
+    robotState.clearTimer();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return (robotState.getBallCount() == 0 || robotState.getTimer() > 200);
   }
 }

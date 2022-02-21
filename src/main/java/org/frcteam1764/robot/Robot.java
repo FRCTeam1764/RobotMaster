@@ -24,6 +24,7 @@ public class Robot extends TimedRobot {
     private SwerveRobotContainer robotContainer;
     private UpdateManager updateManager;
     private ShuffleBoardInfo sbiInstance = ShuffleBoardInfo.getInstance();
+    RobotState state = robotContainer.getRobotState();
    
 
     @Override
@@ -52,11 +53,14 @@ public class Robot extends TimedRobot {
     public void autonomousInit() {
         robotContainer.getRobotSubsystems().setMotorModes(NeutralMode.Coast);
         RobotSubsystems subsystems = robotContainer.getRobotSubsystems();
-        RobotState state = robotContainer.getRobotState();
         state.drivetrain.resetGyroAngle(Rotation2.ZERO);
         // CommandScheduler.getInstance().schedule(new AutoGroupCommand(robotContainer.getRobotState(), robotContainer.getRobotSubsystems()));
         CommandScheduler.getInstance().schedule(
             new SequentialCommandGroup(
+                new ParallelRaceGroup(
+                    new ShooterCommand(3050, state.shooter),
+                    new FeederCommand(subsystems.conveyor, .4, subsystems.elevator, .4)
+                ),
                 new ParallelRaceGroup(
                     new FollowPathCommand(subsystems.drivetrain, state.trajectories[0]),
                     new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 0, subsystems.elevator, 0, state.intake, false)
@@ -66,16 +70,40 @@ public class Robot extends TimedRobot {
                     new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 0, subsystems.elevator, 0, state.intake, false)
                 ),
                 new ParallelRaceGroup(
+                    new ShooterCommand(3050, state.shooter),
+                    new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, 1)
+                ),
+                new ParallelRaceGroup(
                     new FollowPathCommand(subsystems.drivetrain, state.trajectories[2]),
                     new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 0, subsystems.elevator, 0, state.intake, false)
                 ),
                 new ParallelRaceGroup(
                     new FollowPathCommand(subsystems.drivetrain, state.trajectories[3]),
                     new IntakeBallCommand(subsystems.intake, 0, subsystems.conveyor, 0, subsystems.elevator, 0, state.intake, false)
+                ),
+                new ParallelRaceGroup(
+                    new ShooterCommand(3050, state.shooter),
+                    new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, 1)
                 )
             )
         );
         
+    }
+
+    @Override
+    public void autonomousPeriodic() {
+        // TODO Auto-generated method stub
+        super.autonomousPeriodic();
+        if(!robotContainer.getRobotSubsystems().conveyorBreakBeam.get() && !robotContainer.getRobotSubsystems().elevatorBreakBeam.get()){
+            robotContainer.getRobotSubsystems().shooter.shoot();
+            state.shooter.setBallCount(2);
+        }
+        else if(!robotContainer.getRobotSubsystems().elevatorBreakBeam.get() && robotContainer.getRobotSubsystems().conveyorBreakBeam.get()){
+            state.shooter.setBallCount(1);
+        }
+        if(!robotContainer.getRobotSubsystems().shooterBreakBeam.get()){
+            state.shooter.subtractBallCount();
+        }
     }
 
     @Override
@@ -99,4 +127,6 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         robotContainer.getRobotSubsystems().setMotorModes(NeutralMode.Coast);
     }
+
+    
 }

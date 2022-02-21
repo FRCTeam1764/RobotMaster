@@ -19,16 +19,20 @@ public class RobotSubsystems  {
     public Intake intake;
     public Elevator elevator;
     public Climber climber;
-    private DigitalInput conveyorBreakBeam;
-    private DigitalInput elevatorBreakBeam;
+    public Shooter shooter;
+    public DigitalInput conveyorBreakBeam;
+    public DigitalInput elevatorBreakBeam;
+    public DigitalInput shooterBreakBeam;
 	
     public RobotSubsystems(RobotState robotState) {
         this.conveyorBreakBeam = new DigitalInput(RobotConstants.CONVEYOR_BREAK_BEAM);
         this.elevatorBreakBeam = new DigitalInput(RobotConstants.ELEVATOR_BREAK_BEAM);
+        this.shooterBreakBeam = new DigitalInput(RobotConstants.SHOOTER_BREAK_BEAM);
         this.drivetrain = new SwerveDrivetrain(robotState.drivetrain);
         this.conveyor = new Conveyor(conveyorBreakBeam);
         this.elevator = new Elevator(elevatorBreakBeam);
         this.climber = new Climber();
+        this.shooter = new Shooter(3050);
         this.intake = new Intake(robotState.intake, conveyorBreakBeam, elevatorBreakBeam);
     }
     
