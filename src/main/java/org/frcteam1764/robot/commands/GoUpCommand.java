@@ -37,9 +37,6 @@ public class GoUpCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     int tolerance = 100;
-    if(climber.getMasterEncoder() > (fullExtendPos-tolerance) && climber.getMasterEncoder() < (fullExtendPos+tolerance)){
-      return true;
-    }
-    return false;
+    return climber.getMasterEncoder() > (fullExtendPos-tolerance) && climber.getMasterEncoder() < (fullExtendPos+tolerance);
   }
 }
