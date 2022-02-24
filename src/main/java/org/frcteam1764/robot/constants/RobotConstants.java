@@ -5,6 +5,9 @@ public class RobotConstants {
     public static final int ELEVATOR_BREAK_BEAM = 2;
     public static final int CONVEYOR_BREAK_BEAM = 4;
     
+    public static final int RIGHT_LIMIT_SWITCH = 6;
+    public static final int LEFT_LIMIT_SWITCH = 8;
+
     public static final int INTAKE_MOTOR = 60;
     public static final int INTAKE_SOLENOID_FORWARD = 0;
     public static final int INTAKE_SOLENOID_REVERSE = 1;

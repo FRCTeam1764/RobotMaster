@@ -16,16 +16,19 @@ public class RobotState  {
     public IntakeState intake;
 
     /**
-     * State of the robot intake
+     * State of the robot shooter
      */
     public ShooterState shooter;
 
     /**
+     * State of the robot climber
+     */
+    public ClimberState climber;
+
+    /**
      * Limelight used for vision tracking
      */
-    public Limelight limelight;
-
-    
+    public Limelight limelight;    
 
     /**
      * Trajectories generated on robot init on robot container
@@ -36,5 +39,7 @@ public class RobotState  {
         this.limelight = new Limelight();
         this.drivetrain = new DrivetrainState(leftTriggerAxis, rightTriggerAxis);
         this.intake = new IntakeState();
+        this.climber = new ClimberState();
+        this.shooter = new ShooterState();
     }
 }

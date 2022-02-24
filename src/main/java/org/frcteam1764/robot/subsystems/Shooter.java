@@ -27,8 +27,8 @@ public class Shooter extends SubsystemBase {
   public double timeDuration = -1;
   public double shooter;
 
-  public Shooter(double shooterVelocity) {
-    this.shooterVelocity = shooterVelocity;
+  public Shooter() {
+    this.shooterVelocity = 0;
 
     shooterMaster = configShooterMotors(RobotConstants.SHOOTER_MASTER_MOTOR, true, true);
     shooterFollower = configShooterMotors(RobotConstants.SHOOTER_FOLLOWER_MOTOR, false, false);
@@ -101,7 +101,6 @@ public class Shooter extends SubsystemBase {
       talon.configClosedLoopPeakOutput(PIDConstants.kSlot_Shooter_Velocity, PIDConstants.kGains_Velocity_Shooter.kPeakOutput, PIDConstants.kTimeoutMs);
       talon.configAllowableClosedloopError(PIDConstants.kSlot_Shooter_Velocity, 0, PIDConstants.kTimeoutMs);
       talon.selectProfileSlot(PIDConstants.kSlot_Shooter_Velocity, PIDConstants.PID_PRIMARY);
-      //talon = setPIDShooterVelocityConfig(talon);
     }
 
     talon.enableVoltageCompensation(true);
@@ -110,5 +109,7 @@ public class Shooter extends SubsystemBase {
     return talon;
   }
 
-
+  public void setShooterVelocity(double velocity) {
+    this.shooterVelocity = velocity;
+  }
 }

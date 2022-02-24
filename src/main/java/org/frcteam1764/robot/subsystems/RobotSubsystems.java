@@ -31,8 +31,8 @@ public class RobotSubsystems  {
         this.drivetrain = new SwerveDrivetrain(robotState.drivetrain);
         this.conveyor = new Conveyor(conveyorBreakBeam);
         this.elevator = new Elevator(elevatorBreakBeam);
-        this.climber = new Climber();
-        this.shooter = new Shooter(3050);
+        this.climber = new Climber(robotState.climber);
+        this.shooter = new Shooter();
         this.intake = new Intake(robotState.intake, conveyorBreakBeam, elevatorBreakBeam);
     }
     

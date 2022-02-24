@@ -7,9 +7,11 @@ package org.frcteam1764.robot.state;
 /** Add your docs here. */
 public class ClimberState {
     private boolean climberPistonsDeployed;
+    private int zeroOffset;
 	
 	public ClimberState() {
         this.climberPistonsDeployed = false;
+        this.zeroOffset = 0;
     }
     public boolean isClimberPistonsDeployed(){
         return climberPistonsDeployed;
@@ -21,4 +23,13 @@ public class ClimberState {
     public void deployClimberPistons(){
         climberPistonsDeployed = true;
     }
+    public int getOffset(){
+        return zeroOffset;
+    }
+
+    public void setOffset(int offsetValue){
+        zeroOffset = offsetValue;
+    }
+    
+
 }
