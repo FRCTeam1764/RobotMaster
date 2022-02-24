@@ -46,17 +46,14 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         Dashboard.updateSmartDashboard(robotContainer.getRobotState());
-       // SmartDashboard.putBoolean("Break Beam Elevator", robotContainer.breakBeamElevator.get());
-       // SmartDashboard.putBoolean("Break beam Conveyor", robotContainer.breakBeamConveyor.get());
     }
 
     @Override
     public void autonomousInit() {
-        robotContainer.getRobotSubsystems().setMotorModes(NeutralMode.Coast);
         RobotSubsystems subsystems = robotContainer.getRobotSubsystems();
-        state.drivetrain.resetGyroAngle(Rotation2.ZERO);
         Shooter shooter = robotContainer.getRobotSubsystems().shooter;
-        // CommandScheduler.getInstance().schedule(new AutoGroupCommand(robotContainer.getRobotState(), robotContainer.getRobotSubsystems()));
+        subsystems.setMotorModes(NeutralMode.Coast);
+        state.drivetrain.resetGyroAngle(Rotation2.ZERO);
         CommandScheduler.getInstance().schedule(
             new SequentialCommandGroup(
                 new ParallelRaceGroup(
