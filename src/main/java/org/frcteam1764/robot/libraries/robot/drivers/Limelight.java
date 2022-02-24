@@ -97,11 +97,19 @@ public final class Limelight {
         
         return ts.getDouble(0);
     }
+    
     /**
      * Gets the target's x offset.
      */
     public double getTargetXOffset() {
         return tx.getDouble(0);
+    }
+    
+    /**
+     * Gets the target's y offset.
+     */
+    public double getTargetYOffset() {
+        return ty.getDouble(0);
     }
 
     /**

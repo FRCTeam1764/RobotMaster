@@ -11,10 +11,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class GoUpCommand extends CommandBase {
   /** Creates a new ConveyorCommand. */
  private Climber climber;
- private int fullExtendPos;
+ private int position;
   public GoUpCommand(Climber climber, int position) {
     this.climber = climber;
-    this.fullExtendPos = position;
+    this.position = position;
   }
 
   // Called when the command is initially scheduled.
@@ -37,6 +37,6 @@ public class GoUpCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     int tolerance = 100;
-    return climber.getMasterEncoder() > (fullExtendPos-tolerance) && climber.getMasterEncoder() < (fullExtendPos+tolerance);
+    return climber.getMasterEncoder() > (position - tolerance) && climber.getMasterEncoder() < (position + tolerance);
   }
 }

@@ -6,9 +6,14 @@ package org.frcteam1764.robot.state;
 
 public class ShooterState {
     private int timer;
-    private int ballCount;
+    private int shotCount;
+    private double assignedVelocity;
+    private double actualVelocity;
     public ShooterState() {
         this.timer = 0;
+        shotCount = 0;
+        assignedVelocity = 0;
+        actualVelocity = 0;
     }
 
     public int getTimer(){
@@ -26,14 +31,30 @@ public class ShooterState {
         timer = 0;
     }
 
-    public int getBallCount(){
-        return ballCount;
+    public int getShotCount(){
+        return shotCount;
     }
 
-    public void subtractBallCount(){
-        ballCount --;
+    public void addShotCount(){
+        shotCount++;
     }
-    public void setBallCount(int ballCount){
-        this.ballCount = ballCount;
+    public void setShotCount(int shotCount){
+        this.shotCount = shotCount;
+    }
+
+    public void setAssignedVelocity(double velocity) {
+        this.assignedVelocity = velocity;
+    }
+
+    public double getAssignedVelocity() {
+        return assignedVelocity;
+    }
+
+    public void setActualVelocity(double velocity) {
+        this.actualVelocity = velocity;
+    }
+
+    public double getActualVelocity() {
+        return actualVelocity;
     }
 }

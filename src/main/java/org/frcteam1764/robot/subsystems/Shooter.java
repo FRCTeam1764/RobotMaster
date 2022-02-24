@@ -9,7 +9,9 @@ import org.frcteam2910.common.robot.drivers.LazyTalonFX;
 import org.frcteam1764.robot.constants.RobotConstants;
 import org.frcteam1764.robot.constants.PIDConstants;
 import org.frcteam1764.robot.constants.VoltageConstants;
+import org.frcteam1764.robot.state.ShooterState;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -26,9 +28,13 @@ public class Shooter extends SubsystemBase {
   public double shooterVelocity;
   public double timeDuration = -1;
   public double shooter;
+  private ShooterState shooterState;
+  private DigitalInput shooterBreakBeam;
 
-  public Shooter() {
+  public Shooter(ShooterState shooterState, DigitalInput shooterBreakBeam) {
     this.shooterVelocity = 0;
+    this.shooterState = shooterState;
+    this.shooterBreakBeam = shooterBreakBeam;
 
     shooterMaster = configShooterMotors(RobotConstants.SHOOTER_MASTER_MOTOR, true, true);
     shooterFollower = configShooterMotors(RobotConstants.SHOOTER_FOLLOWER_MOTOR, false, false);
@@ -36,13 +42,10 @@ public class Shooter extends SubsystemBase {
     shooterFollower.follow(shooterMaster);
   }
 
-  double velocity;
-
   @Override
   public void periodic() {
-    velocity = shooterMaster.getSelectedSensorVelocity(0);
-     SmartDashboard.putNumber("Shooter's Velocity", velocity);
-     SmartDashboard.putBoolean("Shooter Status", velocity>9500.0 );
+    double velocity = shooterMaster.getSelectedSensorVelocity(0);
+    shooterState.setActualVelocity(velocity);
     
   }
 
@@ -111,5 +114,9 @@ public class Shooter extends SubsystemBase {
 
   public void setShooterVelocity(double velocity) {
     this.shooterVelocity = velocity;
+  }
+
+  public boolean ballIsPresent() {
+    return shooterBreakBeam.get();
   }
 }

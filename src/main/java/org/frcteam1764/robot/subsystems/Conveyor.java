@@ -37,7 +37,7 @@ public class Conveyor extends Subsystem {
         conveyorMotor.set(ControlMode.PercentOutput, 0);
       }
     }
-    public void conveyerOff() {
+    public void conveyorOff() {
       conveyorMotor.set(ControlMode.PercentOutput, 0);
     }
 

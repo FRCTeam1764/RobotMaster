@@ -22,12 +22,13 @@ public class ShooterCommand extends CommandBase {
   @Override
   public void initialize() {
     shooter.setShooterVelocity(shooterSpeed);
+    shooterState.setAssignedVelocity(shooterSpeed);
+    shooter.shoot();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      shooter.shoot();
   }
 
   // Called once the command ends or is interrupted.

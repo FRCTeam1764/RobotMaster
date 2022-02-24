@@ -32,7 +32,7 @@ public class RobotSubsystems  {
         this.conveyor = new Conveyor(conveyorBreakBeam);
         this.elevator = new Elevator(elevatorBreakBeam);
         this.climber = new Climber(robotState.climber);
-        this.shooter = new Shooter();
+        this.shooter = new Shooter(robotState.shooter, shooterBreakBeam);
         this.intake = new Intake(robotState.intake, conveyorBreakBeam, elevatorBreakBeam);
     }
     

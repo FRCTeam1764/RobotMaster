@@ -41,9 +41,16 @@ public class DrivetrainState  {
 	private boolean driveSpeedFast;
 
     /**
-     * Drive speed defaulting to normal
+     * Drive orientation defaulting to field oriented
      */
 	private boolean isFieldOriented;
+
+    /**
+     * Disables drive command
+     */
+	private boolean disabled;
+
+	
 	
 	public DrivetrainState(Axis leftTriggerAxis, Axis rightTriggerAxis) {
 		this.leftTriggerAxis = leftTriggerAxis;
@@ -137,5 +144,21 @@ public class DrivetrainState  {
 
 	public boolean getIsFieldOriented() {
 		return isFieldOriented;
+	}
+
+	public void enable() {
+		if(disabled) {
+			disabled = false;
+		}
+	}
+
+	public void disable() {
+		if(!disabled) {
+			disabled = true;
+		}
+	}
+
+	public boolean isDisabled() {
+		return disabled;
 	}
 }

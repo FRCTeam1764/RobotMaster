@@ -34,7 +34,10 @@ public class SwerveDriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drivetrain.drive(new Vector2(applyDeadzone(getForward(), 0.15), applyDeadzone(getStrafe(), 0.15)), applyDeadzone(getRotation(), 0.15), drivetrainState.getIsFieldOriented());
+        double fwd = drivetrainState.isDisabled() ? 0.0 : applyDeadzone(getForward(), 0.15);
+        double trn = drivetrainState.isDisabled() ? 0.0 : applyDeadzone(getRotation(), 0.15);
+        double stf = drivetrainState.isDisabled() ? 0.0 : applyDeadzone(getStrafe(), 0.15);
+        drivetrain.drive(new Vector2(fwd, stf), trn, drivetrainState.getIsFieldOriented());
     }
 
     private  double applyDeadzone(double input, double deadzone) {
@@ -97,12 +100,12 @@ public class SwerveDriveCommand extends CommandBase {
     private double getCameraTrackingTurn() {
         double limelightXOffset = limelight.getTargetXOffset();
         double cameraRotationConstant = -0.025;
-        double minRotationSignal = limelightXOffset * cameraRotationConstant > 0.0 ? 0.3 : -0.3;
-        System.out.println(minRotationSignal);
+        double rotationSignal = limelightXOffset * cameraRotationConstant;
+        double minRotationSignal = rotationSignal > 0.0 ? 0.2 : -0.2;
     
         drivetrainState.setManeuver("");
         drivetrainState.setTargetTurningAngle(0.0);
-        return Math.abs(limelightXOffset) > 0.5 ? minRotationSignal : 0;
+        return Math.abs(rotationSignal) > Math.abs(minRotationSignal) ? rotationSignal : minRotationSignal;
     }
 
     private double doABarrelRoll(double targetAngle) {

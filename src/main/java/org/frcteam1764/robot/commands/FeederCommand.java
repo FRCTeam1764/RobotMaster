@@ -4,13 +4,9 @@
 
 package org.frcteam1764.robot.commands;
 
-import org.frcteam1764.robot.constants.RobotConstants;
-import org.frcteam1764.robot.state.IntakeState;
+import org.frcteam1764.robot.state.ShooterState;
 import org.frcteam1764.robot.subsystems.Conveyor;
 import org.frcteam1764.robot.subsystems.Elevator;
-import org.frcteam1764.robot.subsystems.Intake;
-
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -21,10 +17,9 @@ public class FeederCommand extends ParallelCommandGroup {
 
   public FeederCommand(
     Conveyor conveyor, double conveyorSpeed,
-    Elevator elevator, double elevatorSpeed
+    Elevator elevator, double elevatorSpeed,
+    ShooterState shooterState
   ) {
-    //DigitalInput breakBeamElevator = new DigitalInput(RobotConstants.ELEVATOR_BREAK_BEAM);
-    //DigitalInput breakBeamConveyor = new DigitalInput(RobotConstants.CONVEYOR_BREAK_BEAM);
     clearGroupedCommands();
     addCommands(
       new ConveyorCommand(conveyor, conveyorSpeed, true),

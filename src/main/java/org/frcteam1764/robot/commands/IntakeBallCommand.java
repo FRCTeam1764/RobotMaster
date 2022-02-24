@@ -25,62 +25,11 @@ public class IntakeBallCommand extends ParallelCommandGroup {
     Elevator elevator, double elevatorSpeed,
     IntakeState intakeState, boolean override
   ) {
-    //DigitalInput breakBeamElevator = new DigitalInput(RobotConstants.ELEVATOR_BREAK_BEAM);
-    //DigitalInput breakBeamConveyor = new DigitalInput(RobotConstants.CONVEYOR_BREAK_BEAM);
     clearGroupedCommands();
-    // if(!breakBeamElevator.get() && breakBeamConveyor.get()) { //some break beam stuff
-    //   intakeState.resetCount();
-      
-    //   addCommands(
-    //   new IntakeCommand(intake, intakeSpeed),
-    //   new ConveyorCommand(conveyor, conveyorSpeed)
-    //   );
-    //   }
-    // else if(!breakBeamElevator.get() && !breakBeamConveyor.get() && intakeState.getCount() < 25){ //more break beam stuff
-    //   intakeState.incrementCount();
-    //   addCommands(
-    //   new IntakeCommand(intake, intakeSpeed),
-    //   new ConveyorCommand(conveyor, conveyorSpeed)
-    //   );
-    // }
-    // else if(breakBeamElevator.get()){
-    //   intakeState.resetCount();
       addCommands(
       new IntakeCommand(intake, intakeSpeed, override),
       new ConveyorCommand(conveyor, conveyorSpeed, override),
       new ElevatorCommand(elevator, elevatorSpeed, override)
       );
-      
- //   }
   }
 }
-// if(!breakBeamElevator.get() && breakBeamConveyor.get()) { //some break beam stuff
-//     count=0;
-//     System.out.println("elevator off");
-//     return new ParallelCommandGroup(
-//         new IntakeCommand(intake, intakeSpeed),
-//         new ConveyorCommand(conveyor, conveyorSpeed)
-//     );
-// }
-// else if(!breakBeamElevator.get() && !breakBeamConveyor.get() && count < 25){ //more break beam stuff
-//     count++;
-//     System.out.println("timer");
-//     return new ParallelCommandGroup(
-//         new ConveyorCommand(conveyor, conveyorSpeed)
-//     );
-// }
-// else if(breakBeamElevator.get()){
-//     count=0;
-//     System.out.println("default");
-//     return new ParallelCommandGroup(
-//         new IntakeCommand(intake, intakeSpeed),
-//         new ConveyorCommand(conveyor, conveyorSpeed),
-//         new ElevatorCommand(elevator, elevatorSpeed)
-//     );
-// }
-// else {
-//     System.out.println("1");
-//     return new ParallelCommandGroup(
-//         new IntakeCommand(intake, 0)
-//     );
-// }

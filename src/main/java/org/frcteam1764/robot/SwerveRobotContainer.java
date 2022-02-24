@@ -60,6 +60,8 @@ public class SwerveRobotContainer {
         primaryController.getRightBumperButton().whenPressed(() -> robotState.drivetrain.setManeuver("reversebarrelroll"));
         primaryController.getRightJoystickButton().whenPressed(() -> robotState.drivetrain.setManeuver("spin"));
         primaryController.getDPadButton(Direction.DOWN).whenPressed(() -> robotState.drivetrain.toggleIsFieldOriented());
+        primaryController.getLeftTriggerAxis().getButton(.5).whileHeld(new IntakeBallCommand(robotSubsystems.intake, .9, robotSubsystems.conveyor, 1, robotSubsystems.elevator ,.81, robotState.intake, false));
+        primaryController.getRightTriggerAxis().getButton(.5).whileHeld(new ShooterCommand(robotSubsystems.shooter, 3050, robotState.shooter));
     }
 
     private void configureCoPilotButtonBindings() {
