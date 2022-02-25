@@ -14,6 +14,7 @@ public class RobotConstants {
 
     public static final int SHOOTER_MASTER_MOTOR = 32;
     public static final int SHOOTER_FOLLOWER_MOTOR = 31;
+    public static final int SHOOTER_TOP_ROLLER_MOTOR = 33;
 
     public static final int ELEVATOR_MOTOR = 20;
 

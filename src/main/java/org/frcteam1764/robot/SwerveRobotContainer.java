@@ -61,11 +61,11 @@ public class SwerveRobotContainer {
         primaryController.getRightJoystickButton().whenPressed(() -> robotState.drivetrain.setManeuver("spin"));
         primaryController.getDPadButton(Direction.DOWN).whenPressed(() -> robotState.drivetrain.toggleIsFieldOriented());
         primaryController.getLeftTriggerAxis().getButton(.5).whileHeld(new IntakeBallCommand(robotSubsystems.intake, .9, robotSubsystems.conveyor, 1, robotSubsystems.elevator ,.81, robotState.intake, false));
-        primaryController.getRightTriggerAxis().getButton(.5).whileHeld(new ShooterCommand(robotSubsystems.shooter, 3050, robotState.shooter));
+        primaryController.getRightTriggerAxis().getButton(.5).whileHeld(new ShooterCommand(robotSubsystems.shooter, robotSubsystems.shooterTopRoller, 3050, robotState.shooter));
     }
 
     private void configureCoPilotButtonBindings() {
-        secondaryController.getRightBumperButton().toggleWhenPressed(new ShooterCommand(robotSubsystems.shooter, 3050, robotState.shooter));
+        secondaryController.getRightBumperButton().toggleWhenPressed(new ShooterCommand(robotSubsystems.shooter, robotSubsystems.shooterTopRoller, 3050, robotState.shooter));
         secondaryController.getLeftBumperButton().whileHeld(new IntakeBallCommand(robotSubsystems.intake, 1, robotSubsystems.conveyor, 1,robotSubsystems.elevator, 1, robotState.intake, true));//Intake Override
         secondaryController.getBButton().whileHeld(new IntakeBallCommand(robotSubsystems.intake, 0, robotSubsystems.conveyor, -.25,robotSubsystems.elevator, -.25, robotState.intake, true));//unjam
         secondaryController.getLeftTriggerAxis().getButton(.5).whileHeld(new IntakeBallCommand(robotSubsystems.intake, .9, robotSubsystems.conveyor, 1, robotSubsystems.elevator ,.81, robotState.intake, false));//intake

@@ -4,15 +4,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import org.frcteam1764.robot.state.ShooterState;
 import org.frcteam1764.robot.subsystems.Shooter;
+import org.frcteam1764.robot.subsystems.ShooterTopRoller;
 
 public class ShooterCommand extends CommandBase {
   
   Shooter shooter;
+  ShooterTopRoller shooterTopRoller;
   ShooterState shooterState;
   double shooterSpeed;
 
-  public ShooterCommand(Shooter shooter, double shooterSpeed, ShooterState shooterState) {
+  public ShooterCommand(Shooter shooter, ShooterTopRoller shooterTopRoller, double shooterSpeed, ShooterState shooterState) {
     this.shooter = shooter;
+    this.shooterTopRoller = shooterTopRoller;
     this.shooterState = shooterState;
     this.shooterSpeed = shooterSpeed;
     addRequirements(shooter);
@@ -22,8 +25,11 @@ public class ShooterCommand extends CommandBase {
   @Override
   public void initialize() {
     shooter.setShooterVelocity(shooterSpeed);
+    shooterTopRoller.setShooterTopRollerVelocity(shooterSpeed);
     shooterState.setAssignedVelocity(shooterSpeed);
+    shooterState.setTopRollerAssignedVelocity(shooterSpeed);
     shooter.shoot();
+    shooterTopRoller.shoot();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,6 +41,9 @@ public class ShooterCommand extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     shooter.stopShooter();
+    shooterTopRoller.stopShooter();
+    shooterState.setAssignedVelocity(0);
+    shooterState.setTopRollerAssignedVelocity(0);
   }
 
   // Returns true when the command should end.

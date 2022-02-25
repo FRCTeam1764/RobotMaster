@@ -3,9 +3,7 @@ package org.frcteam1764.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import org.frcteam1764.robot.constants.RobotConstants;
-import org.frcteam1764.robot.state.IntakeState;
 import org.frcteam1764.robot.state.RobotState;
-import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 
@@ -20,6 +18,7 @@ public class RobotSubsystems  {
     public Elevator elevator;
     public Climber climber;
     public Shooter shooter;
+    public ShooterTopRoller shooterTopRoller;
     public DigitalInput conveyorBreakBeam;
     public DigitalInput elevatorBreakBeam;
     public DigitalInput shooterBreakBeam;
@@ -33,6 +32,7 @@ public class RobotSubsystems  {
         this.elevator = new Elevator(elevatorBreakBeam);
         this.climber = new Climber(robotState.climber);
         this.shooter = new Shooter(robotState.shooter, shooterBreakBeam);
+        this.shooterTopRoller = new ShooterTopRoller(robotState.shooter);
         this.intake = new Intake(robotState.intake, conveyorBreakBeam, elevatorBreakBeam);
     }
     

@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().schedule(
             new SequentialCommandGroup(
                 new ParallelRaceGroup(
-                    new AutoShooterCommand(shooter, 3050, state.shooter, 1),
+                    new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 3050, state.shooter, 1),
                     new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, 1, state.shooter)
                 ),
                 new ParallelRaceGroup(
@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
                     new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 0, subsystems.elevator, 0, state.intake, false)
                 ),
                 new ParallelRaceGroup(
-                    new AutoShooterCommand(shooter, 3050, state.shooter, 0),
+                    new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 3050, state.shooter, 0),
                     new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, 1, state.shooter)
                 ),
                 new ParallelRaceGroup(
@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
                     new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 0, subsystems.elevator, 0, state.intake, false)
                 ),
                 new ParallelRaceGroup(
-                    new AutoShooterCommand(shooter, 3050, state.shooter, 0),
+                    new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 3050, state.shooter, 0),
                     new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, 1, state.shooter)
                 )
             )
@@ -86,6 +86,7 @@ public class Robot extends TimedRobot {
         super.autonomousPeriodic();
         if(!subsystems.conveyorBreakBeam.get() && !subsystems.elevatorBreakBeam.get()){
             subsystems.shooter.shoot();
+            subsystems.shooterTopRoller.shoot();
         }
     }
 
@@ -124,14 +125,10 @@ public class Robot extends TimedRobot {
         double limelightLowerYTolerance = 10.0;
         double limelightUpperXTolerance = 2.0;
         double limelightLowerXTolerance = -2.0;
-        double shooterActualVelocity = state.shooter.getActualVelocity();
-        double shooterAssignedVelocity = state.shooter.getAssignedVelocity();
-        double tolerance = 50;
-        boolean shooterReady = shooterActualVelocity > shooterAssignedVelocity - tolerance && shooterActualVelocity < shooterAssignedVelocity + tolerance;
         boolean robotRotationReady = xOffset > limelightLowerXTolerance && xOffset < limelightUpperXTolerance;
         boolean robotDistanceReady = yOffset > limelightLowerYTolerance && yOffset < limelightUpperYTolerance;
 
-        if(shooterReady && robotRotationReady && robotRotationReady){
+        if(state.shooter.isReady() && robotRotationReady && robotRotationReady){
             state.drivetrain.disable();
             subsystems.conveyor.conveyorOn(1, true);
             subsystems.elevator.elevatorOn(1, true);
