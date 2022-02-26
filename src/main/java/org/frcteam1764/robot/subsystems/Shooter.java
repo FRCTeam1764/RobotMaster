@@ -3,6 +3,7 @@ package org.frcteam1764.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import org.frcteam2910.common.robot.drivers.LazyTalonFX;
 
@@ -40,32 +41,21 @@ public class Shooter extends SubsystemBase {
     shooterFollower = configShooterMotors(RobotConstants.SHOOTER_FOLLOWER_MOTOR, false, false);
 
     shooterFollower.follow(shooterMaster);
+    this.shooterFollower.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 150);
   }
 
-  @Override
-  public void periodic() {
-    double velocity = shooterMaster.getSelectedSensorVelocity(0);
-    shooterState.setActualVelocity(velocity);
+  // @Override
+  // public void periodic() {
+  //   double velocity = shooterMaster.getSelectedSensorVelocity(0);
+  //   shooterState.setActualVelocity(velocity);
     
-  }
+  // }
 
   public void shoot() {
     SimpleMotorFeedforward simpleMotorFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
     double kF = simpleMotorFeedforward.calculate(shooterVelocity);
     shooterMaster.set(ControlMode.Velocity, shooterVelocity/60*2048*0.1);
 
-  }
-
-  public void shoot(double time){
-    Timer timer = new Timer();
-    timer.start();
-
-    while(timer.get()<=time){
-      shoot();
-    }
-
-    timer.stop();
-    stopShooter();
   }
 
   public void stopShooter(){
@@ -96,9 +86,9 @@ public class Shooter extends SubsystemBase {
       config.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor;
       talon.configAllSettings(config);
 
-      talon.config_kP(PIDConstants.kSlot_Shooter_Velocity, 0.066, PIDConstants.kTimeoutMs);
+      talon.config_kP(PIDConstants.kSlot_Shooter_Velocity, 0.060, PIDConstants.kTimeoutMs);
       talon.config_kI(PIDConstants.kSlot_Shooter_Velocity, 0.0, PIDConstants.kTimeoutMs);
-      talon.config_kD(PIDConstants.kSlot_Shooter_Velocity, 0.0015, PIDConstants.kTimeoutMs);
+      talon.config_kD(PIDConstants.kSlot_Shooter_Velocity, 0.0009, PIDConstants.kTimeoutMs);
       talon.config_kF(PIDConstants.kSlot_Shooter_Velocity, 0.049, PIDConstants.kTimeoutMs);
       talon.config_IntegralZone(PIDConstants.kSlot_Shooter_Velocity, (int)PIDConstants.kGains_Velocity_Shooter.kIzone, PIDConstants.kTimeoutMs);
       talon.configClosedLoopPeakOutput(PIDConstants.kSlot_Shooter_Velocity, PIDConstants.kGains_Velocity_Shooter.kPeakOutput, PIDConstants.kTimeoutMs);

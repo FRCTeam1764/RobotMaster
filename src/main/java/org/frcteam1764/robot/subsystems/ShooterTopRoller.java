@@ -35,30 +35,18 @@ public class ShooterTopRoller extends SubsystemBase {
     this.shooterTopRoller = configShooterMotors(RobotConstants.SHOOTER_TOP_ROLLER_MOTOR);
   }
 
-  @Override
-  public void periodic() {
-    double velocity = shooterTopRoller.getSelectedSensorVelocity(0);
-    shooterState.setTopRollerActualVelocity(velocity);
+  // @Override
+  // public void periodic() {
+  //   double velocity = shooterTopRoller.getSelectedSensorVelocity(0);
+  //   shooterState.setTopRollerActualVelocity(velocity);
     
-  }
+  // }
 
   public void shoot() {
     SimpleMotorFeedforward simpleMotorFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
     double kF = simpleMotorFeedforward.calculate(shooterVelocity);
     shooterTopRoller.set(ControlMode.Velocity, shooterVelocity/60*2048*0.1);
 
-  }
-
-  public void shoot(double time){
-    Timer timer = new Timer();
-    timer.start();
-
-    while(timer.get()<=time){
-      shoot();
-    }
-
-    timer.stop();
-    stopShooter();
   }
 
   public void stopShooter(){

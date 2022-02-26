@@ -2,7 +2,7 @@ package org.frcteam1764.robot;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-import edu.wpi.first.wpilibj.Compressor;
+// import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,14 +23,17 @@ import org.frcteam2910.common.robot.UpdateManager;
 public class Robot extends TimedRobot {
     private SwerveRobotContainer robotContainer;
     private UpdateManager updateManager;
-    private ShuffleBoardInfo sbiInstance = ShuffleBoardInfo.getInstance();
-    private RobotState state = robotContainer.getRobotState();
-    private RobotSubsystems subsystems = robotContainer.getRobotSubsystems();
+    private ShuffleBoardInfo sbiInstance;
+    private RobotState state;
+    private RobotSubsystems subsystems;
    
 
     @Override
     public void robotInit() {
         robotContainer = new SwerveRobotContainer();
+        sbiInstance = ShuffleBoardInfo.getInstance();
+        state = robotContainer.getRobotState();
+        subsystems = robotContainer.getRobotSubsystems();
         updateManager = new UpdateManager(
                 robotContainer.getRobotSubsystems().drivetrain
         );
@@ -38,7 +41,7 @@ public class Robot extends TimedRobot {
         Dashboard.configSmartDashboard(robotContainer.getRobotState());
         state.limelight.setLedMode(LedMode.OFF);
         subsystems.intake.intakeOff();
-        subsystems.climber.pneumaticsWithdraw();;
+        subsystems.climber.pneumaticsWithdraw();
     }
 
 
@@ -82,7 +85,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousPeriodic() {
-        // TODO Auto-generated method stub
+        // // TODO Auto-generated method stub
         super.autonomousPeriodic();
         if(!subsystems.conveyorBreakBeam.get() && !subsystems.elevatorBreakBeam.get()){
             subsystems.shooter.shoot();
@@ -116,27 +119,26 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         // TODO Auto-generated method stub
         super.teleopPeriodic();
-        SmartDashboard.putNumber("Climber position", subsystems.climber.getMasterEncoder());
 
-        Limelight limelight = state.limelight;
-        double yOffset = limelight.getTargetYOffset();
-        double xOffset = limelight.getTargetXOffset();
-        double limelightUpperYTolerance = 15.0;
-        double limelightLowerYTolerance = 10.0;
-        double limelightUpperXTolerance = 2.0;
-        double limelightLowerXTolerance = -2.0;
-        boolean robotRotationReady = xOffset > limelightLowerXTolerance && xOffset < limelightUpperXTolerance;
-        boolean robotDistanceReady = yOffset > limelightLowerYTolerance && yOffset < limelightUpperYTolerance;
+        // Limelight limelight = state.limelight;
+        // double yOffset = limelight.getTargetYOffset();
+        // double xOffset = limelight.getTargetXOffset();
+        // double limelightUpperYTolerance = 15.0;
+        // double limelightLowerYTolerance = 10.0;
+        // double limelightUpperXTolerance = 2.0;
+        // double limelightLowerXTolerance = -2.0;
+        // boolean robotRotationReady = xOffset > limelightLowerXTolerance && xOffset < limelightUpperXTolerance;
+        // boolean robotDistanceReady = yOffset > limelightLowerYTolerance && yOffset < limelightUpperYTolerance;
 
-        if(state.shooter.isReady() && robotRotationReady && robotRotationReady){
-            state.drivetrain.disable();
-            subsystems.conveyor.conveyorOn(1, true);
-            subsystems.elevator.elevatorOn(1, true);
-        }
-        else {
-            state.drivetrain.enable();
-            subsystems.conveyor.conveyorOff();
-            subsystems.elevator.elevatorOff();
-        }
+        // if(state.shooter.isReady() && robotRotationReady && robotRotationReady){
+        //     state.drivetrain.disable();
+        //     subsystems.conveyor.conveyorOn(1, true);
+        //     subsystems.elevator.elevatorOn(1, true);
+        // }
+        // else {
+        //     state.drivetrain.enable();
+        //     subsystems.conveyor.conveyorOff();
+        //     subsystems.elevator.elevatorOff();
+        // }
     }
 }

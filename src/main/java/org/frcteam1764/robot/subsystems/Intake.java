@@ -8,16 +8,16 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import org.frcteam2910.common.robot.drivers.LazyTalonFX;
+import edu.wpi.first.wpilibj.motorcontrol.PWMTalonFX;
 import org.frcteam1764.robot.constants.RobotConstants;
 import org.frcteam1764.robot.state.IntakeState;
 
 /** Add your docs here*/
-public class Intake extends Subsystem {
-  private LazyTalonFX intakeMotor;
+public class Intake extends SubsystemBase {
+  private PWMTalonFX intakeMotor;
   private DoubleSolenoid intakeSolenoid;
   private IntakeState intakeState; 
   private DigitalInput conveyorBreakBeam;
@@ -27,37 +27,38 @@ public class Intake extends Subsystem {
       this.intakeState = intakeState;
       this.conveyorBreakBeam = conveyorBreakBeam;
       this.elevatorBreakBeam = elevatorBreakBeam;
-      this.intakeMotor = new LazyTalonFX(RobotConstants.INTAKE_MOTOR);
-      this.intakeMotor.configFactoryDefault();
-      this.intakeMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 52000);
+      this.intakeMotor = new PWMTalonFX(RobotConstants.INTAKE_MOTOR);
       this.intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RobotConstants.INTAKE_SOLENOID_FORWARD, RobotConstants.INTAKE_SOLENOID_REVERSE);
   }
 
   public void intakeOn(double intakeSpeed, boolean override) {
     if(override){
-      intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
-      intakeSolenoid.set(Value.kForward);
-      intakeState.deployIntake();
+      intakeMotor.set(intakeSpeed);
+      if(!intakeState.isIntakeDeployed()){
+        intakeSolenoid.set(Value.kForward);
+        intakeState.deployIntake();
+      }
     }
     else if(!elevatorBreakBeam.get() && !conveyorBreakBeam.get()){
-      intakeMotor.set(ControlMode.PercentOutput, 0);
-      intakeSolenoid.set(Value.kReverse);
-      intakeState.withdrawIntake();
+      intakeMotor.set(intakeSpeed);
+      if(intakeState.isIntakeDeployed()){
+        intakeSolenoid.set(Value.kReverse);
+        intakeState.withdrawIntake();
+      }
     }
     else{
-      intakeMotor.set(ControlMode.PercentOutput, intakeSpeed);
-      intakeSolenoid.set(Value.kForward);
-      intakeState.deployIntake();
+      intakeMotor.set(intakeSpeed);
+      if(!intakeState.isIntakeDeployed()){
+        intakeSolenoid.set(Value.kForward);
+        intakeState.deployIntake();
+      }
     }
   }
   public void intakeOff() {
-    intakeMotor.set(ControlMode.PercentOutput, 0);
-    intakeSolenoid.set(Value.kReverse);
-    intakeState.withdrawIntake();
-  }
-
-  @Override
-  protected void initDefaultCommand() {
-    // TODO Auto-generated method stub
+    intakeMotor.set(0);
+    if(intakeState.isIntakeDeployed()){
+      intakeSolenoid.set(Value.kReverse);
+      intakeState.withdrawIntake();
+    }
   }
 }

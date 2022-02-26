@@ -65,8 +65,8 @@ public class SwerveRobotContainer {
     }
 
     private void configureCoPilotButtonBindings() {
-        secondaryController.getRightBumperButton().toggleWhenPressed(new ShooterCommand(robotSubsystems.shooter, robotSubsystems.shooterTopRoller, 3050, robotState.shooter));
-        secondaryController.getLeftBumperButton().whileHeld(new IntakeBallCommand(robotSubsystems.intake, 1, robotSubsystems.conveyor, 1,robotSubsystems.elevator, 1, robotState.intake, true));//Intake Override
+        secondaryController.getRightBumperButton().toggleWhenPressed(new ShooterCommand(robotSubsystems.shooter, robotSubsystems.shooterTopRoller, 2000, robotState.shooter));
+        secondaryController.getLeftBumperButton().toggleWhenPressed(new IntakeBallCommand(robotSubsystems.intake, 1, robotSubsystems.conveyor, 1,robotSubsystems.elevator, 1, robotState.intake, true));//Intake Override
         secondaryController.getBButton().whileHeld(new IntakeBallCommand(robotSubsystems.intake, 0, robotSubsystems.conveyor, -.25,robotSubsystems.elevator, -.25, robotState.intake, true));//unjam
         secondaryController.getLeftTriggerAxis().getButton(.5).whileHeld(new IntakeBallCommand(robotSubsystems.intake, .9, robotSubsystems.conveyor, 1, robotSubsystems.elevator ,.81, robotState.intake, false));//intake
         secondaryController.getDPadButton(Direction.UP).whileHeld(new ClimberCommand(robotSubsystems.climber, .75));

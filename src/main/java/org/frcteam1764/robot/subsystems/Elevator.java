@@ -6,41 +6,32 @@ package org.frcteam1764.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import org.frcteam2910.common.robot.drivers.LazyTalonFX;
+import edu.wpi.first.wpilibj.motorcontrol.PWMTalonFX;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
 import org.frcteam1764.robot.constants.RobotConstants;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Elevator extends Subsystem {
+public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
-  private LazyTalonFX elevatorMotor;
+  private PWMTalonFX elevatorMotor;
   private DigitalInput elevatorBreakBeam;
   public Elevator(DigitalInput elevatorBreakBeam){
     this.elevatorBreakBeam = elevatorBreakBeam;
-    this.elevatorMotor = new LazyTalonFX(RobotConstants.ELEVATOR_MOTOR);
-		this.elevatorMotor.configFactoryDefault();
-    this.elevatorMotor.setInverted(true);
-    this.elevatorMotor.setNeutralMode(NeutralMode.Brake);
-    this.elevatorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 50000);
+    this.elevatorMotor = new PWMTalonFX(RobotConstants.ELEVATOR_MOTOR);
   }
 
     public void elevatorOn(double elevatorSpeed, boolean override) {
       if(elevatorBreakBeam.get() || override){
-        elevatorMotor.set(ControlMode.PercentOutput, elevatorSpeed);
+        elevatorMotor.set(-elevatorSpeed);
       }
       else{
-        elevatorMotor.set(ControlMode.PercentOutput, 0);
+        elevatorMotor.set(0);
       }
     }
     public void elevatorOff() {
-      elevatorMotor.set(ControlMode.PercentOutput, 0);
-    }
-
-    @Override
-    protected void initDefaultCommand() {
-      // TODO Auto-generated method stub
+      elevatorMotor.set(0);
     }
   }

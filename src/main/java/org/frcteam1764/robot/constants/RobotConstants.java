@@ -5,10 +5,10 @@ public class RobotConstants {
     public static final int ELEVATOR_BREAK_BEAM = 2;
     public static final int CONVEYOR_BREAK_BEAM = 4;
     
-    public static final int RIGHT_LIMIT_SWITCH = 6;
-    public static final int LEFT_LIMIT_SWITCH = 8;
+    public static final int RIGHT_LIMIT_SWITCH = 8;
+    public static final int LEFT_LIMIT_SWITCH = 6;
 
-    public static final int INTAKE_MOTOR = 60;
+    public static final int INTAKE_MOTOR = 0; //PWM
     public static final int INTAKE_SOLENOID_FORWARD = 0;
     public static final int INTAKE_SOLENOID_REVERSE = 1;
 
@@ -16,9 +16,9 @@ public class RobotConstants {
     public static final int SHOOTER_FOLLOWER_MOTOR = 31;
     public static final int SHOOTER_TOP_ROLLER_MOTOR = 33;
 
-    public static final int ELEVATOR_MOTOR = 20;
+    public static final int ELEVATOR_MOTOR = 2; //pwm
 
-    public static final int CONVEYOR_MOTOR = 50;
+    public static final int CONVEYOR_MOTOR = 1; //pwm
 
     public static final int CLIMBER_MASTER_MOTOR = 40;
     public static final int CLIMBER_FOLLOWER_MOTOR = 41;

@@ -7,7 +7,7 @@ package org.frcteam1764.robot.subsystems;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.controller.PIDController;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
@@ -16,18 +16,19 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import org.frcteam2910.common.robot.drivers.LazyTalonFX;
 import org.frcteam1764.robot.constants.RobotConstants;
 import org.frcteam1764.robot.state.ClimberState;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
 /** Add your docs here*/
-public class Climber extends Subsystem {
+public class Climber extends SubsystemBase {
   private LazyTalonFX climberMasterMotor;
   private LazyTalonFX climberFollowerMotor;
   private DoubleSolenoid climberSolenoid;
   private PIDController pidController; 
   private ClimberState climberState;
-  private DigitalInput rightLimitSwitch;
-  private DigitalInput leftLimitSwitch;
+  public DigitalInput rightLimitSwitch;
+  public DigitalInput leftLimitSwitch;
 
   public Climber(ClimberState climberState){
     this.climberMasterMotor = new LazyTalonFX(RobotConstants.CLIMBER_MASTER_MOTOR);
@@ -43,14 +44,21 @@ public class Climber extends Subsystem {
     this.climberState = climberState; 
     this.rightLimitSwitch = new DigitalInput(RobotConstants.RIGHT_LIMIT_SWITCH);
     this.leftLimitSwitch = new DigitalInput(RobotConstants.LEFT_LIMIT_SWITCH);
+    this.climberFollowerMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 171);
   }
 
 
   public void pneumaticsWithdraw(){
-    climberSolenoid.set(Value.kReverse);
+    if(climberState.isClimberPistonsDeployed()){
+      climberSolenoid.set(Value.kReverse);
+      climberState.withdrawClimberPistons();
+    }
   }
   public void pneumaticsDeploy(){
-    climberSolenoid.set(Value.kForward);
+    if(!climberState.isClimberPistonsDeployed()){
+      climberSolenoid.set(Value.kForward);
+      climberState.deployClimberPistons();
+    }
   }
 
   public void climberOn(double climberSpeed) {
@@ -85,10 +93,5 @@ public class Climber extends Subsystem {
     {
       return false;
     }
-  }
-
-  @Override
-  protected void initDefaultCommand() {
-    // TODO Auto-generated method stub
   }
 }

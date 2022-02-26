@@ -5,44 +5,38 @@
 package org.frcteam1764.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import org.frcteam2910.common.robot.drivers.LazyTalonFX;
+import edu.wpi.first.wpilibj.motorcontrol.PWMTalonFX;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import org.frcteam1764.robot.constants.RobotConstants;
 
 /** Add your docs here*/
-public class Conveyor extends Subsystem {
-  private LazyTalonFX conveyorMotor;
+public class Conveyor extends SubsystemBase {
+  private PWMTalonFX conveyorMotor;
   private DigitalInput conveyorBreakBeam;
   private int count;
   public Conveyor(DigitalInput conveyorBreakBeam){
     this.conveyorBreakBeam = conveyorBreakBeam;
     count = 0;
-    this.conveyorMotor = new LazyTalonFX(RobotConstants.CONVEYOR_MOTOR);
-		this.conveyorMotor.configFactoryDefault();
-    this.conveyorMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_7_CommStatus, 51000);
+    this.conveyorMotor = new PWMTalonFX(RobotConstants.CONVEYOR_MOTOR);
+    
   }
 
     public void conveyorOn(double conveyorSpeed, boolean override) {
       if(conveyorBreakBeam.get() || override){
         count =0;
-        conveyorMotor.set(ControlMode.PercentOutput, conveyorSpeed);
+        conveyorMotor.set(conveyorSpeed);
       }
-      else if(!conveyorBreakBeam.get() && count<25){
+      else if(!conveyorBreakBeam.get() && count < 25){
         count++;
-        conveyorMotor.set(ControlMode.PercentOutput, conveyorSpeed);
+        conveyorMotor.set(conveyorSpeed);
       }
       else{
-        conveyorMotor.set(ControlMode.PercentOutput, 0);
+        conveyorMotor.set(0);
       }
     }
     public void conveyorOff() {
-      conveyorMotor.set(ControlMode.PercentOutput, 0);
-    }
-
-    @Override
-    protected void initDefaultCommand() {
-      // TODO Auto-generated method stub
+      conveyorMotor.set(0);
     }
   }
