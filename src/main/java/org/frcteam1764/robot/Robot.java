@@ -132,7 +132,7 @@ public class Robot extends TimedRobot {
         boolean robotRotationReady = xOffset > limelightLowerXTolerance && xOffset < limelightUpperXTolerance;
         boolean robotDistanceReady = yOffset > limelightLowerYTolerance && yOffset < limelightUpperYTolerance;
 
-        if(limelight.hasTarget() && state.shooter.isReady() && robotRotationReady && robotRotationReady){
+        if(limelight.hasTarget() && state.shooter.isReady() && robotRotationReady){
             // state.drivetrain.disable();
             state.isShooting = true;
             subsystems.conveyor.conveyorOn(1, true);
