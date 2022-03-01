@@ -34,6 +34,11 @@ public class RobotState  {
      * Trajectories generated on robot init on robot container
      */
     public Trajectory[] trajectories;
+
+    /**
+     * Trajectories generated on robot init on robot container
+     */
+    public boolean isShooting;
 	
 	public RobotState(Axis leftTriggerAxis, Axis rightTriggerAxis) {
         this.limelight = new Limelight();
@@ -41,5 +46,6 @@ public class RobotState  {
         this.intake = new IntakeState();
         this.climber = new ClimberState();
         this.shooter = new ShooterState();
+        this.isShooting = false;
     }
 }

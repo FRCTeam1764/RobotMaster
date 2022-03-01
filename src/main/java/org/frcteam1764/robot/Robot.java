@@ -119,26 +119,30 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         // TODO Auto-generated method stub
         super.teleopPeriodic();
+        SmartDashboard.putNumber("Climber position", subsystems.climber.getMasterEncoder());
+        SmartDashboard.putNumber("Climber 0 offset", state.climber.getOffset());
 
-        // Limelight limelight = state.limelight;
-        // double yOffset = limelight.getTargetYOffset();
-        // double xOffset = limelight.getTargetXOffset();
-        // double limelightUpperYTolerance = 15.0;
-        // double limelightLowerYTolerance = 10.0;
-        // double limelightUpperXTolerance = 2.0;
-        // double limelightLowerXTolerance = -2.0;
-        // boolean robotRotationReady = xOffset > limelightLowerXTolerance && xOffset < limelightUpperXTolerance;
-        // boolean robotDistanceReady = yOffset > limelightLowerYTolerance && yOffset < limelightUpperYTolerance;
+        Limelight limelight = state.limelight;
+        double yOffset = limelight.getTargetYOffset();
+        double xOffset = limelight.getTargetXOffset();
+        double limelightUpperYTolerance = -2.0;
+        double limelightLowerYTolerance = -7.0;
+        double limelightUpperXTolerance = 2.0;
+        double limelightLowerXTolerance = -2.0;
+        boolean robotRotationReady = xOffset > limelightLowerXTolerance && xOffset < limelightUpperXTolerance;
+        boolean robotDistanceReady = yOffset > limelightLowerYTolerance && yOffset < limelightUpperYTolerance;
 
-        // if(state.shooter.isReady() && robotRotationReady && robotRotationReady){
-        //     state.drivetrain.disable();
-        //     subsystems.conveyor.conveyorOn(1, true);
-        //     subsystems.elevator.elevatorOn(1, true);
-        // }
-        // else {
-        //     state.drivetrain.enable();
-        //     subsystems.conveyor.conveyorOff();
-        //     subsystems.elevator.elevatorOff();
-        // }
+        if(limelight.hasTarget() && state.shooter.isReady() && robotRotationReady && robotRotationReady){
+            // state.drivetrain.disable();
+            state.isShooting = true;
+            subsystems.conveyor.conveyorOn(1, true);
+            subsystems.elevator.elevatorOn(-1, true);
+        }
+        else if(state.isShooting){
+            // state.drivetrain.enable();
+            subsystems.conveyor.conveyorOff();
+            subsystems.elevator.elevatorOff();
+            state.isShooting = false;
+        }
     }
 }

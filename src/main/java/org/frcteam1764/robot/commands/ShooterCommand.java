@@ -24,8 +24,8 @@ public class ShooterCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setShooterVelocity(shooterSpeed -700);
-    shooterTopRoller.setShooterTopRollerVelocity(shooterSpeed + 850);
+    shooter.setShooterVelocity(shooterSpeed - 850);
+    shooterTopRoller.setShooterTopRollerVelocity(shooterSpeed + 1700);
     shooterState.setAssignedVelocity(shooterSpeed);
     shooterState.setTopRollerAssignedVelocity(shooterSpeed);
     shooter.shoot();

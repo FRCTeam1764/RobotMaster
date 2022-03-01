@@ -77,13 +77,13 @@ public class ShooterState {
     }
 
     public boolean isReady() {
-        double shooterTolerance = 50;
-        double topRollerTolerance = 50;
-        boolean shooterAboveTolerance = actualVelocity > assignedVelocity - shooterTolerance;
-        boolean shooterBelowTolerance = actualVelocity < assignedVelocity + shooterTolerance;
-        boolean topRollerAboveTolerance = actualTopRollerVelocity > assignedTopRollerVelocity - topRollerTolerance;
-        boolean topRollerBelowTolerance = actualTopRollerVelocity < assignedTopRollerVelocity + topRollerTolerance;
+        // double shooterTolerance = 75;
+        // double topRollerTolerance = 600;
+        boolean shooterAboveTolerance = actualVelocity > ((assignedVelocity - 850)/60*2048*0.1);
+        boolean shooterBelowTolerance = actualVelocity < ((assignedVelocity - 850)/60*2048*0.1);
+        boolean topRollerAboveTolerance = actualTopRollerVelocity > ((assignedTopRollerVelocity + 1700)/60*2048*0.1);
+        boolean topRollerBelowTolerance = actualTopRollerVelocity < ((assignedTopRollerVelocity + 1700)/60*2048*0.1);
 
-        return shooterAboveTolerance && shooterBelowTolerance && topRollerAboveTolerance && topRollerBelowTolerance;
+        return shooterAboveTolerance && topRollerAboveTolerance;
     }
 }

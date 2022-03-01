@@ -35,7 +35,7 @@ public class Climber extends SubsystemBase {
     this.climberFollowerMotor = new LazyTalonFX(RobotConstants.CLIMBER_FOLLOWER_MOTOR);
 		this.climberMasterMotor.configFactoryDefault();
 		this.climberFollowerMotor.configFactoryDefault();
-    this.climberFollowerMotor.setInverted(true);
+    this.climberMasterMotor.setInverted(true);
     this.climberMasterMotor.setNeutralMode(NeutralMode.Brake);
     this.climberFollowerMotor.setNeutralMode(NeutralMode.Brake);
     this.climberFollowerMotor.follow(climberMasterMotor);
@@ -62,18 +62,23 @@ public class Climber extends SubsystemBase {
   }
 
   public void climberOn(double climberSpeed) {
-    climberMasterMotor.set(ControlMode.PercentOutput, climberSpeed);
+    if(!rightLimitSwitch.get() || !leftLimitSwitch.get()){
+      double newClimberSpeed = climberSpeed < 0 ? 0 : climberSpeed;
+      climberMasterMotor.set(ControlMode.PercentOutput, newClimberSpeed);
+    }
+    else {
+      climberMasterMotor.set(ControlMode.PercentOutput, climberSpeed);
+    }
   }
   public void climberOff() {
     climberMasterMotor.set(ControlMode.PercentOutput, 0);
   }
 
   public void climb(){
-    climberMasterMotor.set(pidController.calculate(getMasterEncoder()));
-  }
-
-  public void climberMaxHeight(){
-    pidController.setSetpoint(100);
+    double calculation = pidController.calculate(getPosition());
+    double setpoint = pidController.getSetpoint();
+    double signal = setpoint != 75000 ? calculation : calculation > 0.25 ? 0.25 : calculation;
+    climberMasterMotor.set(signal);
   }
 
   public int getMasterEncoder(){
@@ -86,12 +91,20 @@ public class Climber extends SubsystemBase {
   }
 
   public boolean checkLimitSwitches(){
-    if(rightLimitSwitch.get() || leftLimitSwitch.get()){
+    if(!rightLimitSwitch.get() || !leftLimitSwitch.get()){
       return true;
     }
     else
     {
       return false;
     }
+  }
+
+  public void setPosition(int position) {
+    pidController.setSetpoint(position);
+  }
+
+  public int getPosition() {
+    return getMasterEncoder() - climberState.getOffset();
   }
 }

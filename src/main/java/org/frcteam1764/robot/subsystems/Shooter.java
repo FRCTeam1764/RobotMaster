@@ -44,12 +44,12 @@ public class Shooter extends SubsystemBase {
     this.shooterFollower.setStatusFramePeriod(StatusFrameEnhanced.Status_2_Feedback0, 150);
   }
 
-  // @Override
-  // public void periodic() {
-  //   double velocity = shooterMaster.getSelectedSensorVelocity(0);
-  //   shooterState.setActualVelocity(velocity);
+  @Override
+  public void periodic() {
+    double velocity = shooterMaster.getSelectedSensorVelocity(0);
+    shooterState.setActualVelocity(velocity);
     
-  // }
+  }
 
   public void shoot() {
     SimpleMotorFeedforward simpleMotorFeedforward = new SimpleMotorFeedforward(0.0, 0.0);

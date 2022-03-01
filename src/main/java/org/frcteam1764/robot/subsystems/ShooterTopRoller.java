@@ -35,12 +35,12 @@ public class ShooterTopRoller extends SubsystemBase {
     this.shooterTopRoller = configShooterMotors(RobotConstants.SHOOTER_TOP_ROLLER_MOTOR);
   }
 
-  // @Override
-  // public void periodic() {
-  //   double velocity = shooterTopRoller.getSelectedSensorVelocity(0);
-  //   shooterState.setTopRollerActualVelocity(velocity);
+  @Override
+  public void periodic() {
+    double velocity = shooterTopRoller.getSelectedSensorVelocity(0);
+    shooterState.setTopRollerActualVelocity(velocity);
     
-  // }
+  }
 
   public void shoot() {
     SimpleMotorFeedforward simpleMotorFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
@@ -73,9 +73,9 @@ public class ShooterTopRoller extends SubsystemBase {
     config.primaryPID.selectedFeedbackSensor = FeedbackDevice.IntegratedSensor;
     talon.configAllSettings(config);
 
-    talon.config_kP(PIDConstants.kSlot_Shooter_Velocity, 0.066, PIDConstants.kTimeoutMs);
+    talon.config_kP(PIDConstants.kSlot_Shooter_Velocity, 0.045, PIDConstants.kTimeoutMs);
     talon.config_kI(PIDConstants.kSlot_Shooter_Velocity, 0.0, PIDConstants.kTimeoutMs);
-    talon.config_kD(PIDConstants.kSlot_Shooter_Velocity, 0.0015, PIDConstants.kTimeoutMs);
+    talon.config_kD(PIDConstants.kSlot_Shooter_Velocity, 0.002, PIDConstants.kTimeoutMs);
     talon.config_kF(PIDConstants.kSlot_Shooter_Velocity, 0.049, PIDConstants.kTimeoutMs);
     talon.config_IntegralZone(PIDConstants.kSlot_Shooter_Velocity, (int)PIDConstants.kGains_Velocity_Shooter.kIzone, PIDConstants.kTimeoutMs);
     talon.configClosedLoopPeakOutput(PIDConstants.kSlot_Shooter_Velocity, PIDConstants.kGains_Velocity_Shooter.kPeakOutput, PIDConstants.kTimeoutMs);

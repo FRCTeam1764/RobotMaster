@@ -99,9 +99,13 @@ public class SwerveDriveCommand extends CommandBase {
 
     private double getCameraTrackingTurn() {
         double limelightXOffset = limelight.getTargetXOffset();
-        double cameraRotationConstant = -0.025;
+        if(Math.abs(limelightXOffset) < 2){
+            return 0;
+        }
+
+        double cameraRotationConstant = -0.0295;
         double rotationSignal = limelightXOffset * cameraRotationConstant;
-        double minRotationSignal = rotationSignal > 0.0 ? 0.2 : -0.2;
+        double minRotationSignal = rotationSignal > 0.0 ? 0.0 : -0.0;
     
         drivetrainState.setManeuver("");
         drivetrainState.setTargetTurningAngle(0.0);
