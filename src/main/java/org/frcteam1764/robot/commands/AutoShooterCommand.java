@@ -15,7 +15,8 @@ public class AutoShooterCommand extends CommandBase {
   int initialShotCount;
   boolean ballIsPresent;
 
-  public AutoShooterCommand(Shooter shooter, ShooterTopRoller shooterTopRoller, double shooterSpeed, ShooterState shooterState, int initialShotCount) {
+  public AutoShooterCommand(Shooter shooter, ShooterTopRoller shooterTopRoller,
+   double shooterSpeed, ShooterState shooterState, int initialShotCount) {
     this.shooter = shooter;
     this.shooterTopRoller = shooterTopRoller;
     this.shooterState = shooterState;
