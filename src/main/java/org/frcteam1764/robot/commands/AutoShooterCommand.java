@@ -34,6 +34,7 @@ public class AutoShooterCommand extends CommandBase {
     shooterTopRoller.setShooterTopRollerVelocity(shooterSpeed);
     shooterState.setAssignedVelocity(shooterSpeed);
     shooterState.setTopRollerAssignedVelocity(shooterSpeed);
+    shooterState.clearTimer();
     shooter.shoot();
     shooterTopRoller.shoot();
   }
@@ -51,6 +52,7 @@ public class AutoShooterCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("Shooter end");
     shooter.stopShooter();
     shooterTopRoller.stopShooter();
     shooterState.clearTimer();
