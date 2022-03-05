@@ -54,9 +54,9 @@ public class LimelightUtil {
     }
 
     public boolean robotRotationReady(){
-        return limelightLowerXTolerance > limelight.getTargetXOffset() > limelightLowerXTolerance;
+        return limelightLowerXTolerance > limelight.getTargetXOffset() && limelight.getTargetXOffset() > limelightLowerXTolerance;
     }
     public boolean robotDistanceReady(){
-        return limelightUpperYTolerance > limelight.getTargetYOffset() > limelightLowerYTolerance;
+        return limelightUpperYTolerance > limelight.getTargetYOffset() && limelight.getTargetYOffset() > limelightLowerYTolerance;
     }
 }

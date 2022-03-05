@@ -4,6 +4,7 @@
 
 package org.frcteam1764.robot.commands;
 
+import org.frcteam1764.robot.state.IntakeState;
 import org.frcteam1764.robot.subsystems.Conveyor;
 import org.frcteam1764.robot.subsystems.Elevator;
 import org.frcteam1764.robot.subsystems.Intake;
@@ -20,10 +21,10 @@ public class AutoDriveCommand extends ParallelRaceGroup {
   public AutoDriveCommand(Intake intake, double intakeSpeed,
   Conveyor conveyor, double conveyorSpeed,
   Elevator elevator, double elevatorSpeed,
-  SwerveDrivetrain drivetrain, Trajectory trajectory) {
+  SwerveDrivetrain drivetrain, IntakeState intakeState, Trajectory trajectory) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    // addCommands(new IntakeBallCommand(intake, intakeSpeed, conveyor, conveyorSpeed, elevator, elevatorSpeed, false),
-    //             new FollowPathCommand(drivetrain, trajectory));
+    addCommands(new IntakeBallCommand(intake, intakeSpeed, conveyor, conveyorSpeed, elevator, elevatorSpeed, intakeState, false),
+    new FollowPathCommand(drivetrain, trajectory));
   }
 }
