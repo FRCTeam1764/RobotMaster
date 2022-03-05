@@ -125,6 +125,10 @@ public class SwerveRobotContainer {
         return primaryController.getRightTriggerAxis();
     }
 
+    public Axis getCopilotRightTriggerAxis() {
+        return secondaryController.getRightTriggerAxis();
+    }
+
     public XboxController getPrimaryController() {
         return primaryController;
     }

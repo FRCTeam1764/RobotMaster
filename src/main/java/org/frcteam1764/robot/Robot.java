@@ -146,13 +146,13 @@ public class Robot extends TimedRobot {
         SmartDashboard.putNumber("Top Shooter Ready", state.climber.getOffset());
         SmartDashboard.putBoolean("Top Shooter RPM", state.shooter.getTopRollerActualVelocity() > ((state.shooter.getTopRollerAssignedVelocity() + 1700)/60*2048*0.1));
 
-        if(limelight.hasTarget() && state.shooter.isReady() && robotDistanceReady && robotRotationReady){
+        if(robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && limelight.hasTarget() && state.shooter.isReady() && robotDistanceReady && robotRotationReady){
             // state.drivetrain.disable();
             state.isShooting = true;
             subsystems.conveyor.conveyorOn(1, true);
             subsystems.elevator.elevatorOn(-0.9, true);
         }
-        else if(state.isShooting){
+        else if(robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && state.isShooting){
             // state.drivetrain.enable();
             subsystems.conveyor.conveyorOff();
             subsystems.elevator.elevatorOff();
