@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
                 new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 2000, state.shooter, 0),
                 new ParallelRaceGroup(
                     new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 2000, state.shooter, 0),
-                    new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, -.9, state.shooter)
+                    new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, -0.9, state.shooter)
                 )
                 // ),
                 // new ParallelRaceGroup(
@@ -124,9 +124,8 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         // TODO Auto-generated method stub
         super.teleopPeriodic();
-        SmartDashboard.putNumber("Climber position", subsystems.climber.getMasterEncoder());
-        SmartDashboard.putNumber("Climber 0 offset", state.climber.getOffset());
-       
+        // SmartDashboard.putNumber("Climber position", subsystems.climber.getMasterEncoder());
+        // SmartDashboard.putNumber("Climber 0 offset", state.climber.getOffset());
 
         Limelight limelight = state.limelight;
         double yOffset = limelight.getTargetYOffset();
@@ -137,14 +136,21 @@ public class Robot extends TimedRobot {
         double limelightUpperXTolerance =  2 + xDeltaScale;
         double limelightLowerXTolerance = -2.0 - xDeltaScale;
         boolean robotRotationReady = xOffset > limelightLowerXTolerance && xOffset < limelightUpperXTolerance;
-        boolean robotDistanceReady = yOffset > limelightLowerYTolerance && yOffset < limelightUpperYTolerance;
-        System.out.println(yOffset);
+        boolean robotDistanceReady = yOffset > limelightLowerYTolerance && yOffset < limelightUpperYTolerance;        
+
+        SmartDashboard.putBoolean("Target Acquired", limelight.hasTarget());
+        SmartDashboard.putNumber("X Offset", xOffset);
+        SmartDashboard.putNumber("Y Offset", yOffset);
+        SmartDashboard.putNumber("Bottom Shooter RPM", state.shooter.getActualVelocity());
+        SmartDashboard.putBoolean("Bottom Shooter Ready", state.shooter.getActualVelocity() > ((state.shooter.getAssignedVelocity() - 850)/60*2048*0.1));
+        SmartDashboard.putNumber("Top Shooter Ready", state.climber.getOffset());
+        SmartDashboard.putBoolean("Top Shooter RPM", state.shooter.getTopRollerActualVelocity() > ((state.shooter.getTopRollerAssignedVelocity() + 1700)/60*2048*0.1));
 
         if(limelight.hasTarget() && state.shooter.isReady() && robotDistanceReady && robotRotationReady){
             // state.drivetrain.disable();
             state.isShooting = true;
             subsystems.conveyor.conveyorOn(1, true);
-            subsystems.elevator.elevatorOn(-1, true);
+            subsystems.elevator.elevatorOn(-0.9, true);
         }
         else if(state.isShooting){
             // state.drivetrain.enable();
