@@ -22,7 +22,6 @@ public class AutoShooterCommand extends CommandBase {
     this.shooterState = shooterState;
     this.shooterSpeed = shooterSpeed;
     this.initialShotCount = initialShotCount;
-    this.ballIsPresent = false;
     addRequirements(shooter);
   }
 
@@ -30,8 +29,8 @@ public class AutoShooterCommand extends CommandBase {
   @Override
   public void initialize() {
     shooterState.setShotCount(initialShotCount);
-    shooter.setShooterVelocity(shooterSpeed);
-    shooterTopRoller.setShooterTopRollerVelocity(shooterSpeed);
+    shooter.setShooterVelocity(shooterSpeed - 850);
+    shooterTopRoller.setShooterTopRollerVelocity(shooterSpeed + 1700);
     shooterState.setAssignedVelocity(shooterSpeed);
     shooterState.setTopRollerAssignedVelocity(shooterSpeed);
     shooterState.clearTimer();
@@ -42,27 +41,22 @@ public class AutoShooterCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(ballIsPresent && !shooter.ballIsPresent()){
-      shooterState.addShotCount();
-    }
-    ballIsPresent = shooter.ballIsPresent();
-    shooterState.addToTimer();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     System.out.println("Shooter end");
-    shooter.stopShooter();
-    shooterTopRoller.stopShooter();
+    // shooter.stopShooter();
+    // shooterTopRoller.stopShooter();
     shooterState.clearTimer();
-    shooterState.setAssignedVelocity(0);
-    shooterState.setTopRollerAssignedVelocity(0);
+    // shooterState.setAssignedVelocity(0);
+    // shooterState.setTopRollerAssignedVelocity(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (shooterState.getShotCount() == 2 || shooterState.getTimer() > 50);
+    return (shooterState.getShotCount() == 2 || shooterState.getTimer() > 25);
   }
 }

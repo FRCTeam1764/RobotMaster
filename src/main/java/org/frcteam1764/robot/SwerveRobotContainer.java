@@ -76,7 +76,8 @@ public class SwerveRobotContainer {
 
     private void configureCoPilotButtonBindings() {
         secondaryController.getRightBumperButton().toggleWhenPressed(new ShooterCommand(robotSubsystems.shooter, robotSubsystems.shooterTopRoller, 2000, robotState.shooter));
-        secondaryController.getLeftBumperButton().whileHeld(new IntakeBallCommand(robotSubsystems.intake, 0.8, robotSubsystems.conveyor, 1,robotSubsystems.elevator, -0.5, robotState.intake, true));//Intake Override
+        secondaryController.getLeftBumperButton().whileHeld(new NonOverrideFeederCommand(robotSubsystems.conveyor, 1, robotSubsystems.elevator, -0.6, robotState.shooter));//Indexing
+        secondaryController.getYButton().whileHeld(new IntakeBallCommand(robotSubsystems.intake, 0.8, robotSubsystems.conveyor, 1,robotSubsystems.elevator, -0.5, robotState.intake, true));//Intake Override
         secondaryController.getLeftTriggerAxis().getButton(.5).whileHeld(new IntakeBallCommand(robotSubsystems.intake, .8, robotSubsystems.conveyor, 1, robotSubsystems.elevator , -0.5, robotState.intake, false));//intake
         secondaryController.getRightTriggerAxis().getButton(.5).whileHeld(new FeederCommand(robotSubsystems.conveyor, 1, robotSubsystems.elevator, -0.9, robotState.shooter));
         secondaryController.getBButton().whileHeld(new IntakeBallCommand(robotSubsystems.intake, 0, robotSubsystems.conveyor, -0.5,robotSubsystems.elevator, 0.5, robotState.intake, true));//unjam

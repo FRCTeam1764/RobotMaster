@@ -27,6 +27,8 @@ public class Robot extends TimedRobot {
     private RobotState state;
     private RobotSubsystems subsystems;
     private LimelightUtil limelightUtil;
+    private int initialShotCount;
+    private boolean ballIsPresent;
    
 
     @Override
@@ -45,6 +47,8 @@ public class Robot extends TimedRobot {
         state.limelight.setLedMode(LedMode.OFF);
         subsystems.intake.intakeOff();
         subsystems.climber.pneumaticsWithdraw();
+        this.initialShotCount = 0;
+        this.ballIsPresent = false;
     }
 
 
@@ -57,32 +61,33 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         Shooter shooter = subsystems.shooter;
+        shooter.shoot();
+        subsystems.shooterTopRoller.shoot();
         subsystems.setMotorModes(NeutralMode.Coast);
         state.drivetrain.resetGyroAngle(Rotation2.ZERO);
         CommandScheduler.getInstance().schedule(
             new SequentialCommandGroup(
-                // new ParallelRaceGroup(
-                //     new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 3050, state.shooter, 1),
-                //     new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, 1, state.shooter)
-                // ),
+                new ParallelRaceGroup(
+                    new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 2000, state.shooter, 1),
+                    new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, -0.9, state.shooter)
+                ),
                 new ParallelRaceGroup(
                     new FollowPathCommand(subsystems.drivetrain, state.trajectories[0]),
-                    new IntakeBallCommand(subsystems.intake, .8, subsystems.conveyor, 1, subsystems.elevator, -0.6, state.intake, false)
+                    new IntakeBallCommand(subsystems.intake, 0.8, subsystems.conveyor, 1, subsystems.elevator, -0.6, state.intake, false)
+                ),
+                new ParallelRaceGroup(
+                    new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 2000, state.shooter, 0),
+                    new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, -0.9, state.shooter)
+                ),
+                new ParallelRaceGroup(
+                    new FollowPathCommand(subsystems.drivetrain, state.trajectories[1]),
+                    new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 1, subsystems.elevator, -0.6, state.intake, false)
                 ),
                 new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 2000, state.shooter, 0),
                 new ParallelRaceGroup(
                     new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 2000, state.shooter, 0),
                     new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, -0.9, state.shooter)
                 )
-                // ),
-                // new ParallelRaceGroup(
-                //     new FollowPathCommand(subsystems.drivetrain, state.trajectories[1]),
-                //     new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 0, subsystems.elevator, 0, state.intake, false)
-                // ),
-                // new ParallelRaceGroup(
-                //     new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 3050, state.shooter, 0),
-                //     new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, 1, state.shooter)
-                // )
             )
         );
         
@@ -92,10 +97,17 @@ public class Robot extends TimedRobot {
     public void autonomousPeriodic() {
         // // TODO Auto-generated method stub
         super.autonomousPeriodic();
-        // if(!subsystems.elevatorBreakBeam.get()){
-            subsystems.shooter.shoot();
-            subsystems.shooterTopRoller.shoot();
+        // // if(!subsystems.elevatorBreakBeam.get()){
+        //     subsystems.shooter.shoot();
+        //     subsystems.shooterTopRoller.shoot();
         // }
+        
+        if(ballIsPresent && !subsystems.shooter.ballIsPresent()){
+            state.shooter.addShotCount();
+        }
+        ballIsPresent = subsystems.shooter.ballIsPresent();
+        state.shooter.addToTimer();
+        System.out.println(state.shooter.getTimer());
     }
 
     @Override
