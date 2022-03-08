@@ -56,6 +56,11 @@ public class Robot extends TimedRobot {
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         Dashboard.updateSmartDashboard(robotContainer.getRobotState());
+        SmartDashboard.putNumber("Climber position", subsystems.climber.getMasterEncoder());
+        SmartDashboard.putNumber("Climber 0 offset", state.climber.getOffset());
+        
+        SmartDashboard.putBoolean("Left Limit Switch", subsystems.climber.leftLimitSwitch.get());
+        SmartDashboard.putBoolean("Right Limit Switch", subsystems.climber.rightLimitSwitch.get());
     }
 
     @Override
@@ -136,8 +141,6 @@ public class Robot extends TimedRobot {
     public void teleopPeriodic() {
         // TODO Auto-generated method stub
         super.teleopPeriodic();
-        // SmartDashboard.putNumber("Climber position", subsystems.climber.getMasterEncoder());
-        // SmartDashboard.putNumber("Climber 0 offset", state.climber.getOffset());
 
         Limelight limelight = state.limelight;
         double yOffset = limelight.getTargetYOffset();
@@ -150,13 +153,13 @@ public class Robot extends TimedRobot {
         boolean robotRotationReady = xOffset > limelightLowerXTolerance && xOffset < limelightUpperXTolerance;
         boolean robotDistanceReady = yOffset > limelightLowerYTolerance && yOffset < limelightUpperYTolerance;        
 
-        SmartDashboard.putBoolean("Target Acquired", limelight.hasTarget());
-        SmartDashboard.putNumber("X Offset", xOffset);
-        SmartDashboard.putNumber("Y Offset", yOffset);
-        SmartDashboard.putNumber("Bottom Shooter RPM", state.shooter.getActualVelocity());
-        SmartDashboard.putBoolean("Bottom Shooter Ready", state.shooter.getActualVelocity() > ((state.shooter.getAssignedVelocity() - 850)/60*2048*0.1));
-        SmartDashboard.putNumber("Top Shooter Ready", state.climber.getOffset());
-        SmartDashboard.putBoolean("Top Shooter RPM", state.shooter.getTopRollerActualVelocity() > ((state.shooter.getTopRollerAssignedVelocity() + 1700)/60*2048*0.1));
+        // SmartDashboard.putBoolean("Target Acquired", limelight.hasTarget());
+        // SmartDashboard.putNumber("X Offset", xOffset);
+        // SmartDashboard.putNumber("Y Offset", yOffset);
+        // SmartDashboard.putNumber("Bottom Shooter RPM", state.shooter.getActualVelocity());
+        // SmartDashboard.putBoolean("Bottom Shooter Ready", state.shooter.getActualVelocity() > ((state.shooter.getAssignedVelocity() - 850)/60*2048*0.1));
+        // SmartDashboard.putNumber("Top Shooter Ready", state.climber.getOffset());
+        // SmartDashboard.putBoolean("Top Shooter RPM", state.shooter.getTopRollerActualVelocity() > ((state.shooter.getTopRollerAssignedVelocity() + 1700)/60*2048*0.1));
 
         if(robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && limelight.hasTarget() && state.shooter.isReady() && robotDistanceReady && robotRotationReady){
             // state.drivetrain.disable();
