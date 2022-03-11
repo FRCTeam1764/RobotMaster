@@ -9,16 +9,14 @@ import org.frcteam1764.robot.subsystems.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class ClimberPneumaticsCommand extends CommandBase {
+public class SimpleWaitCommand extends CommandBase {
   /** Creates a new ConveyorCommand. */
- private Climber climber;
- private ClimberState climberState;
- private boolean finishedState;
+ private int waitTime; //ms
+ private boolean doneWaiting;
 
-  public ClimberPneumaticsCommand(Climber climber, ClimberState climberState, boolean finishedState) {
-    this.climber = climber;
-    this.climberState = climberState;
-    this.finishedState = finishedState;
+  public SimpleWaitCommand(int waitTime) {
+    this.waitTime = waitTime;
+    this.doneWaiting = false;
   }
 
   // Called when the command is initially scheduled.
@@ -28,12 +26,14 @@ public class ClimberPneumaticsCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(finishedState){
-      climber.pneumaticsDeploy();
+    try {
+      Thread.sleep(waitTime);
+      doneWaiting = true;
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
     }
-    else {
-      climber.pneumaticsWithdraw();
-    }
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -45,6 +45,6 @@ public class ClimberPneumaticsCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (climberState.isClimberPistonsDeployed() && finishedState) || (!climberState.isClimberPistonsDeployed() && !finishedState);
+    return doneWaiting;
   }
 }

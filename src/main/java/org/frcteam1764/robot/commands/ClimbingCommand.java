@@ -12,19 +12,19 @@ public class ClimbingCommand extends SequentialCommandGroup {
   /** Creates a new ClimbingCommand. */
   public ClimbingCommand(Climber climber) {
     clearGroupedCommands();
-    addCommands(
-      new PullDownCommand(climber, .75),
-      new GoUpCommand(climber, 1000),
-      new ClimberPneumaticsCommand(climber),
-      new GoUpCommand(climber, 2000),
-      new ClimberPneumaticsCommand(climber),
-      new PullDownCommand(climber, .75),
-      new GoUpCommand(climber, 1000),
-      new ClimberPneumaticsCommand(climber),
-      new GoUpCommand(climber, 2000),
-      new ClimberPneumaticsCommand(climber),
-      new PullDownCommand(climber, .75)
-    );
+    // addCommands(
+    //   new PullDownCommand(climber, .75),
+    //   new GoUpCommand(climber, 1000),
+    //   new ClimberPneumaticsCommand(climber),
+    //   new GoUpCommand(climber, 2000),
+    //   new ClimberPneumaticsCommand(climber),
+    //   new PullDownCommand(climber, .75),
+    //   new GoUpCommand(climber, 1000),
+    //   new ClimberPneumaticsCommand(climber),
+    //   new GoUpCommand(climber, 2000),
+    //   new ClimberPneumaticsCommand(climber),
+    //   new PullDownCommand(climber, .75)
+    // );
   }
 
 }

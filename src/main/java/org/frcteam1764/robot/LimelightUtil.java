@@ -39,6 +39,7 @@ public class LimelightUtil {
     }
 
     public void runShooter(){
+        System.out.println(limelight.getTargetYOffset());
         if(limelight.hasTarget() && state.shooter.isReady() && robotRotationReady() && robotDistanceReady()){
             // state.drivetrain.disable();
             state.isShooting = true;
@@ -50,11 +51,12 @@ public class LimelightUtil {
             subsystems.conveyor.conveyorOff();
             subsystems.elevator.elevatorOff();
             state.isShooting = false;
+            
         }
     }
 
     public boolean robotRotationReady(){
-        return limelightLowerXTolerance > limelight.getTargetXOffset() && limelight.getTargetXOffset() > limelightLowerXTolerance;
+        return limelightUpperXTolerance > limelight.getTargetXOffset() && limelight.getTargetXOffset() > limelightLowerXTolerance;
     }
     public boolean robotDistanceReady(){
         return limelightUpperYTolerance > limelight.getTargetYOffset() && limelight.getTargetYOffset() > limelightLowerYTolerance;
