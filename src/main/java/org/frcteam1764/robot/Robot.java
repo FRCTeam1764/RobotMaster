@@ -3,6 +3,7 @@ package org.frcteam1764.robot;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 // import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -49,11 +50,13 @@ public class Robot extends TimedRobot {
         subsystems.climber.pneumaticsWithdraw();
         this.initialShotCount = 0;
         this.ballIsPresent = false;
+        CameraServer.startAutomaticCapture();
     }
 
 
     @Override
     public void robotPeriodic() {
+
         CommandScheduler.getInstance().run();
         Dashboard.updateSmartDashboard(robotContainer.getRobotState());
         SmartDashboard.putNumber("Climber position", subsystems.climber.getMasterEncoder());
