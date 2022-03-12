@@ -45,13 +45,38 @@ public class SwerveDriveCommand extends CommandBase {
     }
 
     private double getForward() {
+        double targetAngle = drivetrainState.getTargetTurningAngle();
+        boolean limelightHasTarget = limelight.hasTarget();
+        boolean robotIsRotationLocked = drivetrainState.isStrafeLocked();
+        boolean robotIsCameraTracking = limelightHasTarget && robotIsRotationLocked;
+        boolean controllerTurnSignalPresent = Math.abs(rotation.get(true)) > 0.15;
+        boolean maneuverIsSet = targetAngle > 0.0 && !drivetrainState.getManeuver().equals("");
+        boolean robotHasTargetTurningAngle = targetAngle > 0.0;
+        limelight.setLedMode(robotIsRotationLocked ? LedMode.ON : LedMode.OFF);
+        limelight.setCamMode(robotIsRotationLocked ? CamMode.VISION : CamMode.DRIVER);
+
         boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
-        if (robotIsLocked) {
+        if (robotIsCameraTracking) {
+            return getCameraTrackingForward();
+        }
+        else if (robotIsRotationLocked) {
             return forward.get(true)/2; //intent to go slower when Lt or RT is held down
         }
         else {
             return forward.get(true);
         }
+    }
+
+    private double getCameraTrackingForward() {
+        double limelightXOffset = limelight.getTargetXOffset();
+        if(Math.abs(limelightXOffset) < 2){
+            return 0;
+        }
+
+        double cameraRotationConstant = -0.0295;
+        double forwardSignal = limelightXOffset * cameraRotationConstant;
+        double minRotationSignal = forwardSignal > 0.0 ? 0.0 : -0.0;
+        return Math.abs(forwardSignal) > Math.abs(minRotationSignal) ? forwardSignal : minRotationSignal;
     }
 
     private double getStrafe() {

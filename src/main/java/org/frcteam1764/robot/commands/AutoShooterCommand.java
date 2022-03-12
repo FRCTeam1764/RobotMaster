@@ -11,17 +11,19 @@ public class AutoShooterCommand extends CommandBase {
   Shooter shooter;
   ShooterTopRoller shooterTopRoller;
   ShooterState shooterState;
-  double shooterSpeed;
+  double shooterTopRollerSpeed;
   int initialShotCount;
   boolean ballIsPresent;
+  double shooterRatio;
 
   public AutoShooterCommand(Shooter shooter, ShooterTopRoller shooterTopRoller,
-   double shooterSpeed, ShooterState shooterState, int initialShotCount) {
+   double shooterTopRollerSpeed, ShooterState shooterState, int initialShotCount) {
     this.shooter = shooter;
     this.shooterTopRoller = shooterTopRoller;
     this.shooterState = shooterState;
-    this.shooterSpeed = shooterSpeed;
+    this.shooterTopRollerSpeed = shooterTopRollerSpeed;
     this.initialShotCount = initialShotCount;
+    this.shooterRatio = 3.2;
     addRequirements(shooter);
   }
 
@@ -29,10 +31,10 @@ public class AutoShooterCommand extends CommandBase {
   @Override
   public void initialize() {
     shooterState.setShotCount(initialShotCount);
-    shooter.setShooterVelocity(shooterSpeed - 850);
-    shooterTopRoller.setShooterTopRollerVelocity(shooterSpeed + 1700);
-    shooterState.setAssignedVelocity(shooterSpeed);
-    shooterState.setTopRollerAssignedVelocity(shooterSpeed);
+    shooter.setShooterVelocity(shooterTopRollerSpeed / shooterRatio);
+    shooterTopRoller.setShooterTopRollerVelocity(shooterTopRollerSpeed);
+    shooterState.setAssignedVelocity(shooterTopRollerSpeed  / shooterRatio);
+    shooterState.setTopRollerAssignedVelocity(shooterTopRollerSpeed);
     shooterState.clearTimer();
     shooter.shoot();
     shooterTopRoller.shoot();
@@ -46,7 +48,6 @@ public class AutoShooterCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Shooter end");
     // shooter.stopShooter();
     // shooterTopRoller.stopShooter();
     shooterState.clearTimer();
