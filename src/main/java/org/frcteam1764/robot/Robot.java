@@ -112,7 +112,6 @@ public class Robot extends TimedRobot {
         }
         ballIsPresent = subsystems.shooter.ballIsPresent();
         state.shooter.addToTimer();
-        System.out.println(state.shooter.getTimer());
     }
 
     @Override
@@ -145,26 +144,35 @@ public class Robot extends TimedRobot {
         Limelight limelight = state.limelight;
         double yOffset = limelight.getTargetYOffset();
         double xOffset = limelight.getTargetXOffset();
-        double limelightUpperYTolerance = -2.0; // 10 yes positive
-        double limelightLowerYTolerance = -8.0; // -18 to  -20
-        double xScale = 2;
+        double limelightUpperYTolerance = 10.0; // 10 yes positive
+        double limelightLowerYTolerance = -17.5; // -18 to  -20
+        double xScale = 4;
         double xDeltaScale = Math.abs(limelightLowerYTolerance - yOffset)*xScale/Math.abs(limelightLowerYTolerance - limelightUpperYTolerance); // plus or minus 4 close and plus or minus 2 far = 2. Y delta is between 0 and 6.
-        double limelightUpperXTolerance =  2 + xDeltaScale;
-        double limelightLowerXTolerance = -2.0 - xDeltaScale;
-        double turningToleranceRate = 0.25; // radians per second
+        double limelightUpperXTolerance =  1.5 + xDeltaScale;
+        double limelightLowerXTolerance = -1.5 - xDeltaScale;
+        double turningToleranceRate = 6; // radians per second
         boolean robotRotationReady = xOffset > limelightLowerXTolerance && xOffset < limelightUpperXTolerance;
         boolean robotDistanceReady = yOffset > limelightLowerYTolerance && yOffset < limelightUpperYTolerance;
-        boolean isNotTurning = Math.abs(state.drivetrain.getGyro().getRate()) > turningToleranceRate;      
+        boolean isNotTurning = Math.abs(state.drivetrain.getGyro().getRate()) > Math.abs(turningToleranceRate);
+
+        // if(robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && limelight.hasTarget()){
+        //     double shooterVelocity = getShooterVelocity(yOffset);
+        //     double topRollerVelocity = getTopRollerVelocity(yOffset);
+        //     subsystems.shooter.setShooterVelocity(shooterVelocity);
+        //     state.shooter.setAssignedVelocity(shooterVelocity);
+        //     subsystems.shooterTopRoller.setShooterTopRollerVelocity(getTopRollerVelocity(topRollerVelocity));
+        //     state.shooter.setTopRollerAssignedVelocity(topRollerVelocity);
+        // }
 
         // SmartDashboard.putBoolean("Target Acquired", limelight.hasTarget());
         // SmartDashboard.putNumber("X Offset", xOffset);
-        // SmartDashboard.putNumber("Y Offset", yOffset);
+        SmartDashboard.putNumber("Y Offset", yOffset);
         // SmartDashboard.putNumber("Bottom Shooter RPM", state.shooter.getActualVelocity());
         // SmartDashboard.putBoolean("Bottom Shooter Ready", state.shooter.getActualVelocity() > ((state.shooter.getAssignedVelocity() - 850)/60*2048*0.1));
         // SmartDashboard.putNumber("Top Shooter Ready", state.climber.getOffset());
         SmartDashboard.putNumber("Top Shooter RPM", state.shooter.getTopRollerActualVelocity());
 
-        if(robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && limelight.hasTarget() && state.shooter.isReady() && robotDistanceReady && robotRotationReady){
+        if(robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && limelight.hasTarget() && robotDistanceReady && robotRotationReady) { //} && state.shooter.isReady()){
             // state.drivetrain.disable();
             state.isShooting = true;
             subsystems.conveyor.conveyorOn(1, true);
@@ -176,5 +184,21 @@ public class Robot extends TimedRobot {
             subsystems.elevator.elevatorOff();
             state.isShooting = false;
         }
+    }
+
+    public double getShooterVelocity(double yOffset) {
+        double shooterDistance = yOffset + 20;
+        double maxSpeed = 2500;
+        double minSpeed = 1000;
+        double speedDelta = maxSpeed - minSpeed;
+        return minSpeed + (Math.pow((shooterDistance/30), 1/5) * speedDelta);
+    }
+
+    public double getTopRollerVelocity(double yOffset) {
+        double shooterDistance = yOffset + 20;
+        double maxSpeed = 5000;
+        double minSpeed = 500;
+        double speedDelta = maxSpeed - minSpeed;
+        return maxSpeed - ((shooterDistance/30) * speedDelta);
     }
 }

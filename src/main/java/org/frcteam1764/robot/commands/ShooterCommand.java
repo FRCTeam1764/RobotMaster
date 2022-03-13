@@ -13,21 +13,22 @@ public class ShooterCommand extends CommandBase {
   ShooterState shooterState;
   double shooterTopRollerSpeed;
   double shooterRatio;
-
+//14-17.5
+//11-13
   public ShooterCommand(Shooter shooter, ShooterTopRoller shooterTopRoller, double shooterTopRollerSpeed, ShooterState shooterState) {
     this.shooter = shooter;
     this.shooterTopRoller = shooterTopRoller;
     this.shooterState = shooterState;
     this.shooterTopRollerSpeed = shooterTopRollerSpeed;
-    this.shooterRatio = 3.2; //3.2
+    this.shooterRatio = 4.8; //3.2 //4.1 //4.8
     addRequirements(shooter);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterTopRoller.setShooterTopRollerVelocity(500); // shooterTopRollerSpeed); //3700 4500
-    shooter.setShooterVelocity(2500); // shooterTopRollerSpeed / shooterRatio); //1150 1000
+    shooterTopRoller.setShooterTopRollerVelocity(shooterTopRollerSpeed); //3700 4500
+    shooter.setShooterVelocity(shooterTopRollerSpeed / shooterRatio); //1150 1000
     shooterState.setAssignedVelocity(shooterTopRollerSpeed);
     shooterState.setTopRollerAssignedVelocity(shooterTopRollerSpeed / shooterRatio);
     shooter.shoot();

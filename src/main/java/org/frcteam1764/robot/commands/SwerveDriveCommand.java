@@ -57,7 +57,7 @@ public class SwerveDriveCommand extends CommandBase {
 
         boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
         if (robotIsCameraTracking) {
-            return getCameraTrackingForward();
+            return forward.get(true)/2; //getCameraTrackingForward();
         }
         else if (robotIsRotationLocked) {
             return forward.get(true)/2; //intent to go slower when Lt or RT is held down
@@ -68,15 +68,25 @@ public class SwerveDriveCommand extends CommandBase {
     }
 
     private double getCameraTrackingForward() {
-        double limelightXOffset = limelight.getTargetXOffset();
-        if(Math.abs(limelightXOffset) < 2){
-            return 0;
+        double limelightYOffset = limelight.getTargetYOffset();
+        double cameraFwdConstant = 0;// -0.0295;
+        double fwdUpperLimit = 10;
+        double fwdLowerLimit = -17.5;
+        double fwdSignal;
+        if(limelightYOffset > fwdUpperLimit){
+            double delta = limelightYOffset - fwdUpperLimit + 0;
+            fwdSignal = delta * cameraFwdConstant;
+        }
+        else if(limelightYOffset < fwdLowerLimit) {
+            double delta = limelightYOffset - fwdUpperLimit - 0;
+            fwdSignal = delta * cameraFwdConstant;
+        }
+        else {
+            fwdSignal = 0;
         }
 
-        double cameraRotationConstant = -0.0295;
-        double forwardSignal = limelightXOffset * cameraRotationConstant;
-        double minRotationSignal = forwardSignal > 0.0 ? 0.0 : -0.0;
-        return Math.abs(forwardSignal) > Math.abs(minRotationSignal) ? forwardSignal : minRotationSignal;
+        double minRotationSignal = fwdSignal > 0.0 ? 0.2 : -0.2;
+        return Math.abs(fwdSignal) > Math.abs(minRotationSignal) ? fwdSignal : minRotationSignal;
     }
 
     private double getStrafe() {
@@ -128,9 +138,9 @@ public class SwerveDriveCommand extends CommandBase {
             return 0;
         }
 
-        double cameraRotationConstant = -0.0295;
+        double cameraRotationConstant = -0.026;
         double rotationSignal = limelightXOffset * cameraRotationConstant;
-        double minRotationSignal = rotationSignal > 0.0 ? 0.0 : -0.0;
+        double minRotationSignal = rotationSignal > 0.0 ? 0.2 : -0.2;
     
         drivetrainState.setManeuver("");
         drivetrainState.setTargetTurningAngle(0.0);

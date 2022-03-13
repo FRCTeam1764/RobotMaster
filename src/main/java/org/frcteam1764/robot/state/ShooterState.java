@@ -80,9 +80,26 @@ public class ShooterState {
     }
 
     public boolean isReady() {
-        shooterAboveTolerance = actualVelocity > (assignedVelocity/60*2048*0.1);
-        topRollerAboveTolerance = actualTopRollerVelocity > (assignedTopRollerVelocity/60*2048*0.1);
-
-        return shooterAboveTolerance && topRollerAboveTolerance;
+        if(assignedTopRollerVelocity == 5000) {
+            return actualTopRollerVelocity > 17500;
+        }
+        else if(assignedTopRollerVelocity == 4600) {
+            return actualTopRollerVelocity > 16200;
+        }
+        else if(assignedTopRollerVelocity == 4200) {
+            return actualTopRollerVelocity > 14800;
+        }
+        else if(assignedTopRollerVelocity == 3800) {
+            return actualTopRollerVelocity > 13400;
+        }
+        else if(assignedTopRollerVelocity == 3000) {
+            return actualTopRollerVelocity > 10600;
+        }
+        else if(assignedTopRollerVelocity == 2400) {
+            return actualTopRollerVelocity > 8500;
+        }
+        else {
+          return false;
+        }
     }
 }

@@ -72,11 +72,11 @@ public class SwerveRobotContainer {
         //     // robotSubsystems.elevator.elevatorOff();
         //     // robotSubsystems.intake.intakeOff();
         // });
-        primaryController.getRightTriggerAxis().getButton(.5).whileHeld(new ShooterCommand(robotSubsystems.shooter, robotSubsystems.shooterTopRoller, 3700, robotState.shooter));
+        primaryController.getRightTriggerAxis().getButton(.5).whileHeld(new DistanceShooterCommand(robotSubsystems.shooter, robotSubsystems.shooterTopRoller, getRobotState().limelight, robotState.shooter));
     }
 
     private void configureCoPilotButtonBindings() {
-        secondaryController.getRightBumperButton().toggleWhenPressed(new ShooterCommand(robotSubsystems.shooter, robotSubsystems.shooterTopRoller, 4000, robotState.shooter));
+        secondaryController.getRightBumperButton().toggleWhenPressed(new ShooterCommand(robotSubsystems.shooter, robotSubsystems.shooterTopRoller, 5000, robotState.shooter)); //4300
         secondaryController.getLeftBumperButton().whileHeld(new NonOverrideFeederCommand(robotSubsystems.conveyor, 1, robotSubsystems.elevator, -0.6, robotState.shooter));//Indexing
         // secondaryController.getYButton().whileHeld(new IntakeBallCommand(robotSubsystems.intake, 0.8, robotSubsystems.conveyor, 1,robotSubsystems.elevator, -0.5, robotState.intake, true));//Intake Override
         secondaryController.getLeftTriggerAxis().getButton(.5).whileHeld(new IntakeBallCommand(robotSubsystems.intake, 0.7, robotSubsystems.conveyor, 1, robotSubsystems.elevator , -0.6, robotState.intake, false));//intake
@@ -87,7 +87,7 @@ public class SwerveRobotContainer {
         secondaryController.getDPadButton(Direction.DOWN).whileHeld(new ClimberCommand(robotSubsystems.climber, -1.0));
         secondaryController.getXButton().whenPressed(new SequentialCommandGroup(
             new ClimberPneumaticsCommand(robotSubsystems.climber, robotState.climber, true),
-            new SimpleWaitCommand(500),
+            new SimpleWaitCommand(1000),
             new GoUpCommand(robotSubsystems.climber, 350000),
             new SimpleWaitCommand(1000),
             new ClimberPneumaticsCommand(robotSubsystems.climber, robotState.climber, false)
