@@ -43,17 +43,17 @@ public class DistanceShooterCommand extends CommandBase {
     }
     else if(ty <= -11 && ty > -13.5) {
       shooterTopRoller.setShooterTopRollerVelocity(4600);
-      shooter.setShooterVelocity(4400 / 4.8);
-      shooterState.setAssignedVelocity(4400);
+      shooter.setShooterVelocity(4600 / 4.8);
+      shooterState.setAssignedVelocity(4600);
       shooterState.setTopRollerAssignedVelocity(4600 / 4.8);
       shooter.shoot();
       shooterTopRoller.shoot();
     }
     else if(ty <= -8.5 && ty > -11) {
-      shooterTopRoller.setShooterTopRollerVelocity(4200);
-      shooter.setShooterVelocity(4200 / 4.4);
-      shooterState.setAssignedVelocity(4200);
-      shooterState.setTopRollerAssignedVelocity(4200 / 4.4);
+      shooterTopRoller.setShooterTopRollerVelocity(4300);
+      shooter.setShooterVelocity(4300 / 4.5);
+      shooterState.setAssignedVelocity(4300);
+      shooterState.setTopRollerAssignedVelocity(4300 / 4.5);
       shooter.shoot();
       shooterTopRoller.shoot();
     }

@@ -215,8 +215,8 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
 
     private void configDriveTalon(TalonFX talon) {
         configTalon(talon);
-        setTalonMaxOutput(talon, 0.75);
-        talon.configOpenloopRamp(0.5);
+        setTalonMaxOutput(talon, 0.79);
+        talon.configOpenloopRamp(0.45);
     }
 
     private void configTalon(TalonFX talon) {

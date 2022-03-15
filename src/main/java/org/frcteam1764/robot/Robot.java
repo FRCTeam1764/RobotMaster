@@ -76,7 +76,7 @@ public class Robot extends TimedRobot {
         CommandScheduler.getInstance().schedule(
             new SequentialCommandGroup(
                 new ParallelRaceGroup(
-                    new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 3700, state.shooter, 1),
+                    new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 1),
                     new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, -0.9, state.shooter)
                 ),
                 new ParallelRaceGroup(
@@ -84,16 +84,16 @@ public class Robot extends TimedRobot {
                     new IntakeBallCommand(subsystems.intake, 0.8, subsystems.conveyor, 1, subsystems.elevator, -0.6, state.intake, false)
                 ),
                 new ParallelRaceGroup(
-                    new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 3700, state.shooter, 0),
+                    new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 0),
                     new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, -0.9, state.shooter)
                 ),
                 new ParallelRaceGroup(
                     new FollowPathCommand(subsystems.drivetrain, state.trajectories[1]),
                     new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 1, subsystems.elevator, -0.6, state.intake, false)
                 ),
-                new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 3700, state.shooter, 0),
+                new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 0),
                 new ParallelRaceGroup(
-                    new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 3700, state.shooter, 0),
+                    new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 0),
                     new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, -0.9, state.shooter)
                 )
             )
@@ -179,7 +179,7 @@ public class Robot extends TimedRobot {
             // state.drivetrain.disable();
             state.isShooting = true;
             subsystems.conveyor.conveyorOn(1, true);
-            subsystems.elevator.elevatorOn(-0.9, true);
+            subsystems.elevator.elevatorOn(-0.8, true);
         }
         else if(robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && state.isShooting){
             // state.drivetrain.enable();

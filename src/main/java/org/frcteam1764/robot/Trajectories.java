@@ -23,8 +23,8 @@ public class Trajectories {
 	 .lineTo(new Vector2(-35.0, -85.0), Rotation2.fromDegrees(-20.0))
 	.build();
 	private static Path autoPath2 = new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
-	.lineTo(new Vector2(20.0, -100.0), Rotation2.fromDegrees(-75.0))
-	.lineTo(new Vector2(20.0, -265.0), Rotation2.fromDegrees(-75.0))
+	.lineTo(new Vector2(22.0, -100.0), Rotation2.fromDegrees(-65.0))
+	.lineTo(new Vector2(22.0, -265.0), Rotation2.fromDegrees(-65.0))
 	.lineTo(new Vector2(30.0, -200.0), Rotation2.fromDegrees(-10.0))
 	.lineTo(new Vector2(30.0, -45.0), Rotation2.fromDegrees(-10.0))
 	.build();

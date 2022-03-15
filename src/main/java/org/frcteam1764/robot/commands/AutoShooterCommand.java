@@ -23,7 +23,7 @@ public class AutoShooterCommand extends CommandBase {
     this.shooterState = shooterState;
     this.shooterTopRollerSpeed = shooterTopRollerSpeed;
     this.initialShotCount = initialShotCount;
-    this.shooterRatio = 3.2;
+    this.shooterRatio = 4;
     addRequirements(shooter);
   }
 
