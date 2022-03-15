@@ -85,20 +85,20 @@ public class SwerveRobotContainer {
 
         secondaryController.getDPadButton(Direction.UP).whileHeld(new ClimberCommand(robotSubsystems.climber, 1));
         secondaryController.getDPadButton(Direction.DOWN).whileHeld(new ClimberCommand(robotSubsystems.climber, -1.0));
-        // secondaryController.getXButton().whenPressed(new SequentialCommandGroup(
-        //     new ClimberPneumaticsCommand(robotSubsystems.climber, robotState.climber, true),
-        //     new SimpleWaitCommand(1000),
-        //     new GoUpCommand(robotSubsystems.climber, 350000),
-        //     new SimpleWaitCommand(1000),
-        //     new ClimberPneumaticsCommand(robotSubsystems.climber, robotState.climber, false)
-        //     // new PullDownCommand(robotSubsystems.climber, -1),
-        //     // new GoUpCommand(robotSubsystems.climber, 125000)
-        // ));
-        // secondaryController.getAButton().whenPressed(new SequentialCommandGroup(
-        //     new PullDownCommand(robotSubsystems.climber, -0.6),
-        //     new SimpleWaitCommand(5000),
-        //     new GoUpCommand(robotSubsystems.climber, 125000)
-        // ));
+        secondaryController.getXButton().whenPressed(new SequentialCommandGroup(
+            new ClimberPneumaticsCommand(robotSubsystems.climber, robotState.climber, true),
+            new SimpleWaitCommand(1000),
+            new GoUpCommand(robotSubsystems.climber, 350000),
+            new SimpleWaitCommand(1000),
+            new ClimberPneumaticsCommand(robotSubsystems.climber, robotState.climber, false)
+            // new PullDownCommand(robotSubsystems.climber, -1),
+            // new GoUpCommand(robotSubsystems.climber, 125000)
+        ));
+        secondaryController.getAButton().whenPressed(new SequentialCommandGroup(
+            new PullDownCommand(robotSubsystems.climber, -0.6),
+            new SimpleWaitCommand(5000),
+            new GoUpCommand(robotSubsystems.climber, 125000)
+        ));
         // secondaryController.getXButton().toggleWhenPressed(new ClimberPneumaticsCommand(robotSubsystems.climber, robotState.climber, !robotState.climber.isClimberPistonsDeployed()));
         // secondaryController.getAButton().whenPressed(new PullDownCommand(robotSubsystems.climber, -.60));
         // secondaryController.getYButton().whenPressed(new GoUpCommand(robotSubsystems.climber, 321000));
