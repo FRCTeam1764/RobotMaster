@@ -11,8 +11,6 @@ public class ShooterState {
     private double actualVelocity;
     private double assignedTopRollerVelocity;
     private double actualTopRollerVelocity;
-    private boolean topRollerAboveTolerance;
-    private boolean shooterAboveTolerance;
 
     public ShooterState() {
         timer = 0;

@@ -76,8 +76,9 @@ public class Climber extends SubsystemBase {
 
   public void climb(){
     double calculation = pidController.calculate(getPosition());
+    System.out.println(getPosition());
     double setpoint = pidController.getSetpoint();
-    double signal = setpoint != 125000 ? calculation : calculation > 0.45 ? 0.45 : calculation;
+    double signal = setpoint != 90000 ? calculation : calculation > 0.45 ? 0.45 : calculation;
     climberMasterMotor.set(signal);
   }
 

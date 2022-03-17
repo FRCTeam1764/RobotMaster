@@ -45,48 +45,13 @@ public class SwerveDriveCommand extends CommandBase {
     }
 
     private double getForward() {
-        double targetAngle = drivetrainState.getTargetTurningAngle();
-        boolean limelightHasTarget = limelight.hasTarget();
         boolean robotIsRotationLocked = drivetrainState.isStrafeLocked();
-        boolean robotIsCameraTracking = limelightHasTarget && robotIsRotationLocked;
-        boolean controllerTurnSignalPresent = Math.abs(rotation.get(true)) > 0.15;
-        boolean maneuverIsSet = targetAngle > 0.0 && !drivetrainState.getManeuver().equals("");
-        boolean robotHasTargetTurningAngle = targetAngle > 0.0;
-        limelight.setLedMode(robotIsRotationLocked ? LedMode.ON : LedMode.OFF);
-        limelight.setCamMode(robotIsRotationLocked ? CamMode.VISION : CamMode.DRIVER);
-
-        boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
-        if (robotIsCameraTracking) {
-            return forward.get(true)/2; //getCameraTrackingForward();
-        }
-        else if (robotIsRotationLocked) {
+        if (robotIsRotationLocked) {
             return forward.get(true)/2; //intent to go slower when Lt or RT is held down
         }
         else {
             return forward.get(true);
         }
-    }
-
-    private double getCameraTrackingForward() {
-        double limelightYOffset = limelight.getTargetYOffset();
-        double cameraFwdConstant = 0;// -0.0295;
-        double fwdUpperLimit = 10;
-        double fwdLowerLimit = -17.5;
-        double fwdSignal;
-        if(limelightYOffset > fwdUpperLimit){
-            double delta = limelightYOffset - fwdUpperLimit + 0;
-            fwdSignal = delta * cameraFwdConstant;
-        }
-        else if(limelightYOffset < fwdLowerLimit) {
-            double delta = limelightYOffset - fwdUpperLimit - 0;
-            fwdSignal = delta * cameraFwdConstant;
-        }
-        else {
-            fwdSignal = 0;
-        }
-
-        double minRotationSignal = fwdSignal > 0.0 ? 0.2 : -0.2;
-        return Math.abs(fwdSignal) > Math.abs(minRotationSignal) ? fwdSignal : minRotationSignal;
     }
 
     private double getStrafe() {
