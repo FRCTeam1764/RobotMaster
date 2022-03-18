@@ -82,9 +82,9 @@ public class ShooterState {
             return actualTopRollerVelocity > 17500;
         }
         else if(assignedTopRollerVelocity == 4600) {
-            return actualTopRollerVelocity > 16200;
+            return actualTopRollerVelocity > 15800;
         }
-        else if(assignedTopRollerVelocity == 4200) {
+        else if(assignedTopRollerVelocity == 4300) {
             return actualTopRollerVelocity > 14800;
         }
         else if(assignedTopRollerVelocity == 3800) {

@@ -45,12 +45,12 @@ public class Robot extends TimedRobot {
         );
         updateManager.startLoop(5.0e-3);
         Dashboard.configSmartDashboard(robotContainer.getRobotState());
-        state.limelight.setLedMode(LedMode.OFF);
+        // state.limelight.setLedMode(LedMode.OFF);
         subsystems.intake.intakeOff();
         subsystems.climber.pneumaticsWithdraw();
         this.initialShotCount = 0;
         this.ballIsPresent = false;
-        CameraServer.startAutomaticCapture();
+       // CameraServer.startAutomaticCapture();
     }
 
 
@@ -69,6 +69,33 @@ public class Robot extends TimedRobot {
         subsystems.setMotorModes(NeutralMode.Coast);
         state.drivetrain.resetGyroAngle(Rotation2.ZERO);
         CommandScheduler.getInstance().schedule(
+
+        //
+        //
+        // 2 ball auto
+        //
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+            // new SequentialCommandGroup(
+            //     new ParallelRaceGroup(
+            //         new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 1),
+            //         new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, -0.9, state.shooter)
+            //     ),
+            //     new ParallelRaceGroup(
+            //         new FollowPathCommand(subsystems.drivetrain, state.trajectories[0])
+            //         ,new IntakeBallCommand(subsystems.intake, 0.8, subsystems.conveyor, 1, subsystems.elevator, -0.6, state.intake, false)
+            //     ),
+            //     new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 0),
+            //     new ParallelRaceGroup(
+            //         new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 1),
+            //         new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, -0.9, state.shooter)
+            //     )
+            // )
+
+        //
+        //
+        // 5 ball auto
+        //
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
             new SequentialCommandGroup(
                 new ParallelRaceGroup(
                     new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 1),
@@ -76,7 +103,7 @@ public class Robot extends TimedRobot {
                 ),
                 new ParallelRaceGroup(
                     new FollowPathCommand(subsystems.drivetrain, state.trajectories[0])
-                    // ,new IntakeBallCommand(subsystems.intake, 0.8, subsystems.conveyor, 1, subsystems.elevator, -0.6, state.intake, false)
+                    ,new IntakeBallCommand(subsystems.intake, 0.8, subsystems.conveyor, 1, subsystems.elevator, -0.6, state.intake, false)
                 ),
                 new ParallelRaceGroup(
                     new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 0),
@@ -84,7 +111,7 @@ public class Robot extends TimedRobot {
                 ),
                 new ParallelRaceGroup(
                     new FollowPathCommand(subsystems.drivetrain, state.trajectories[1])
-                    // ,new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 1, subsystems.elevator, -0.6, state.intake, false)
+                    ,new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 1, subsystems.elevator, -0.6, state.intake, false)
                 ),
                 new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 0),
                 new ParallelRaceGroup(
@@ -138,8 +165,9 @@ public class Robot extends TimedRobot {
         Limelight limelight = state.limelight;
         double yOffset = limelight.getTargetYOffset();
         double xOffset = limelight.getTargetXOffset();
-        double limelightUpperYTolerance = 5.0;
-        double limelightLowerYTolerance = -17.5;
+        double limelightUpperYTolerance = 3.0;
+        double limelightLowerYTolerance = -17.5;//-17.5
+        
         double xScale = 4;
         double xDeltaScale = Math.abs(limelightLowerYTolerance - yOffset)*xScale/Math.abs(limelightLowerYTolerance - limelightUpperYTolerance); // plus or minus 4 close and plus or minus 2 far = 2. Y delta is between 0 and 6.
         double limelightUpperXTolerance =  1.5 + xDeltaScale;
@@ -156,8 +184,11 @@ public class Robot extends TimedRobot {
         // SmartDashboard.putBoolean("Bottom Shooter Ready", state.shooter.getActualVelocity() > ((state.shooter.getAssignedVelocity() - 850)/60*2048*0.1));
         // SmartDashboard.putNumber("Top Shooter Ready", state.climber.getOffset());
         SmartDashboard.putNumber("Top Shooter RPM", state.shooter.getTopRollerActualVelocity());
+        SmartDashboard.putNumber("assigned velo", state.shooter.getTopRollerAssignedVelocity());
+        SmartDashboard.putBoolean("Shooter Ready", state.shooter.isReady());
+  //  SmartDashboard.putNumber("Shooter Velocity", state.shooter.getActualVelocity());
 
-        if(robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && limelight.hasTarget() && robotDistanceReady && robotRotationReady) { //} && state.shooter.isReady()){
+        if(robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && limelight.hasTarget() && robotDistanceReady && robotRotationReady && state.shooter.isReady()){
             state.isShooting = true;
             subsystems.conveyor.conveyorOn(1, true);
             subsystems.elevator.elevatorOn(-0.8, true);
@@ -166,6 +197,7 @@ public class Robot extends TimedRobot {
             subsystems.conveyor.conveyorOff();
             subsystems.elevator.elevatorOff();
             state.isShooting = false;
+
         }
     }
 }

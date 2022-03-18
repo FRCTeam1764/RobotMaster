@@ -16,6 +16,7 @@ public class PullDownCommand extends CommandBase {
   public PullDownCommand(Climber climber, double climberSpeed) {
     this.climber = climber;
     this.climberSpeed = climberSpeed; 
+    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.

@@ -4,6 +4,7 @@
 
 package org.frcteam1764.robot.commands;
 
+import org.frcteam1764.robot.state.ClimberState;
 import org.frcteam1764.robot.subsystems.Climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -11,10 +12,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class GoUpCommand extends CommandBase {
   /** Creates a new ConveyorCommand. */
  private Climber climber;
+ private ClimberState climberState;
+ private boolean isPistonsDeployed;
  private int position;
-  public GoUpCommand(Climber climber, int position) {
+  public GoUpCommand(Climber climber, ClimberState climberState, boolean isPistonsDeployed, int position) {
     this.climber = climber;
+    this.climberState = climberState;
+    this.isPistonsDeployed = isPistonsDeployed;
     this.position = position;
+    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
@@ -26,7 +32,9 @@ public class GoUpCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.climb();
+    if(climberState.isClimberPistonsDeployed() == isPistonsDeployed){
+      climber.climb();
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -39,6 +47,7 @@ public class GoUpCommand extends CommandBase {
   @Override
   public boolean isFinished() {
     int tolerance = 500;
-    return climber.getPosition() > (position - tolerance) && climber.getPosition() < (position + tolerance);
+    return (climber.getPosition() > (position - tolerance) && climber.getPosition() < (position + tolerance))
+           || climberState.isClimberPistonsDeployed() == !isPistonsDeployed;
   }
 }
