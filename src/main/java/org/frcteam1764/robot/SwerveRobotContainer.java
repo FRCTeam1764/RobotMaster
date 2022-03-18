@@ -102,15 +102,15 @@ public class SwerveRobotContainer {
         
         secondaryController.getAButton().whenPressed(new SequentialCommandGroup(
             new PullDownCommand(robotSubsystems.climber, -0.6),
-            new GoUpCommand(robotSubsystems.climber, robotState.climber, false, 90000),
-            new GoUpCommand(robotSubsystems.climber, robotState.climber, false, 250000)//250000
+            new GoUpCommand(robotSubsystems.climber, robotState.climber, false, 90000, false),
+            new GoUpCommand(robotSubsystems.climber, robotState.climber, false, 250000, false)//250000
         ));
         secondaryController.getXButton().whenPressed(new SequentialCommandGroup(
             new ClimberPneumaticsCommand(robotSubsystems.climber, robotState.climber, true),
             new IntakePneumaticsCommand(robotSubsystems.intake, robotState.intake, true)
         ));
         secondaryController.getYButton().whenPressed(new SequentialCommandGroup(
-            new GoUpCommand(robotSubsystems.climber, robotState.climber, true, 380000),
+            new GoUpCommand(robotSubsystems.climber, robotState.climber, true, 380000, true),
             new SimpleWaitCommand(1000),
             new IntakePneumaticsCommand(robotSubsystems.intake, robotState.intake, false),
             new ClimberPneumaticsCommand(robotSubsystems.climber, robotState.climber, false)

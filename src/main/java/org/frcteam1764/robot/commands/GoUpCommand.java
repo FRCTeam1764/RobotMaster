@@ -15,11 +15,13 @@ public class GoUpCommand extends CommandBase {
  private ClimberState climberState;
  private boolean isPistonsDeployed;
  private int position;
-  public GoUpCommand(Climber climber, ClimberState climberState, boolean isPistonsDeployed, int position) {
+ private boolean override;
+  public GoUpCommand(Climber climber, ClimberState climberState, boolean isPistonsDeployed, int position, boolean override) {
     this.climber = climber;
     this.climberState = climberState;
     this.isPistonsDeployed = isPistonsDeployed;
     this.position = position;
+    this.override = override;
     addRequirements(climber);
   }
 
@@ -32,7 +34,7 @@ public class GoUpCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(climberState.isClimberPistonsDeployed() == isPistonsDeployed){
+    if(climberState.isClimberPistonsDeployed() == isPistonsDeployed || override){
       climber.climb();
     }
   }
@@ -48,6 +50,6 @@ public class GoUpCommand extends CommandBase {
   public boolean isFinished() {
     int tolerance = 500;
     return (climber.getPosition() > (position - tolerance) && climber.getPosition() < (position + tolerance))
-           || climberState.isClimberPistonsDeployed() == !isPistonsDeployed;
+           || (climberState.isClimberPistonsDeployed() == !isPistonsDeployed && !override);
   }
 }
