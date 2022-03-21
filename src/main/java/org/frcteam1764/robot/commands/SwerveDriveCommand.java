@@ -49,6 +49,9 @@ public class SwerveDriveCommand extends CommandBase {
         if (robotIsRotationLocked) {
             return forward.get(true)/2; //intent to go slower when Lt or RT is held down
         }
+        else if(drivetrainState.getLeftTrigger()) {
+            return forward.get(true)/2;
+        }
         else {
             return forward.get(true);
         }
@@ -58,6 +61,9 @@ public class SwerveDriveCommand extends CommandBase {
         boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
         if (robotIsLocked) {
             return strafe.get(true)/2; //intent to go slower when Lt or RT is held down
+        }
+        else if(drivetrainState.getLeftTrigger()) {
+            return strafe.get(true)/2;
         }
         else {
             return strafe.get(true);
@@ -77,6 +83,9 @@ public class SwerveDriveCommand extends CommandBase {
 
         if (robotIsCameraTracking) {
             return getCameraTrackingTurn();
+        }
+        else if(drivetrainState.getLeftTrigger()) {
+            return rotation.get(true)/2;
         }
         else if (controllerTurnSignalPresent) { // override of critical angles
             drivetrainState.setManeuver("");
@@ -102,9 +111,12 @@ public class SwerveDriveCommand extends CommandBase {
         if(Math.abs(limelightXOffset) < 2){
             return 0;
         }
+        
+        double targetOffset = 0.2;
+        double limelightTargetOffset = limelightXOffset + targetOffset;
 
         double cameraRotationConstant = -0.026;
-        double rotationSignal = limelightXOffset * cameraRotationConstant;
+        double rotationSignal = limelightTargetOffset * cameraRotationConstant;
         double minRotationSignal = rotationSignal > 0.0 ? 0.2 : -0.2;
     
         drivetrainState.setManeuver("");

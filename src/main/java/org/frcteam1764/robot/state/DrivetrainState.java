@@ -161,4 +161,8 @@ public class DrivetrainState  {
 	public boolean isDisabled() {
 		return disabled;
 	}
+
+	public boolean getLeftTrigger() {
+		return leftTriggerAxis.get(true) > 0.5;
+	};
 }

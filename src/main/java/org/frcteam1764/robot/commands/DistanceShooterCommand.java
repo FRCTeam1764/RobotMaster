@@ -35,8 +35,8 @@ public class DistanceShooterCommand extends CommandBase {
   
     // if(ty <= -13.5) {
     // shooterTopRoller.setShooterTopRollerVelocity(5000);
-    // shooter.setShooterVelocity(5000 / 4.8);
-    // shooterState.setAssignedVelocity(5000 / 4.8);
+    // shooter.setShooterVelocity(5000 / 5.2);
+    // shooterState.setAssignedVelocity(5000 / 5.2);
     // shooterState.setTopRollerAssignedVelocity(5000);
     // shooter.shoot();
     // shooterTopRoller.shoot();

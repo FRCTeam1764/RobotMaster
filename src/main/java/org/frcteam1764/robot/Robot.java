@@ -166,12 +166,13 @@ public class Robot extends TimedRobot {
         double yOffset = limelight.getTargetYOffset();
         double xOffset = limelight.getTargetXOffset();
         double limelightUpperYTolerance = 3.0;
-        double limelightLowerYTolerance = -17.5;//-17.5
+        double limelightLowerYTolerance = -13.5;//-17.5
         
+        double targetOffset = 0.2;
         double xScale = 4;
         double xDeltaScale = Math.abs(limelightLowerYTolerance - yOffset)*xScale/Math.abs(limelightLowerYTolerance - limelightUpperYTolerance); // plus or minus 4 close and plus or minus 2 far = 2. Y delta is between 0 and 6.
-        double limelightUpperXTolerance =  1.5 + xDeltaScale;
-        double limelightLowerXTolerance = -1.5 - xDeltaScale;
+        double limelightUpperXTolerance =  1.5 + xDeltaScale + targetOffset;
+        double limelightLowerXTolerance = -1.5 - xDeltaScale + targetOffset;
         double turningToleranceRate = 6; // radians per second
         boolean robotRotationReady = xOffset > limelightLowerXTolerance && xOffset < limelightUpperXTolerance;
         boolean robotDistanceReady = yOffset > limelightLowerYTolerance && yOffset < limelightUpperYTolerance;
@@ -191,7 +192,7 @@ public class Robot extends TimedRobot {
         if(robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && limelight.hasTarget() && robotDistanceReady && robotRotationReady && state.shooter.isReady()){
             state.isShooting = true;
             subsystems.conveyor.conveyorOn(1, true);
-            subsystems.elevator.elevatorOn(-0.8, true);
+            subsystems.elevator.elevatorOn(-0.9, true);
         }
         else if(robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && state.isShooting){
             subsystems.conveyor.conveyorOff();
