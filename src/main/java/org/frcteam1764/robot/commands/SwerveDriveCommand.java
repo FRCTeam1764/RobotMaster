@@ -2,8 +2,11 @@ package org.frcteam1764.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 import org.frcteam1764.robot.state.DrivetrainState;
 import org.frcteam1764.robot.state.RobotState;
+import org.frcteam1764.robot.state.ShooterState;
 import org.frcteam1764.robot.subsystems.SwerveDrivetrain;
 import org.frcteam2910.common.math.Vector2;
 import org.frcteam2910.common.robot.drivers.Limelight;
@@ -19,6 +22,7 @@ public class SwerveDriveCommand extends CommandBase {
     private Axis strafe;
     private Axis rotation;
     private DrivetrainState drivetrainState;
+    private ShooterState shooterState;
     private Limelight limelight;
 
     public SwerveDriveCommand(SwerveDrivetrain drivetrain, Axis forward, Axis strafe, Axis rotation, RobotState robotState) {
@@ -26,6 +30,7 @@ public class SwerveDriveCommand extends CommandBase {
         this.strafe = strafe;
         this.rotation = rotation;
         this.drivetrainState = robotState.drivetrain;
+        this.shooterState = robotState.shooter;
         this.limelight = robotState.limelight;
         this.drivetrain = drivetrain;
 
@@ -46,7 +51,10 @@ public class SwerveDriveCommand extends CommandBase {
 
     private double getForward() {
         boolean robotIsRotationLocked = drivetrainState.isStrafeLocked();
-        if (robotIsRotationLocked) {
+        if(shooterState.getShooterDistance() != 0){
+            return 0;
+        }
+        else if (robotIsRotationLocked) {
             return forward.get(true)/2; //intent to go slower when Lt or RT is held down
         }
         else if(drivetrainState.getLeftTrigger()) {
@@ -59,7 +67,10 @@ public class SwerveDriveCommand extends CommandBase {
 
     private double getStrafe() {
         boolean robotIsLocked = drivetrainState.isRotationLocked() || drivetrainState.isStrafeLocked();
-        if (robotIsLocked) {
+        if(shooterState.getShooterDistance() != 0){
+            return 0;
+        }
+        else if (robotIsLocked) {
             return strafe.get(true)/2; //intent to go slower when Lt or RT is held down
         }
         else if(drivetrainState.getLeftTrigger()) {
@@ -108,12 +119,21 @@ public class SwerveDriveCommand extends CommandBase {
 
     private double getCameraTrackingTurn() {
         double limelightXOffset = limelight.getTargetXOffset();
-        if(Math.abs(limelightXOffset) < 2){
+        double limelightYOffset = limelight.getTargetYOffset();
+        double limelightUpperYTolerance = 3.0;
+        double limelightLowerYTolerance = -17.5;//-17.5
+        double targetOffset = 0.2;
+        double xScale = 4;
+        double targetOffsetScale = 0.2;
+        double targetDeltaScale = Math.abs(limelightLowerYTolerance - limelightYOffset)*targetOffsetScale/Math.abs(limelightLowerYTolerance - limelightUpperYTolerance);
+        double xDeltaScale = Math.abs(limelightLowerYTolerance - limelightYOffset)*xScale/Math.abs(limelightLowerYTolerance - limelightUpperYTolerance); // plus or minus 4 close and plus or minus 2 far = 2. Y delta is between 0 and 6.
+        double limelightUpperXTolerance =  1.5 + xDeltaScale + targetOffset + targetDeltaScale;
+        double limelightLowerXTolerance = -1.5 - xDeltaScale + targetOffset + targetDeltaScale;
+        double limelightTargetOffset = limelightXOffset + targetOffset + targetDeltaScale;
+
+        if(limelightXOffset < limelightUpperXTolerance && limelightXOffset > limelightLowerXTolerance){
             return 0;
         }
-        
-        double targetOffset = 0.2;
-        double limelightTargetOffset = limelightXOffset + targetOffset;
 
         double cameraRotationConstant = -0.026;
         double rotationSignal = limelightTargetOffset * cameraRotationConstant;

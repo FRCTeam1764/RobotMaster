@@ -11,12 +11,14 @@ public class ShooterState {
     private double actualVelocity;
     private double assignedTopRollerVelocity;
     private double actualTopRollerVelocity;
+    private double shooterDistance;
 
     public ShooterState() {
         timer = 0;
         shotCount = 0;
         assignedVelocity = 0;
         actualVelocity = 0;
+        this.shooterDistance = 0;
     }
 
     public int getTimer(){
@@ -75,6 +77,14 @@ public class ShooterState {
 
     public double getTopRollerActualVelocity() {
         return actualTopRollerVelocity;
+    }
+
+    public void setShooterDistance(double shooterDistance) {
+        this.shooterDistance = shooterDistance;
+    }
+
+    public double getShooterDistance() {
+        return shooterDistance;
     }
 
     public boolean isReady() {

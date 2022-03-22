@@ -191,7 +191,11 @@ public class Robot extends TimedRobot {
         SmartDashboard.putBoolean("Shooter Ready", state.shooter.isReady());
   //  SmartDashboard.putNumber("Shooter Velocity", state.shooter.getActualVelocity());
 
-        if(robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && limelight.hasTarget() && robotDistanceReady && robotRotationReady && state.shooter.isReady()){
+        if(state.shooter.getShooterDistance() == 0 && limelight.hasTarget() && robotDistanceReady && robotRotationReady){
+            state.shooter.setShooterDistance(yOffset);
+            subsystems.drivetrain.setMotorNeutralModes(NeutralMode.Brake);
+        }
+        if(state.shooter.getShooterDistance() != 0 && robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && limelight.hasTarget() && robotDistanceReady && robotRotationReady && state.shooter.isReady()){
             state.isShooting = true;
             subsystems.conveyor.conveyorOn(1, true);
             subsystems.elevator.elevatorOn(-0.9, true);
@@ -199,6 +203,7 @@ public class Robot extends TimedRobot {
         else if(robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && state.isShooting){
             subsystems.conveyor.conveyorOff();
             subsystems.elevator.elevatorOff();
+            subsystems.drivetrain.setMotorNeutralModes(NeutralMode.Coast);
             state.isShooting = false;
 
         }
