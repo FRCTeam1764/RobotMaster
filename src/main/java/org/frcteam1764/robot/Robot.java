@@ -166,7 +166,7 @@ public class Robot extends TimedRobot {
         double yOffset = limelight.getTargetYOffset();
         double xOffset = limelight.getTargetXOffset();
         double limelightUpperYTolerance = 3.0;
-        double limelightLowerYTolerance = -17.5;//-17.5
+        double limelightLowerYTolerance = -17;//-17.5
         
         double targetOffset = 0.2;
         double xScale = 4;

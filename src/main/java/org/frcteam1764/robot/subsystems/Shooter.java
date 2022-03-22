@@ -54,7 +54,7 @@ public class Shooter extends SubsystemBase {
   public void shoot() {
     SimpleMotorFeedforward simpleMotorFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
     double kF = simpleMotorFeedforward.calculate(shooterVelocity);
-    shooterMaster.set(ControlMode.Velocity, shooterVelocity/60*2048*0.1);
+    shooterMaster.set(ControlMode.Velocity, shooterVelocity);
 
   }
 

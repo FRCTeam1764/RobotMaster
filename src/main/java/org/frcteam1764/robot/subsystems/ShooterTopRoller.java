@@ -45,7 +45,7 @@ public class ShooterTopRoller extends SubsystemBase {
   public void shoot() {
     SimpleMotorFeedforward simpleMotorFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
     double kF = simpleMotorFeedforward.calculate(shooterVelocity);
-    shooterTopRoller.set(ControlMode.Velocity, shooterVelocity/60*2048*0.1);
+    shooterTopRoller.set(ControlMode.Velocity, shooterVelocity);
 
   }
 

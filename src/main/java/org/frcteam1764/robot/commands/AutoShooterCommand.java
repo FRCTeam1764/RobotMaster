@@ -31,10 +31,10 @@ public class AutoShooterCommand extends CommandBase {
   @Override
   public void initialize() {
     shooterState.setShotCount(initialShotCount);
-    shooter.setShooterVelocity(shooterTopRollerSpeed / shooterRatio);
-    shooterTopRoller.setShooterTopRollerVelocity(shooterTopRollerSpeed);
-    shooterState.setAssignedVelocity(shooterTopRollerSpeed  / shooterRatio);
-    shooterState.setTopRollerAssignedVelocity(shooterTopRollerSpeed);
+    shooter.setShooterVelocity(shooterTopRollerSpeed / shooterRatio /60*2048*0.1);
+    shooterTopRoller.setShooterTopRollerVelocity(shooterTopRollerSpeed /60*2048*0.1);
+    shooterState.setAssignedVelocity(shooterTopRollerSpeed  / shooterRatio /60*2048*0.1);
+    shooterState.setTopRollerAssignedVelocity(shooterTopRollerSpeed /60*2048*0.1);
     shooterState.clearTimer();
     shooter.shoot();
     shooterTopRoller.shoot();

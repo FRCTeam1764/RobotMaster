@@ -4,6 +4,8 @@
 
 package org.frcteam1764.robot.state;
 
+import org.frcteam1764.robot.common.LinearInterpolator;
+
 public class ShooterState {
     private int timer;
     private int shotCount;
@@ -12,6 +14,26 @@ public class ShooterState {
     private double assignedTopRollerVelocity;
     private double actualTopRollerVelocity;
     private double shooterDistance;
+    public final LinearInterpolator shooterInterpolator;
+    public final LinearInterpolator shooterTopRollerInterpolator;
+
+    public static final double[][] SHOOTER_SPEED_ARRAY = {
+        {0, 5461},
+        {-4.5, 5120},
+        {-7.25, 3603},
+        {-9.75, 3262},
+        {-12.25, 3271},
+        {-15.25, 3282}
+    };
+    public static final double[][] SHOOTER_TOP_SPEED_ARRAY = {
+        {0, 8192},
+        {-4.5, 10240},
+        {-7.25, 12971},
+        {-9.75, 14677},
+        {-12.25, 15701},
+        {-15.25, 17067}
+    };
+
 
     public ShooterState() {
         timer = 0;
@@ -19,6 +41,8 @@ public class ShooterState {
         assignedVelocity = 0;
         actualVelocity = 0;
         this.shooterDistance = 0;
+		this.shooterInterpolator = new LinearInterpolator(SHOOTER_SPEED_ARRAY);
+        this.shooterTopRollerInterpolator = new LinearInterpolator(SHOOTER_TOP_SPEED_ARRAY);
     }
 
     public int getTimer(){
@@ -88,26 +112,6 @@ public class ShooterState {
     }
 
     public boolean isReady() {
-        if(assignedTopRollerVelocity == 5000) {
-            return actualTopRollerVelocity > 17500;
-        }
-        else if(assignedTopRollerVelocity == 4600) {
-            return actualTopRollerVelocity > 15800;
-        }
-        else if(assignedTopRollerVelocity == 4300) {
-            return actualTopRollerVelocity > 14800;
-        }
-        else if(assignedTopRollerVelocity == 3800) {
-            return actualTopRollerVelocity > 13400;
-        }
-        else if(assignedTopRollerVelocity == 3000) {
-            return actualTopRollerVelocity > 10600;
-        }
-        else if(assignedTopRollerVelocity == 2400) {
-            return actualTopRollerVelocity > 8500;
-        }
-        else {
-          return false;
-        }
+        return actualTopRollerVelocity > assignedTopRollerVelocity && actualVelocity > assignedVelocity;
     }
 }
