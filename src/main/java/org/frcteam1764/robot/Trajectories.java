@@ -25,8 +25,8 @@ public class Trajectories {
 	private static Path autoPath2 = new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
 	.lineTo(new Vector2(30.0, -100.0), Rotation2.fromDegrees(-65.0))
 	.lineTo(new Vector2(30.0, -235.0), Rotation2.fromDegrees(-65.0))
-	.lineTo(new Vector2(30.0, -200.0), Rotation2.fromDegrees(-11.0))
-	.lineTo(new Vector2(30.0, -45.0), Rotation2.fromDegrees(-16.0))
+	.lineTo(new Vector2(30.0, -200.0), Rotation2.fromDegrees(-13.0))
+	.lineTo(new Vector2(30.0, -45.0), Rotation2.fromDegrees(-13.0))
 	.build();
 	private static Path twoBallAuto = new SimplePathBuilder(Vector2.ZERO, Rotation2.ZERO)
 	.lineTo(new Vector2(35.0, 0.0), Rotation2.fromDegrees(0.0))

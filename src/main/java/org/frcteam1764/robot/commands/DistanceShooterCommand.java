@@ -33,14 +33,14 @@ public class DistanceShooterCommand extends CommandBase {
   public void execute() {
     double ty = limelight.getTargetYOffset();
   
-    // if(ty <= -13.5) {
-    // shooterTopRoller.setShooterTopRollerVelocity(5000);
-    // shooter.setShooterVelocity(5000 / 5.2);
-    // shooterState.setAssignedVelocity(5000 / 5.2);
-    // shooterState.setTopRollerAssignedVelocity(5000);
-    // shooter.shoot();
-    // shooterTopRoller.shoot();
-    // }
+    if(ty <= -13.5) {
+    shooterTopRoller.setShooterTopRollerVelocity(5000);
+    shooter.setShooterVelocity(5000 / 5.2);
+    shooterState.setAssignedVelocity(5000 / 5.2);
+    shooterState.setTopRollerAssignedVelocity(5000);
+    shooter.shoot();
+    shooterTopRoller.shoot();
+    }
      if(ty <= -11 && ty > -13.5) {
       shooterTopRoller.setShooterTopRollerVelocity(4600);
       shooter.setShooterVelocity(4600 / 4.8);

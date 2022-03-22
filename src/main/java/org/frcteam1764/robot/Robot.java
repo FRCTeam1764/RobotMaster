@@ -166,13 +166,15 @@ public class Robot extends TimedRobot {
         double yOffset = limelight.getTargetYOffset();
         double xOffset = limelight.getTargetXOffset();
         double limelightUpperYTolerance = 3.0;
-        double limelightLowerYTolerance = -13.5;//-17.5
+        double limelightLowerYTolerance = -17.5;//-17.5
         
         double targetOffset = 0.2;
         double xScale = 4;
+        double targetOffsetScale = 0.2;
+        double targetDeltaScale = Math.abs(limelightLowerYTolerance - yOffset)*targetOffsetScale/Math.abs(limelightLowerYTolerance - limelightUpperYTolerance);
         double xDeltaScale = Math.abs(limelightLowerYTolerance - yOffset)*xScale/Math.abs(limelightLowerYTolerance - limelightUpperYTolerance); // plus or minus 4 close and plus or minus 2 far = 2. Y delta is between 0 and 6.
-        double limelightUpperXTolerance =  1.5 + xDeltaScale + targetOffset;
-        double limelightLowerXTolerance = -1.5 - xDeltaScale + targetOffset;
+        double limelightUpperXTolerance =  1.5 + xDeltaScale + targetOffset + targetDeltaScale;
+        double limelightLowerXTolerance = -1.5 - xDeltaScale + targetOffset + targetDeltaScale;
         double turningToleranceRate = 6; // radians per second
         boolean robotRotationReady = xOffset > limelightLowerXTolerance && xOffset < limelightUpperXTolerance;
         boolean robotDistanceReady = yOffset > limelightLowerYTolerance && yOffset < limelightUpperYTolerance;
