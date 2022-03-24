@@ -17,7 +17,7 @@ import org.frcteam1764.robot.state.IntakeState;
 
 /** Add your docs here*/
 public class Intake extends SubsystemBase {
-  private PWMTalonFX intakeMotor;
+  private edu.wpi.first.wpilibj.PWMTalonFX intakeMotor;
   private DoubleSolenoid intakeSolenoid;
   private IntakeState intakeState; 
   private DigitalInput conveyorBreakBeam;
@@ -28,6 +28,7 @@ public class Intake extends SubsystemBase {
       this.conveyorBreakBeam = conveyorBreakBeam;
       this.elevatorBreakBeam = elevatorBreakBeam;
       this.intakeMotor = new PWMTalonFX(RobotConstants.INTAKE_MOTOR);
+      intakeMotor.setInverted(true);
       this.intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, RobotConstants.INTAKE_SOLENOID_FORWARD, RobotConstants.INTAKE_SOLENOID_REVERSE);
   }
 
