@@ -17,7 +17,7 @@ import org.frcteam1764.robot.state.IntakeState;
 
 /** Add your docs here*/
 public class Intake extends SubsystemBase {
-  private edu.wpi.first.wpilibj.PWMTalonFX intakeMotor;
+  private PWMTalonFX intakeMotor;
   private DoubleSolenoid intakeSolenoid;
   private IntakeState intakeState; 
   private DigitalInput conveyorBreakBeam;

@@ -103,7 +103,7 @@ public class Robot extends TimedRobot {
                 ),
                 new ParallelRaceGroup(
                     new FollowPathCommand(subsystems.drivetrain, state.trajectories[0])
-                    ,new IntakeBallCommand(subsystems.intake, 0.8, subsystems.conveyor, 1, subsystems.elevator, -0.6, state.intake, false)
+                    ,new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 1, subsystems.elevator, -0.6, state.intake, false)
                 ),
                 new ParallelRaceGroup(
                     new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 0),
@@ -191,7 +191,7 @@ public class Robot extends TimedRobot {
         SmartDashboard.putBoolean("Shooter Ready", state.shooter.isReady());
   //  SmartDashboard.putNumber("Shooter Velocity", state.shooter.getActualVelocity());
 
-        if(state.shooter.getShooterDistance() == 0 && limelight.hasTarget() && robotDistanceReady && robotRotationReady){
+        if(state.shooter.getShooterDistance() == 0 && limelight.hasTarget() && robotDistanceReady && robotRotationReady && robotContainer.getPilotRightTriggerAxis().get(true) < 0.5){
             state.shooter.setShooterDistance(yOffset);
             subsystems.drivetrain.setMotorNeutralModes(NeutralMode.Brake);
         }
