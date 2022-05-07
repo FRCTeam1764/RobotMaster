@@ -43,10 +43,10 @@ public final class Constants {
 
     // In degrees
     // increasing turns clockwise
-    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = Math.toRadians(11.33);
-    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = Math.toRadians(302.18);
-    public static final double BACK_LEFT_MODULE_STEER_OFFSET = Math.toRadians(15.34);
-    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = Math.toRadians(330.07);
+    public static final double FRONT_LEFT_MODULE_STEER_OFFSET = Math.toRadians(-11.46);
+    public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = Math.toRadians(-300.42);
+    public static final double BACK_LEFT_MODULE_STEER_OFFSET = Math.toRadians(-194.77);
+    public static final double BACK_RIGHT_MODULE_STEER_OFFSET = Math.toRadians(-332.06);
     
     public static final int PRESSURE_SENSOR_PORT = 0;
 }

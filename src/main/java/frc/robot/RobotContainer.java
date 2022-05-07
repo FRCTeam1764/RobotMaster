@@ -35,8 +35,8 @@ public class RobotContainer {
         // }
         // autonomousChooser = new AutonomousChooser(autonomousTrajectories);
 
-        // primaryController.getLeftXAxis().setInverted(true);
-        // primaryController.getRightXAxis().setInverted(true);
+        primaryController.getLeftXAxis().setInverted(true);
+        primaryController.getRightXAxis().setInverted(true);
 
         CommandScheduler.getInstance().registerSubsystem(visionSubsystem);
         CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
