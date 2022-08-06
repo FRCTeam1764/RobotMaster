@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.*;
 import frc.robot.libraries.external.math.RigidTransform2;
 import frc.robot.libraries.external.math.Rotation2;
 import frc.robot.libraries.external.robot.UpdateManager;
@@ -44,16 +43,8 @@ public class Robot extends TimedRobot {
     }
 
     @Override
-    public void testInit() {
-    }
-
-    @Override
-    public void testPeriodic() {
-    }
-
-    @Override
     public void disabledPeriodic() {
-        //robotContainer.getVisionSubsystem().setLedMode(Limelight.LedMode.OFF);
+        robotContainer.getVisionSubsystem().setLedMode(Limelight.LedMode.OFF);
     }
 
     @Override
