@@ -40,13 +40,7 @@ public class Robot extends TimedRobot {
         robotContainer.getDrivetrainSubsystem().resetPose(RigidTransform2.ZERO);
         robotContainer.getDrivetrainSubsystem().resetGyroAngle(Rotation2.ZERO);
 
-        // robotContainer.getAutonomousCommand().schedule();
-
-        
-        // CommandScheduler.getInstance().schedule(
-        //     new FollowTrajectoryCommand(robotContainer.getDrivetrainSubsystem(), robotContainer.getTrajectories()[0])
-        // );
-        new FollowTrajectoryCommand(robotContainer.getDrivetrainSubsystem(), robotContainer.getTrajectories()[0]).schedule();
+        robotContainer.getAutonomousCommand().schedule();
     }
 
     @Override

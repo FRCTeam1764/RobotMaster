@@ -1,17 +1,14 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
-// import frc.robot.util.AutonomousChooser;
-// import frc.robot.util.AutonomousTrajectories;
-// import frc.robot.util.DriverReadout;
+import frc.robot.libraries.external.util.AutonomousChooser;
 import frc.robot.libraries.external.control.Trajectory;
 import frc.robot.libraries.external.math.Rotation2;
 import frc.robot.libraries.external.robot.input.Axis;
 import frc.robot.libraries.external.robot.input.XboxController;
-
-import java.io.IOException;
 
 public class RobotContainer {
     private final XboxController primaryController = new XboxController(0);
@@ -21,20 +18,9 @@ public class RobotContainer {
     private final DrivetrainSubsystem drivetrainSubsystem = new DrivetrainSubsystem();
     private final VisionSubsystem visionSubsystem = new VisionSubsystem(drivetrainSubsystem);
     private Trajectory[] trajectories;
-
-    // private AutonomousTrajectories autonomousTrajectories;
-    // private final AutonomousChooser autonomousChooser;
-
-    // private final DriverReadout driverReadout;
+    private final AutonomousChooser autonomousChooser;
 
     public RobotContainer() {
-        // try {
-        //     autonomousTrajectories = new AutonomousTrajectories(DrivetrainSubsystem.TRAJECTORY_CONSTRAINTS);
-        // } catch (IOException e) {
-        //     e.printStackTrace();
-        // }
-        // autonomousChooser = new AutonomousChooser(autonomousTrajectories);
-
         primaryController.getLeftXAxis().setInverted(true);
         primaryController.getRightXAxis().setInverted(true);
 
@@ -42,12 +28,11 @@ public class RobotContainer {
         CommandScheduler.getInstance().registerSubsystem(drivetrainSubsystem);
 
         CommandScheduler.getInstance().setDefaultCommand(drivetrainSubsystem, new DriveCommand(drivetrainSubsystem, getDriveForwardAxis(), getDriveStrafeAxis(), getDriveRotationAxis()));
-
-        // driverReadout = new DriverReadout(this);
         
         setTrajectories();
         configurePilotButtonBindings();
         configureCoPilotButtonBindings();
+        autonomousChooser = new AutonomousChooser(trajectories);
     }
 
     private void setTrajectories() {
@@ -63,9 +48,9 @@ public class RobotContainer {
     private void configureCoPilotButtonBindings() {
     }
 
-    // public Command getAutonomousCommand() {
-    //     return autonomousChooser.getCommand(this);
-    // }
+    public Command getAutonomousCommand() {
+        return autonomousChooser.getCommand(this);
+    }
 
     private Axis getDriveForwardAxis() {
         return primaryController.getLeftYAxis();
@@ -95,9 +80,9 @@ public class RobotContainer {
         return primaryController;
     }
 
-    // public AutonomousChooser getAutonomousChooser() {
-    //     return autonomousChooser;
-    // }
+    public AutonomousChooser getAutonomousChooser() {
+        return autonomousChooser;
+    }
 
     public Trajectory[] getTrajectories() {
         return trajectories;
