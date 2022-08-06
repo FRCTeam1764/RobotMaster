@@ -11,7 +11,6 @@
 ---
 * Swervedrive Subsystem  
 * Path following  
-* Camera tracking with rotation lock  
 * Controller config  
 
 ## How To's
