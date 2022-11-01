@@ -96,28 +96,35 @@ public class Robot extends TimedRobot {
         // 5 ball auto
         //
         ///////////////////////////////////////////////////////////////////////////////////////////////////////
+            // new SequentialCommandGroup(
+            //     new ParallelRaceGroup(
+            //         new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 1),
+            //         new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, 0.9, state.shooter)
+            //     ),
+            //     new ParallelRaceGroup(
+            //         new FollowPathCommand(subsystems.drivetrain, state.trajectories[0])
+            //         ,new IntakeBallCommand(subsystems.intake, 0.8, subsystems.conveyor, 1, subsystems.elevator, 0.6, state.intake, false)
+            //     ),
+            //     new ParallelRaceGroup(
+            //         new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 0),
+            //         new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, 0.9, state.shooter)
+            //     ),
+            //     new ParallelRaceGroup(
+            //         new FollowPathCommand(subsystems.drivetrain, state.trajectories[1])
+            //         ,new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 1, subsystems.elevator, 0.6, state.intake, false)
+            //     ),
+            //     new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 0),
+            //     new ParallelRaceGroup(
+            //         new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 0),
+            //         new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, 0.9, state.shooter)
+            //     )
+            // )
             new SequentialCommandGroup(
                 new ParallelRaceGroup(
-                    new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 1),
-                    new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, -0.9, state.shooter)
+                    new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4000, state.shooter, 1),
+                    new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, 0.9, state.shooter)
                 ),
-                new ParallelRaceGroup(
-                    new FollowPathCommand(subsystems.drivetrain, state.trajectories[0])
-                    ,new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 1, subsystems.elevator, -0.6, state.intake, false)
-                ),
-                new ParallelRaceGroup(
-                    new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 0),
-                    new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, -0.9, state.shooter)
-                ),
-                new ParallelRaceGroup(
-                    new FollowPathCommand(subsystems.drivetrain, state.trajectories[1])
-                    ,new IntakeBallCommand(subsystems.intake, 1, subsystems.conveyor, 1, subsystems.elevator, -0.6, state.intake, false)
-                ),
-                new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 0),
-                new ParallelRaceGroup(
-                    new AutoShooterCommand(shooter, subsystems.shooterTopRoller, 4100, state.shooter, 0),
-                    new FeederCommand(subsystems.conveyor, 1, subsystems.elevator, -0.9, state.shooter)
-                )
+                new FollowPathCommand(subsystems.drivetrain, state.trajectories[1])
             )
         );
         
@@ -191,14 +198,14 @@ public class Robot extends TimedRobot {
         SmartDashboard.putBoolean("Shooter Ready", state.shooter.isReady());
   //  SmartDashboard.putNumber("Shooter Velocity", state.shooter.getActualVelocity());
 
-        if(state.shooter.getShooterDistance() == 0 && limelight.hasTarget() && robotDistanceReady && robotRotationReady && robotContainer.getPilotRightTriggerAxis().get(true) < 0.5){
+        if(state.shooter.getShooterDistance() == 0 && limelight.hasTarget() && robotDistanceReady && robotRotationReady){
             state.shooter.setShooterDistance(yOffset);
             subsystems.drivetrain.setMotorNeutralModes(NeutralMode.Brake);
         }
         if(state.shooter.getShooterDistance() != 0 && robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && limelight.hasTarget() && robotDistanceReady && robotRotationReady && state.shooter.isReady()){
             state.isShooting = true;
             subsystems.conveyor.conveyorOn(1, true);
-            subsystems.elevator.elevatorOn(-0.9, true);
+            subsystems.elevator.elevatorOn(0.9, true);
         }
         else if(robotContainer.getCopilotRightTriggerAxis().get(true) < 0.5 && state.isShooting){
             subsystems.conveyor.conveyorOff();

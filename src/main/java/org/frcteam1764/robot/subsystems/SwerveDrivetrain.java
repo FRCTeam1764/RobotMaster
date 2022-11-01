@@ -2,6 +2,7 @@ package org.frcteam1764.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.google.errorprone.annotations.concurrent.GuardedBy;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -98,8 +99,10 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
         frontRightDriveMotor = new TalonFX(RobotConstants.DRIVETRAIN_FRONT_RIGHT_DRIVE_MOTOR);
         backLeftDriveMotor = new TalonFX(RobotConstants.DRIVETRAIN_BACK_LEFT_DRIVE_MOTOR);
         backRightDriveMotor = new TalonFX(RobotConstants.DRIVETRAIN_BACK_RIGHT_DRIVE_MOTOR);
-        frontRightDriveMotor.setInverted(true);
+        frontRightDriveMotor.setInverted(false);
         backRightDriveMotor.setInverted(true);
+        backLeftDriveMotor.setInverted(false);
+        frontLeftDriveMotor.setInverted(false);
 
         // Limit speed (testing only)
         configDriveTalon(frontLeftDriveMotor);
@@ -217,6 +220,12 @@ public class SwerveDrivetrain implements Subsystem, UpdateManager.Updatable {
         configTalon(talon);
         setTalonMaxOutput(talon, 0.79);
         talon.configOpenloopRamp(0.45);
+        // SupplyCurrentLimitConfiguration config = new SupplyCurrentLimitConfiguration();
+        // config.currentLimit = 60;
+        // config.triggerThresholdCurrent = 65;
+        // config.triggerThresholdTime= 2;
+        // config.enable = true;
+        // talon.configSupplyCurrentLimit(config,20);
     }
 
     private void configTalon(TalonFX talon) {

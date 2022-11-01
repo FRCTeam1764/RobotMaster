@@ -39,6 +39,8 @@ public class RobotState  {
      * Trajectories generated on robot init on robot container
      */
     public boolean isShooting;
+
+    public int blinkin; //not needed, without doesn't work
 	
 	public RobotState(Axis leftTriggerAxis, Axis rightTriggerAxis) {
         this.limelight = new Limelight();

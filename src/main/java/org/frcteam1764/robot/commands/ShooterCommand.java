@@ -3,6 +3,7 @@ package org.frcteam1764.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import org.frcteam1764.robot.state.ShooterState;
+//import org.frcteam1764.robot.subsystems.Blinkin;
 import org.frcteam1764.robot.subsystems.Shooter;
 import org.frcteam1764.robot.subsystems.ShooterTopRoller;
 
@@ -13,15 +14,17 @@ public class ShooterCommand extends CommandBase {
   ShooterState shooterState;
   double shooterTopRollerSpeed;
   double shooterRatio;
+  //Blinkin blinkin;
 //14-17.5
 //11-13
-  public ShooterCommand(Shooter shooter, ShooterTopRoller shooterTopRoller, double shooterTopRollerSpeed, ShooterState shooterState) {
+  public ShooterCommand(Shooter shooter, ShooterTopRoller shooterTopRoller, double shooterTopRollerSpeed, ShooterState shooterState/*, Blinkin blinkin*/) {
     this.shooter = shooter;
     this.shooterTopRoller = shooterTopRoller;
     this.shooterState = shooterState;
     this.shooterTopRollerSpeed = shooterTopRollerSpeed;
     this.shooterRatio = 4.8;
-    addRequirements(shooter);
+    //this.blinkin = blinkin;
+    //addRequirements(shooter, blinkin);
   }
 
   // Called when the command is initially scheduled.
@@ -33,6 +36,7 @@ public class ShooterCommand extends CommandBase {
     shooterState.setTopRollerAssignedVelocity(shooterTopRollerSpeed / shooterRatio /60*2048*0.1);
     shooter.shoot();
     shooterTopRoller.shoot();
+    //blinkin.blinkinRainbow();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,6 +51,7 @@ public class ShooterCommand extends CommandBase {
     shooterTopRoller.stopShooter();
     shooterState.setAssignedVelocity(0);
     shooterState.setTopRollerAssignedVelocity(0);
+    //blinkin.blinkinOff();
   }
 
   // Returns true when the command should end.

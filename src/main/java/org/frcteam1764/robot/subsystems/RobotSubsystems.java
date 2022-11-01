@@ -22,7 +22,8 @@ public class RobotSubsystems  {
     public DigitalInput conveyorBreakBeam;
     public DigitalInput elevatorBreakBeam;
     public DigitalInput shooterBreakBeam;
-	
+    //public Blinkin blinkin;
+
     public RobotSubsystems(RobotState robotState) {
         this.conveyorBreakBeam = new DigitalInput(RobotConstants.CONVEYOR_BREAK_BEAM);
         this.elevatorBreakBeam = new DigitalInput(RobotConstants.ELEVATOR_BREAK_BEAM);
@@ -34,6 +35,7 @@ public class RobotSubsystems  {
         this.shooter = new Shooter(robotState.shooter, shooterBreakBeam);
         this.shooterTopRoller = new ShooterTopRoller(robotState.shooter);
         this.intake = new Intake(robotState.intake, conveyorBreakBeam, elevatorBreakBeam);
+    //    this.blinkin = new Blinkin(robotState.blinkin);
     }
     
     public void setMotorModes(NeutralMode mode){

@@ -28,7 +28,7 @@ public class Conveyor extends SubsystemBase {
         count =0;
         conveyorMotor.set(conveyorSpeed);
       }
-      else if(!conveyorBreakBeam.get() && count < 50){
+      else if(!conveyorBreakBeam.get() && count < 25){
         count++;
         conveyorMotor.set(conveyorSpeed);
       }

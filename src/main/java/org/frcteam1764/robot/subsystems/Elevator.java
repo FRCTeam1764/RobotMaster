@@ -25,11 +25,12 @@ public class Elevator extends SubsystemBase {
 
     public void elevatorOn(double elevatorSpeed, boolean override) {
       if(elevatorBreakBeam.get() || override){
-        elevatorMotor.set(elevatorSpeed);
+        elevatorMotor.set(-elevatorSpeed);
       }
       else{
         elevatorMotor.set(0);
       }
+      System.out.println(elevatorSpeed);
     }
     public void elevatorOff() {
       elevatorMotor.set(0);
